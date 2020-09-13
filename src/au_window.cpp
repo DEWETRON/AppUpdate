@@ -15,27 +15,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QApplication>
-#include <QMessageBox>
 #include "au_window.h"
 
-int main(int argc, char* argv[])
+AuWindow::AuWindow()
 {
-    Q_INIT_RESOURCE(systray);
+}
 
-    QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+void AuWindow::setVisible(bool visible)
+{
 
-    QApplication app(argc, argv);
-
-    if (!QSystemTrayIcon::isSystemTrayAvailable()) {
-        QMessageBox::critical(nullptr, QObject::tr("Systray"),
-                              QObject::tr("I couldn't detect any system tray "
-                                          "on this system."));
-        return 1;
-    }
-    QApplication::setQuitOnLastWindowClosed(false);
-
-    AuWindow window;
-    window.show();
-    return app.exec();
 }
