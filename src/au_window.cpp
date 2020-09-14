@@ -19,19 +19,41 @@
 
 #ifndef QT_NO_SYSTEMTRAYICON
 
+#ifdef WIN32
+#include "au_registry_win.h"
+#endif
+
 #include <QCloseEvent>
 #include <QCoreApplication>
-
+#include <QLabel>
 #include <QMenu>
 #include <QMessageBox>
+#include <QVBoxLayout>
 
 
 AuWindow::AuWindow()
-{
+    : QDialog(nullptr, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint)
+ {
     createActions();
     createTrayIcon();
 
     connect(m_trayIcon, &QSystemTrayIcon::activated, this, &AuWindow::iconActivated);
+
+    auto mainLayout = new QVBoxLayout;
+
+#ifdef WIN32
+    auto sw_registry = AuRegistry();
+    sw_registry.enumInstalledSoftware();
+    auto dewetron_sw = sw_registry.getInstalledSw();
+    
+    for (const auto& dw_sw : dewetron_sw)
+    {
+        mainLayout->addWidget(new QLabel((dw_sw.m_sw_display_name + " : " + dw_sw.m_sw_version).c_str()));
+    }
+
+#endif
+    
+    setLayout(mainLayout);
 
     m_trayIcon->show();
 
@@ -71,6 +93,7 @@ void AuWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
     case QSystemTrayIcon::Trigger:
     case QSystemTrayIcon::DoubleClick:
         //iconComboBox->setCurrentIndex((iconComboBox->currentIndex() + 1) % iconComboBox->count());
+        this->showNormal();
         break;
     case QSystemTrayIcon::MiddleClick:
         showMessage();

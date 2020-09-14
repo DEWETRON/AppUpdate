@@ -42,6 +42,18 @@ set(AU_SOURCE_FILES
   src/au_window.cpp
 )
 
+if(WIN32)
+  set(AU_HEADER_FILES
+    ${AU_HEADER_FILES}
+    inc/au_registry_win.h
+  )
+  set(AU_SOURCE_FILES
+    ${AU_SOURCE_FILES}
+    src/au_registry_win.cpp
+  )
+endif()
+
+
 set(AU_RESOURCE_FILES
   res/au_resources.qrc
 )
