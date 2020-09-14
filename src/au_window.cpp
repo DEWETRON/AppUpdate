@@ -25,10 +25,12 @@
 
 #include <QCloseEvent>
 #include <QCoreApplication>
+#include <QGridLayout>
+#include <QHeaderview>
 #include <QLabel>
 #include <QMenu>
 #include <QMessageBox>
-#include <QVBoxLayout>
+#include <QTableWidget>
 
 
 AuWindow::AuWindow()
@@ -39,18 +41,37 @@ AuWindow::AuWindow()
 
     connect(m_trayIcon, &QSystemTrayIcon::activated, this, &AuWindow::iconActivated);
 
-    auto mainLayout = new QVBoxLayout;
+    auto mainLayout = new QGridLayout;
 
 #ifdef WIN32
     auto sw_registry = AuRegistry();
     sw_registry.enumInstalledSoftware();
     auto dewetron_sw = sw_registry.getInstalledSw();
     
-    for (const auto& dw_sw : dewetron_sw)
+
+    auto sw_table = new QTableWidget(dewetron_sw.size(), 3, this);
+
+    sw_table->setHorizontalHeaderLabels({"Name", "Version", "Latest Release"});
+    sw_table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    sw_table->verticalHeader()->setVisible(false);
+    sw_table->setAlternatingRowColors(true);
+
+    for (auto i = 0; i<dewetron_sw.size(); ++i)
     {
-        mainLayout->addWidget(new QLabel((dw_sw.m_sw_display_name + " : " + dw_sw.m_sw_version).c_str()));
+        const auto& dw_sw = dewetron_sw.at(i);
+
+        {
+            QTableWidgetItem* newItem = new QTableWidgetItem(dw_sw.m_sw_display_name.c_str());
+            sw_table->setItem(i, 0, newItem);
+        }
+        {
+            QTableWidgetItem* newItem = new QTableWidgetItem(dw_sw.m_sw_version.c_str());
+            sw_table->setItem(i, 1, newItem);
+
+        }
     }
 
+    mainLayout->addWidget(sw_table);
 #endif
     
     setLayout(mainLayout);
@@ -58,7 +79,7 @@ AuWindow::AuWindow()
     m_trayIcon->show();
 
     setWindowTitle(tr("DEWETRON AppUpdate"));
-    resize(400, 300);
+    resize(500, 300);
 }
 
 void AuWindow::setVisible(bool visible)
