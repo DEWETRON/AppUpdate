@@ -2,6 +2,16 @@
 # Qt build settings for Windows, Linux, macOS
 #
 
+#
+# QtSettings is a cmake helper module to detect and configure Qt.
+#
+# It can be configured with following variables:
+#
+# * QT_VERSION use a specific version Qt (default = 5.12.6)
+# * QT_BASE_PATH point to a Qt installation (default = "")
+# * QT_CANDIDATES is a list of supported Qt versions
+# * QT_DIRS list of commonly used Qt install directories
+
 if(my_module_QtSettings_included)
   return()
 endif(my_module_QtSettings_included)
@@ -12,8 +22,26 @@ if (NOT SW_APP_ROOT)
   get_filename_component(SW_APP_ROOT .. ABSOLUTE)
 endif()
 
+# default qt list
+set(QT_CANDIDATES "5.12.6;5.12.5")
 
-#find correct qt variant for current build
+
+if (QT_BASE_PATH)
+  get_filename_component(_qt_base_path ${CMAKE_CURRENT_SOURCE_DIR}/${QT_BASE_PATH} ABSOLUTE)
+endif()
+
+set(QT_DIRS
+  "${_qt_base_path}"
+  "${SW_APP_ROOT}/3rdparty/qt"
+  "/opt/qt"
+  "C:/Qt"
+)
+
+
+message(STATUS "=Qt Settings=========================================================")
+
+
+# find correct qt variant for current build
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
   set(QT_BUILD_BITS 64)
 else()
@@ -31,173 +59,67 @@ else()
 endif()
 
 
+# Detect qt and set QT_VERSION if unset
 if(NOT QT_VERSION)
   
   # set default
-  set(QT_VERSION "5.12.5")
+  set(QT_VERSION "5.12.6")
 
   if (WIN32)
-    if (MSVC_VERSION EQUAL 1800)
-      set(QT_CANDIDATES "5.9.2;5.6.0")
-    else()
-      set(QT_CANDIDATES "5.12.6;5.12.5")
-    endif()
+
+    set(_detected false)
 
     foreach(_qt ${QT_CANDIDATES})
-      message(STATUS "Looking for ${SW_APP_ROOT}/3rdparty/qt/${_qt}_${QT_BUILD_SYSTEM}${QT_BUILD_BITS}")
-      if (EXISTS "${SW_APP_ROOT}/3rdparty/qt/${_qt}_${QT_BUILD_SYSTEM}${QT_BUILD_BITS}")
-        set(QT_VERSION ${_qt})
+
+      foreach(_qt_dir ${QT_DIRS})
+      # path without separate version dir
+      set(_this_qt "${_qt_dir}")
+      message(STATUS "looking for ${_this_qt}")
+      if (EXISTS ${_this_qt})
+        get_filename_component(qt_base_name ${_this_qt} NAME)
+        string(LENGTH ${_qt} qt_ver_len)
+        string(SUBSTRING  ${qt_base_name} 0 ${qt_ver_len} qt_prefix)
+        if ("${qt_prefix}" EQUAL "${_qt}")
+          set(QT_VERSION ${_qt})
+          message(STATUS "detected ${QT_VERSION} (1)")
+          set(_detected true)
+          get_filename_component(_qt_base_path ${_this_qt} ABSOLUTE)
+          break()
+        endif()
+      endif()
+
+      if (${_detected})
         break()
       endif()
-    endforeach()   
-    message("Qt version detected (${QT_VERSION})")
+
+      # path with separate version dir
+      set(_this_qt "${_qt_dir}/${_qt}")
+        message(STATUS "looking for ${_this_qt}")
+        if (EXISTS ${_this_qt})
+          set(QT_VERSION ${_qt})
+          message(STATUS "detected ${QT_VERSION} (2)")
+          set(_detected true)
+          get_filename_component(_qt_base_path ${_this_qt} ABSOLUTE)
+          break()
+        endif()
+        endforeach()
+
+      if (${_detected})
+        break()
+      endif()
+
+    endforeach()
+    message(STATUS "Qt version detected (${QT_VERSION})")
   endif()
 endif()
 
-
-if(QT_VERSION VERSION_LESS 5.9.0)
-  if(QT_SPECIAL_VERSION)
-    set(QT_BUILD_SUFFIX "_${QT_SPECIAL_VERSION}")
-  else()
-    set(QT_BUILD_SUFFIX "")
-  endif()
-else()
-  set(QT_BUILD_SUFFIX "")
-endif()
-
-
-set(QT_BUILD "${QT_BUILD_SYSTEM}${QT_BUILD_BITS}${QT_BUILD_SUFFIX}")
-
-
-
-message("=Qt==================================================================")
-if(NOT QT_BASE_PATH)
-  foreach(_QT_PATH
-      ${OPT_ROOT}/qt/${QT_VERSION}_${QT_BUILD}
-      ${SW_APP_ROOT}/3rdparty/qt/${QT_VERSION}_${QT_BUILD}
-      /opt/qt/${QT_VERSION}_${QT_BUILD}
-      /opt/Qt${QT_VERSION}/${QT_VERSION}/gcc_64
-      $ENV{HOME}/Qt${QT_VERSION}/${QT_VERSION}/gcc_64
-      /opt/Qt/${QT_VERSION}/gcc_64
-      $ENV{HOME}/Qt/${QT_VERSION}/gcc_64
-      )
-                
-    message("Qt Discovery: Testing ${_QT_PATH}")
-    if(EXISTS ${_QT_PATH})
-      set(QT_BASE_PATH ${_QT_PATH})
-      get_filename_component(QT_INSTALL_PATH ${QT_BASE_PATH} DIRECTORY)
-      break()
-    endif()
-  endforeach()
-endif()
-
-
-message("QT_VERSION=${QT_VERSION} (requested)")
-if(EXISTS ${QT_BASE_PATH})
-  message("QT_BASE_PATH=${QT_BASE_PATH}")
-else()
-  unset(QT_BASE_PATH)
-  message("No Qt found in opt or 3rdparty")
-endif()
-message("=====================================================================")
-
-
-#
-# Can Qt System lib used? (Fallback)
-#
-if(NOT EXISTS ${QT_BASE_PATH})
-  find_program(LSB_RELEASE_COMMAND lsb_release)
-  if(LSB_RELEASE_COMMAND)
-    execute_process(COMMAND ${LSB_RELEASE_COMMAND} -s -i
-      OUTPUT_VARIABLE TMP_LSB_RELEASE_ID
-      OUTPUT_STRIP_TRAILING_WHITESPACE)
-    string(TOLOWER ${TMP_LSB_RELEASE_ID} LSB_RELEASE_ID)
-    execute_process(COMMAND ${LSB_RELEASE_COMMAND} -s -c
-      OUTPUT_VARIABLE TMP_LSB_RELEASE_CODENAME
-      OUTPUT_STRIP_TRAILING_WHITESPACE)
-    string(TOLOWER ${TMP_LSB_RELEASE_CODENAME} LSB_RELEASE_CODENAME)
-
-    if (NOT QT_SYSTEM_PATH AND ${LSB_RELEASE_ID} STREQUAL "ubuntu" AND
-        (${LSB_RELEASE_CODENAME} STREQUAL "vivid"
-          OR ${LSB_RELEASE_CODENAME} STREQUAL "wily"
-          OR ${LSB_RELEASE_CODENAME} STREQUAL "xenial"
-          OR ${LSB_RELEASE_CODENAME} STREQUAL "zesty"
-          OR ${LSB_RELEASE_CODENAME} STREQUAL "bionic"
-          OR ${LSB_RELEASE_CODENAME} STREQUAL "eoan"
-          OR ${LSB_RELEASE_CODENAME} STREQUAL "focal"
-          ))
-      set(QT_SYSTEM_PATH "/usr/lib/*/cmake")
-      message("Selecting Qt system libraries.")
-    endif()
-    if (NOT QT_SYSTEM_PATH AND ${LSB_RELEASE_ID} STREQUAL "debian")
-      set(QT_SYSTEM_PATH "/usr/lib/*/cmake")
-      message("Selecting Qt system libraries.")
-    endif()
-  endif(LSB_RELEASE_COMMAND)
-endif()
-
-# Guess where to look for installed Qt5 libraries:
-# Debian/Ubuntu use something like that /opt/lib/x86_64-linux-gnu/cmake
-# RHEL/CentOS use something loke that /opt/lib64/cmake
-
-# Look for the Qt library files
-# 1. opt/qt (or 3rdparty/qt)
-# 2. /opt/lib (on Linux)
+# find Qt cmake support files
 find_path(QT_CMAKE_PATH Qt5/Qt5Config.cmake
-  ${QT_BASE_PATH}/lib/cmake
-  /opt/lib/*/cmake
-  /opt/lib64/cmake
-  /opt/lib/cmake
-  /usr/lib64/cmake
-  ${QT_SYSTEM_PATH}
-  )
+  ${_qt_base_path}/lib/cmake
+)
 
-if(NOT QT_CMAKE_PATH)
-  message( FATAL_ERROR "Qt5 CMake support files not found." )
-endif()
-
-if (CMAKE_SCRIPT_DEBUG)
-  message("Qt5 cmake path: ${QT_CMAKE_PATH}")
-endif()
-
+# extend CMAKE_PREFIX_PATH
 set(CMAKE_PREFIX_PATH
   ${CMAKE_PREFIX_PATH}
   ${QT_CMAKE_PATH}
 )
-
-# add a windows sdk path the cmake prefix path which was needed for some qt builds
-# does not work in all cases and seems to be no longer required for new qt releases
-#if(WIN32)
-#
-##find installed windows sdk
-#find_path(WIN_SDK_PATH lib/GlU32.Lib
-#  "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Microsoft SDKs\\Windows;CurrentInstallFolder]"
-#  "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Microsoft SDKs\\Windows;CurrentInstallFolder]"
-#  )
-#
-#if(NOT WIN_SDK_PATH)
-#  message( FATAL_ERROR "Windows SDK not found. (Required for Qt5 OpenGL support)" )
-#endif()
-#
-#message("Windows SDK: ${WIN_SDK_PATH}")
-#
-#if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-#  set(WIN_SDK_LIB_PATH "${WIN_SDK_PATH}\\lib\\x64")
-#else()
-#  set(WIN_SDK_LIB_PATH "${WIN_SDK_PATH}\\lib")
-#endif()
-#
-#set(CMAKE_PREFIX_PATH
-#  ${CMAKE_PREFIX_PATH}
-#  ${WIN_SDK_LIB_PATH}
-#)
-#
-#endif() #win32
-
-add_definitions(-DQT_NO_KEYWORDS)
-
-if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
-  add_definitions(-DQT_NO_DEBUG )
-else()
-  add_definitions(-DQT_QML_DEBUG)
-endif()

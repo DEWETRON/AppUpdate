@@ -19,11 +19,11 @@ set(CMAKE_MODULE_PATH
 
 include(QtSettings)
 
-message(STATUS "=Build Settings======================================================")
-message(STATUS "QT_VERSION      = ${QT_VERSION}")
-message(STATUS "=====================================================================")
-
+# Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
+# Whether to handle rcc automatically for Qt targets.
+set(CMAKE_AUTORCC ON)
+
 find_package(Qt5Core)
 find_package(Qt5Widgets)
 find_package(Qt5Network)
@@ -33,29 +33,27 @@ include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-set(HEADER_FILES
+set(AU_HEADER_FILES
   inc/au_window.h
 )
 
-
-set(SOURCE_FILES
+set(AU_SOURCE_FILES
   src/app_update.cpp
   src/au_window.cpp
 )
 
+set(AU_RESOURCE_FILES
+  res/au_resources.qrc
+)
+qt5_add_resources(RESOURCE_ADDED ${QT_RESOURCE_FILES})
 
-add_executable(${APPNAME}
-  ${SOURCE_FILES}
-  ${HEADER_FILES}
-  ${RESOURCE_FILES}
+add_executable(${APPNAME} WIN32
+  ${AU_SOURCE_FILES}
+  ${AU_HEADER_FILES}
+  ${AU_RESOURCE_FILES}
   ${VERSION_SOURCE_FILES}
   ${QT_GUI_FORMS_HEADERS}
   ${RESOURCE_ADDED}
 )
 
-if (WIN32)
-  target_link_libraries(${APPNAME}
-    Qt5::WinMain
-    ws2_32.lib
-  )
-endif()
+qt5_use_modules(${APPNAME} Widgets)

@@ -16,12 +16,15 @@
  */
 
 #include <QApplication>
+
+#ifndef QT_NO_SYSTEMTRAYICON
+
 #include <QMessageBox>
 #include "au_window.h"
 
 int main(int argc, char* argv[])
 {
-    Q_INIT_RESOURCE(systray);
+    Q_INIT_RESOURCE(au_resources);
 
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
@@ -39,3 +42,24 @@ int main(int argc, char* argv[])
     window.show();
     return app.exec();
 }
+
+#else
+
+#include <QLabel>
+#include <QDebug>
+
+int main(int argc, char* argv[])
+{
+    QApplication app(argc, argv);
+    QString text("QSystemTrayIcon is not supported on this platform");
+
+    QLabel* label = new QLabel(text);
+    label->setWordWrap(true);
+
+    label->show();
+    qDebug() << text;
+
+    app.exec();
+}
+
+#endif
