@@ -28,4 +28,24 @@ public:
     AuWindow();
 
     void setVisible(bool visible) override;
+
+protected:
+    void closeEvent(QCloseEvent* event) override;
+
+private Q_SLOTS:
+    void iconActivated(QSystemTrayIcon::ActivationReason reason);
+    void showMessage();
+
+private:
+    void createActions();
+    void createTrayIcon();
+
+private:
+    QAction* m_minimizeAction;
+    QAction* m_maximizeAction;
+    QAction* m_restoreAction;
+    QAction* m_quitAction;
+
+    QSystemTrayIcon* m_trayIcon;
+    QMenu* m_trayIconMenu;
 };
