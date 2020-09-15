@@ -17,10 +17,13 @@
 
 #include "au_registry_win.h"
 
-#ifdef WIN32
+#ifndef WIN32
+#error This file only compiles on Windows Operating Systems
+#endif
+
 #include "windows.h"
 #include <strsafe.h>
-#endif
+
 
 AuRegistry::AuRegistry()
 {
@@ -30,10 +33,9 @@ AuRegistry::~AuRegistry()
 {
 }
 
-#ifdef WIN32
 
 
-bool AuRegistry::enumInstalledSoftware()
+std::vector<SwEntry> AuRegistry::enumerate()
 {
     HKEY hUninstKey = NULL;
     HKEY hAppKey = NULL;
@@ -52,17 +54,14 @@ bool AuRegistry::enumInstalledSoftware()
     DWORD dwType = KEY_ALL_ACCESS;
     DWORD dwBufferSize = 0;
 
-    m_installed_sw.clear();
-
     std::vector<SwEntry> all_sw_entries;
 
     for (const auto sRoot : registry_root)
     {
-
         //Open the "Uninstall" key.
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, sRoot, 0, KEY_READ, &hUninstKey) != ERROR_SUCCESS)
         {
-            return false;
+            continue;
         }
 
         lResult = ERROR_SUCCESS;
@@ -80,7 +79,7 @@ bool AuRegistry::enumInstalledSoftware()
                 {
                     RegCloseKey(hAppKey);
                     RegCloseKey(hUninstKey);
-                    return false;
+                    return {};
                 }
 
                 //Get the display name value from the application's sub key.
@@ -121,25 +120,13 @@ bool AuRegistry::enumInstalledSoftware()
     }
 
     // Filter company products
-    for (const auto& sw : all_sw_entries)
-    {
-        if (sw.m_publisher.find("DEWETRON") != std::string::npos)
-        {
-            m_installed_sw.push_back(sw);
-        }
-    }
+    // for (const auto& sw : all_sw_entries)
+    // {
+    //     if (sw.m_publisher.find("DEWETRON") != std::string::npos)
+    //     {
+    //         m_installed_sw.push_back(sw);
+    //     }
+    // }
 
-    return true;
-}
-#else
-bool AuRegistry::enumInstalledSoftware()
-{
-    return true;
-}
-#endif
-
-
-std::vector<SwEntry> AuRegistry::getInstalledSw() const
-{
-    return m_installed_sw;
+    return all_sw_entries;
 }

@@ -19,7 +19,10 @@
 
 AuApplicationData::AuApplicationData()
     : m_bla{"A", "B", "C"}
+    , m_installed_software{}
+    , m_sw_enumerator()
 {
+    update();
 }
 
 AuApplicationData::~AuApplicationData()
@@ -29,4 +32,23 @@ AuApplicationData::~AuApplicationData()
 QStringList AuApplicationData::getBla()
 {
     return m_bla;
+}
+
+QVariantList AuApplicationData::getInstalledSoftware()
+{
+    return m_installed_software;
+}
+
+void AuApplicationData::update()
+{
+    auto all_sw_entries = m_sw_enumerator.enumerate();
+
+    for (const auto& sw_entry : all_sw_entries)
+    {
+        QStringList one_entry{sw_entry.m_sw_display_name.c_str(), 
+            sw_entry.m_sw_version.c_str()};
+        
+        m_installed_software.push_back(one_entry);
+    }
+
 }

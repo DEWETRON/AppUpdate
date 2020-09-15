@@ -17,29 +17,19 @@
 
 #pragma once
 
+#include "au_software_enumerator.h"
 #include <vector>
 #include <string>
 
 
-struct SwEntry
-{
-    std::string m_sw_display_name;
-    std::string m_sw_version;
-    std::string m_publisher;
-};
-
-
-class AuRegistry
+class AuRegistry : public AuSoftwareEnumeratorSource
 {
 public:
     AuRegistry();
     ~AuRegistry();
 
-    bool enumInstalledSoftware();
-
-    std::vector<SwEntry> getInstalledSw() const;
-
+    std::vector<SwEntry> enumerate() override;
 private:
-    std::vector<SwEntry> m_installed_sw;
+
 };
 

@@ -17,18 +17,37 @@
 
 import QtQuick 2.0
 import QtQuick.Controls 1.0
-
+import QtQuick.Layouts 1.12
 
 Rectangle {
     id: page
     width: 320; height: 480
     color: "lightgray"
 
-    Text {
-        id: helloText
-        text: "*Hello world!!!!!" + app.bla
-        y: 30
-        anchors.horizontalCenter: page.horizontalCenter
-        font.pointSize: 24; font.bold: true
+    // Text {
+    //     id: helloText
+    //     text: "*Hello world!!!!!" + app.installedSoftware
+    //     y: 30
+    //     anchors.horizontalCenter: page.horizontalCenter
+    //     font.pointSize: 24; font.bold: true
+    // }
+
+    GridLayout {
+        columns: 2
+
+        Repeater {
+            model: app.installedSoftware
+
+            Repeater {
+
+                model: modelData
+                            
+                Text {
+                    text: modelData
+                    font.pointSize: 24; font.bold: true
+                }
+            }
+        }
     }
+
 }

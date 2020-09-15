@@ -17,44 +17,34 @@
 
 #pragma once
 
-#include "au_software_enumerator.h"
+#include <memory>
+#include <string>
+#include <vector>
 
-#include <QObject>
-#include <QStringList>
-#include <QVariant>
 
- /**
-  * Application main model
-  */
-class AuApplicationData : public QObject
+struct SwEntry
 {
-    Q_OBJECT
-
-    Q_PROPERTY(QStringList bla
-                READ getBla
-                NOTIFY blaChanged)
-    Q_PROPERTY(QVariantList installedSoftware
-                READ getInstalledSoftware
-                NOTIFY installedSoftwareChanged)
-
-public:
-    AuApplicationData();
-    ~AuApplicationData();
-
-    QStringList getBla();
-
-    QVariantList getInstalledSoftware();
-
-    void update();
-
-Q_SIGNALS:
-    void blaChanged();
-    void installedSoftwareChanged();
-
-private:
-    QStringList m_bla;
-    QVariantList m_installed_software;
-
-    AuSoftwareEnumerator m_sw_enumerator;
+    std::string m_sw_display_name;
+    std::string m_sw_version;
+    std::string m_publisher;
 };
 
+
+class AuSoftwareEnumeratorSource
+{
+public:
+    virtual ~AuSoftwareEnumeratorSource() = default;
+    virtual std::vector<SwEntry> enumerate() = 0;
+};
+
+
+class AuSoftwareEnumerator
+{
+public:
+    AuSoftwareEnumerator();
+
+    std::vector<SwEntry> enumerate();
+
+private:
+    std::vector<std::shared_ptr<AuSoftwareEnumeratorSource>> m_sw_sources;
+};
