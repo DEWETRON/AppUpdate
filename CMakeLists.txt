@@ -43,6 +43,7 @@ set(AU_HEADER_FILES
   #inc/au_window.h
   inc/au_window_qml.h
   inc/au_software_enumerator.h
+  inc/au_update_json.h
 )
 
 set(AU_SOURCE_FILES
@@ -52,6 +53,7 @@ set(AU_SOURCE_FILES
   #src/au_window.cpp
   src/au_window_qml.cpp
   src/au_software_enumerator.cpp
+  src/au_update_json.cpp
 )
 
 if(WIN32)

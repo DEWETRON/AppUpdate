@@ -15,40 +15,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "au_application_data.h"
 #include "au_update_json.h"
+#include <QJsonDocument>
+#include <QFile>
 
-AuApplicationData::AuApplicationData()
-    : m_installed_software{}
-    , m_sw_enumerator()
+AuUpdateJson::AuUpdateJson()
+    : QObject(nullptr)
 {
-    update();
+    QFile update_file("../examples/update.json");
 
-    auto test = new AuUpdateJson;
-
-
-    delete test;
-}
-
-AuApplicationData::~AuApplicationData()
-{
-}
-
-QVariantList AuApplicationData::getInstalledSoftware()
-{
-    return m_installed_software;
-}
-
-void AuApplicationData::update()
-{
-    auto all_sw_entries = m_sw_enumerator.enumerate();
-
-    for (const auto& sw_entry : all_sw_entries)
-    {
-        QStringList one_entry{sw_entry.m_sw_display_name.c_str(), 
-            sw_entry.m_sw_version.c_str()};
-        
-        m_installed_software.push_back(one_entry);
+    if (!update_file.open(QIODevice::ReadOnly)) {
+        qWarning("Couldn't open save file.");
+        //return false;
     }
+
+    QByteArray json_data = update_file.readAll();
+    QJsonParseError err;
+    QJsonDocument json(QJsonDocument::fromJson(json_data, &err));
+
+    auto debug = json.toJson();
+
 
 }

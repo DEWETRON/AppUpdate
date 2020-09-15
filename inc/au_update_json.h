@@ -15,40 +15,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "au_application_data.h"
-#include "au_update_json.h"
+#pragma once
 
-AuApplicationData::AuApplicationData()
-    : m_installed_software{}
-    , m_sw_enumerator()
+#include <QObject>
+
+class AuUpdateJson : public QObject
 {
-    update();
-
-    auto test = new AuUpdateJson;
-
-
-    delete test;
-}
-
-AuApplicationData::~AuApplicationData()
-{
-}
-
-QVariantList AuApplicationData::getInstalledSoftware()
-{
-    return m_installed_software;
-}
-
-void AuApplicationData::update()
-{
-    auto all_sw_entries = m_sw_enumerator.enumerate();
-
-    for (const auto& sw_entry : all_sw_entries)
-    {
-        QStringList one_entry{sw_entry.m_sw_display_name.c_str(), 
-            sw_entry.m_sw_version.c_str()};
-        
-        m_installed_software.push_back(one_entry);
-    }
-
-}
+    Q_OBJECT
+public:
+    AuUpdateJson();
+    ~AuUpdateJson() = default;
+};
