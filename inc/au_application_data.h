@@ -30,9 +30,6 @@ class AuApplicationData : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QStringList bla
-                READ getBla
-                NOTIFY blaChanged)
     Q_PROPERTY(QVariantList installedSoftware
                 READ getInstalledSoftware
                 NOTIFY installedSoftwareChanged)
@@ -40,8 +37,6 @@ class AuApplicationData : public QObject
 public:
     AuApplicationData();
     ~AuApplicationData();
-
-    QStringList getBla();
 
     QVariantList getInstalledSoftware();
 
@@ -52,7 +47,6 @@ Q_SIGNALS:
     void installedSoftwareChanged();
 
 private:
-    QStringList m_bla;
     QVariantList m_installed_software;
 
     AuSoftwareEnumerator m_sw_enumerator;

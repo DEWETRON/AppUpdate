@@ -18,8 +18,7 @@
 #include "au_application_data.h"
 
 AuApplicationData::AuApplicationData()
-    : m_bla{"A", "B", "C"}
-    , m_installed_software{}
+    : m_installed_software{}
     , m_sw_enumerator()
 {
     update();
@@ -27,11 +26,6 @@ AuApplicationData::AuApplicationData()
 
 AuApplicationData::~AuApplicationData()
 {
-}
-
-QStringList AuApplicationData::getBla()
-{
-    return m_bla;
 }
 
 QVariantList AuApplicationData::getInstalledSoftware()
