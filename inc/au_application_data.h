@@ -17,12 +17,30 @@
 
 #pragma once
 
-class AuApplicationData
+#include <QObject>
+#include <QStringList>
+
+ /**
+  * Application main model
+  */
+class AuApplicationData : public QObject
 {
-private:
-    /* data */
+    Q_OBJECT
+
+    Q_PROPERTY(QStringList bla
+                READ getBla
+                NOTIFY blaChanged)
+
 public:
-    AuApplicationData(/* args */);
+    AuApplicationData();
     ~AuApplicationData();
+
+    QStringList getBla();
+
+Q_SIGNALS:
+    void blaChanged();
+
+private:
+    QStringList m_bla;
 };
 

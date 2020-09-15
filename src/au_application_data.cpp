@@ -17,10 +17,16 @@
 
 #include "au_application_data.h"
 
-AuApplicationData::AuApplicationData(/* args */)
+AuApplicationData::AuApplicationData()
+    : m_bla{"A", "B", "C"}
 {
 }
 
 AuApplicationData::~AuApplicationData()
 {
+}
+
+QStringList AuApplicationData::getBla()
+{
+    return m_bla;
 }

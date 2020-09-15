@@ -16,9 +16,11 @@
  */
 
 #include "au_application.h"
+#include "au_application_data.h"
 #include "au_window_qml.h"
 
 #include <QFileInfo>
+#include <QQmlContext>
 #include <QQmlEngine>
 
 AuApplication::AuApplication(int& argc, char** argv)
@@ -34,11 +36,16 @@ AuApplication::AuApplication(int& argc, char** argv)
 AuApplication::~AuApplication()
 {
     delete m_qml_reloader;
+    delete m_main_window;
+    delete m_app_data;
 }
 
 bool AuApplication::init()
 {
+    m_app_data = new AuApplicationData;
+
     // Setup main.qml
+    // TODO other paths, qrc ...
     m_qml_main_file = "../qml/main.qml";
     QFileInfo qml_file_info(m_qml_main_file);
     auto qml_path = qml_file_info.absolutePath();
@@ -57,14 +64,15 @@ bool AuApplication::initGui()
 {
     m_main_window = new AuWindowQml;
     m_main_window->connect(m_main_window->engine(), &QQmlEngine::quit, &m_app, &QCoreApplication::quit);
-    //m_main_window->setSource(QUrl("qrc:/main.qml"));
-    //m_main_window->setSource(QUrl("qml/main.qml"));
     m_main_window->setSource(QUrl(m_qml_main_file));
 
     if (m_main_window->status() == QQuickView::Error)
         return false;
 
     m_main_window->setResizeMode(QQuickView::SizeRootObjectToView);
+    
+    m_main_window->rootContext()->setContextProperty("app", m_app_data);
+    
     m_main_window->show();
     m_qml_reloader->addView(m_main_window);
 

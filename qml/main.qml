@@ -16,6 +16,8 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Controls 1.0
+
 
 Rectangle {
     id: page
@@ -24,7 +26,7 @@ Rectangle {
 
     Text {
         id: helloText
-        text: "*Hello world!!!!!"
+        text: "*Hello world!!!!!" + app.bla
         y: 30
         anchors.horizontalCenter: page.horizontalCenter
         font.pointSize: 24; font.bold: true

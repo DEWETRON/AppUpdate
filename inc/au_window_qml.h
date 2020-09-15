@@ -17,15 +17,35 @@
 
 #pragma once
 
+#include <QSystemTrayIcon>
 #include <QQuickView>
 
+/**
+ * Au main window
+ */
 class AuWindowQml : public QQuickView
 {
 
 public:
     AuWindowQml();
-    ~AuWindowQml();
+
+    bool event(QEvent* event) override;
+
+private Q_SLOTS:
+    void iconActivated(QSystemTrayIcon::ActivationReason reason);
+    void close();
 
 private:
+    void createActions();
+    void createTrayIcon();
+
+private:
+    QAction* m_minimizeAction;
+    QAction* m_maximizeAction;
+    QAction* m_restoreAction;
+    QAction* m_quitAction;
+
+    QSystemTrayIcon* m_trayIcon;
+    QMenu* m_trayIconMenu;
 };
 
