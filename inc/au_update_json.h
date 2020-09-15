@@ -17,12 +17,21 @@
 
 #pragma once
 
-#include <QObject>
+#include <Qurl>
+#include <QJsonDocument>
+#include <QVariant>
 
-class AuUpdateJson : public QObject
+class AuUpdateJson
 {
-    Q_OBJECT
 public:
     AuUpdateJson();
     ~AuUpdateJson() = default;
+
+    bool update(QUrl remote_url);
+
+    QVariantMap getVariantMap() const;
+
+private:
+    QJsonDocument m_update_doc;
+    QVariantMap   m_update_map;
 };

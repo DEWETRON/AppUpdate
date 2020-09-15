@@ -17,6 +17,7 @@
 
 #pragma once
 
+#include <functional>
 #include <memory>
 #include <string>
 #include <vector>
@@ -45,6 +46,9 @@ public:
 
     std::vector<SwEntry> enumerate();
 
+    bool addFilter(std::function<bool(const SwEntry&)> f);
+
 private:
     std::vector<std::shared_ptr<AuSoftwareEnumeratorSource>> m_sw_sources;
+    std::function<bool(const SwEntry&)> m_filter;
 };

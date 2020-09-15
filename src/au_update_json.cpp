@@ -19,21 +19,34 @@
 #include <QJsonDocument>
 #include <QFile>
 
+
 AuUpdateJson::AuUpdateJson()
-    : QObject(nullptr)
+{
+}
+
+
+bool AuUpdateJson::update(QUrl remote_url)
 {
     QFile update_file("../examples/update.json");
 
     if (!update_file.open(QIODevice::ReadOnly)) {
         qWarning("Couldn't open save file.");
-        //return false;
+        return false;
     }
 
     QByteArray json_data = update_file.readAll();
     QJsonParseError err;
-    QJsonDocument json(QJsonDocument::fromJson(json_data, &err));
+    m_update_doc = QJsonDocument::fromJson(json_data, &err);
 
-    auto debug = json.toJson();
+    auto debug = m_update_doc.toJson();
+
+    m_update_map = qvariant_cast<QVariantMap>(m_update_doc.toVariant());
+
+    return true;
+}
 
 
+QVariantMap AuUpdateJson::getVariantMap() const
+{
+    return m_update_map;
 }
