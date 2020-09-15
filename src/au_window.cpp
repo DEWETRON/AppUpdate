@@ -1,17 +1,17 @@
-/* 
+/*
  * This file is part of the AppUpdate (https://github.com/DEWETRON/AppUpdate)
  * Copyright (c) DEWETRON GmbH 2020.
- * 
- * This program is free software: you can redistribute it and/or modify  
- * it under the terms of the GNU General Public License as published by  
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, version 3.
  *
- * This program is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License 
+ * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
@@ -26,7 +26,7 @@
 #include <QCloseEvent>
 #include <QCoreApplication>
 #include <QGridLayout>
-#include <QHeaderview>
+#include <QHeaderView>
 #include <QLabel>
 #include <QMenu>
 #include <QMessageBox>
@@ -47,7 +47,7 @@ AuWindow::AuWindow()
     auto sw_registry = AuRegistry();
     sw_registry.enumInstalledSoftware();
     auto dewetron_sw = sw_registry.getInstalledSw();
-    
+
 
     auto sw_table = new QTableWidget(dewetron_sw.size(), 3, this);
 
@@ -73,7 +73,7 @@ AuWindow::AuWindow()
 
     mainLayout->addWidget(sw_table);
 #endif
-    
+
     setLayout(mainLayout);
 
     m_trayIcon->show();

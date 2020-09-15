@@ -27,6 +27,7 @@ set(CMAKE_AUTORCC ON)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Quick)
 find_package(Qt5Network)
+find_package(Qt5Widgets)
 
 include_directories(
   inc

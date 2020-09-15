@@ -34,6 +34,9 @@
 # VS Code
 .vs/
 
+# CLion
+.idea/
+
 # build directories
 build/
 build64/
