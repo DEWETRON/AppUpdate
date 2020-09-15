@@ -20,7 +20,10 @@
 #ifndef QT_NO_SYSTEMTRAYICON
 
 #include <QMessageBox>
-#include "au_window.h"
+#include <QSystemTrayIcon>
+//#include "au_window.h"
+#include "au_application.h"
+
 
 int main(int argc, char* argv[])
 {
@@ -28,7 +31,7 @@ int main(int argc, char* argv[])
 
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
-    QApplication app(argc, argv);
+    AuApplication app(argc, argv);
 
     if (!QSystemTrayIcon::isSystemTrayAvailable()) {
         QMessageBox::critical(nullptr, QObject::tr("Systray"),
@@ -38,9 +41,12 @@ int main(int argc, char* argv[])
     }
     QApplication::setQuitOnLastWindowClosed(false);
 
-    AuWindow window;
-    window.show();
-    return app.exec();
+    // AuWindow window;
+    // window.show();
+    // return app.exec();
+
+    if (!app.init()) return -1;
+    return app.run();
 }
 
 #else

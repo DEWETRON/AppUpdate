@@ -24,8 +24,8 @@ set(CMAKE_AUTOMOC ON)
 # Whether to handle rcc automatically for Qt targets.
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt5Core)
-find_package(Qt5Widgets)
+find_package(Qt5Core REQUIRED)
+find_package(Qt5Quick)
 find_package(Qt5Network)
 
 include_directories(
@@ -33,13 +33,20 @@ include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
 )
 
+
+add_subdirectory(qml)
+
 set(AU_HEADER_FILES
+  inc/au_application.h
   inc/au_window.h
+  inc/au_window_qml.h
 )
 
 set(AU_SOURCE_FILES
   src/app_update.cpp
+  src/au_application.cpp
   src/au_window.cpp
+  src/au_window_qml.cpp
 )
 
 if(WIN32)
@@ -54,6 +61,15 @@ if(WIN32)
 endif()
 
 
+set(QT_HEADER_FILES
+  inc/qml_reloader.h
+)
+
+set(QT_SOURCE_FILES
+  src/qml_reloader.cpp
+)
+
+
 set(AU_RESOURCE_FILES
   res/au_resources.qrc
 )
@@ -63,9 +79,11 @@ add_executable(${APPNAME} WIN32
   ${AU_SOURCE_FILES}
   ${AU_HEADER_FILES}
   ${AU_RESOURCE_FILES}
+  ${QT_HEADER_FILES}
+  ${QT_SOURCE_FILES}
   ${VERSION_SOURCE_FILES}
   ${QT_GUI_FORMS_HEADERS}
   ${RESOURCE_ADDED}
 )
 
-qt5_use_modules(${APPNAME} Widgets)
+qt5_use_modules(${APPNAME} Widgets Quick)

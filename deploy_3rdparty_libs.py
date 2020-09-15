@@ -9,7 +9,7 @@ ARCH_X64      = 'x64'
 
 def deploy_qt(script_path, destination, qt_directory, arch, build_type, special_build, version, install_qt_ut_libs):
     deploy_script_path = os.path.join(script_path, "deploy_qt.py")
-    args = "--destination \"%s\" --qt-directory \"%s\" --arch %s --build-type %s --qt-version %s --qt-module widgets " % (destination, qt_directory, arch, build_type, version)
+    args = "--destination \"%s\" --qt-directory \"%s\" --arch %s --build-type %s --qt-version %s --qt-module widgets --qt-module quick2 --qt-module network" % (destination, qt_directory, arch, build_type, version)
     if (special_build):
         args = args + " --special-build %s" % (special_build)
     if (install_qt_ut_libs):
