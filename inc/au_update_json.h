@@ -17,9 +17,40 @@
 
 #pragma once
 
+#include <map>
+#include <string>
+#include <vector>
+
 #include <Qurl>
 #include <QJsonDocument>
 #include <QVariant>
+
+
+namespace au_doc
+{
+    struct AuAppVersion
+    {
+        std::string version;
+        std::string release_note_url;
+        std::string release_date;
+        std::string license;
+        std::string url;
+        std::string signature;
+        std::vector<std::string> bundle;
+    };
+
+    struct AuApp
+    {
+        std::map<std::string, AuAppVersion> m_app_versions;
+    };
+
+    struct AuDoc
+    {
+        std::map<std::string, AuApp> m_apps;
+    };
+}
+
+
 
 class AuUpdateJson
 {
@@ -30,6 +61,7 @@ public:
     bool update(QUrl remote_url);
 
     QVariantMap getVariantMap() const;
+    au_doc::AuDoc getDocument() const;
 
 private:
     QJsonDocument m_update_doc;

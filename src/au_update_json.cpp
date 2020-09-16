@@ -16,9 +16,11 @@
  */
 
 #include "au_update_json.h"
+#include <algorithm>
 #include <QJsonDocument>
 #include <QFile>
 
+using namespace au_doc;
 
 AuUpdateJson::AuUpdateJson()
 {
@@ -49,4 +51,42 @@ bool AuUpdateJson::update(QUrl remote_url)
 QVariantMap AuUpdateJson::getVariantMap() const
 {
     return m_update_map;
+}
+
+au_doc::AuDoc AuUpdateJson::getDocument() const
+{
+    au_doc::AuDoc doc;
+
+    for (auto app_it = m_update_map.begin(); app_it != m_update_map.end(); ++app_it)
+    {
+        AuApp au_app;
+
+        QVariantMap ver_map = qvariant_cast<QVariantMap>(app_it.value());
+
+        for (auto ver_it = ver_map.begin(); ver_it != ver_map.end(); ++ver_it)
+        {
+            AuAppVersion au_ver;
+            QVariantMap ver_val = qvariant_cast<QVariantMap>(ver_it.value());
+            au_ver.version = ver_val["version"].toString().toStdString();
+            au_ver.release_note_url = ver_val["release_note_url"].toString().toStdString();
+            au_ver.release_date = ver_val["release_date"].toString().toStdString();
+            au_ver.license = ver_val["license"].toString().toStdString();
+            au_ver.url = ver_val["url"].toString().toStdString();
+            au_ver.signature = ver_val["signature"].toString().toStdString();
+            
+            auto bundle = ver_val["bundle"].toStringList();
+            au_ver.bundle.resize(bundle.size());
+            std::transform(bundle.begin(), bundle.end(), au_ver.bundle.begin(),
+                [](QString entry) {
+                    return entry.toStdString();
+                }
+                );
+
+            au_app.m_app_versions.insert({ ver_it.key().toStdString(), au_ver});
+        }
+
+        doc.m_apps.insert({ app_it.key().toStdString(), au_app });
+    }
+
+    return doc;
 }
