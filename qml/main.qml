@@ -24,121 +24,35 @@ import QtQuick.Layouts 1.12
 TabView {
     width: 550; height: 300
 
-
-
-
     Tab {
         title: "Updates"
-
+        
         ColumnLayout {
             anchors.fill: parent
-            anchors.margins: 20
             spacing: 10
 
             Text {
+                Layout.topMargin: 10
+                Layout.leftMargin: 10
                 text: "New versions of your software have been released!"
                 font.pointSize: 14; font.bold: false
             }
 
-
-            ColumnLayout {
-                RowLayout {
-                    spacing: 10
-                    Rectangle{
-                        width: 64
-                        height: 64
-                        //color: "red"
-                        Image {
-                            anchors.fill: parent
-                            fillMode: Image.PreserveAspectFit
-                            source: "../res/dewetron.ico"
-                        }
-                    }
-
-                    ColumnLayout {
-                        Text {
-                            text: "DEWETRON OXYGEN 6.0"
-                            font.pointSize: 14; font.bold: false
-                        }
-                        Text {
-                            text: "Installed version: 3.l.0"
-                            font.pointSize: 12; font.bold: false
-                        }
-                    }
-
-                    // HorizontalSpacer
-                    Item {
-                        Layout.fillWidth: true
-                    }
-
-                    ColumnLayout {
-                        Text {
-                            Layout.alignment: Qt.AlignRight
-                            text: "Download"
-                            color: "blue"
-                            font.pointSize: 12; font.bold: false; font.underline: true
-                        }
-                    }
-
-                    // HorizontalSpacer (fixed)
-                    Item {
-                        Layout.minimumWidth: 20
-                    }
-
-                }
-
-                RowLayout {
-                    spacing: 10
-                    Rectangle{
-                        width: 64
-                        height: 64
-                        color: "blue"
-                    }
-                    Text {
-                        Layout.alignment: Qt.AlignTop | Qt.AlignLeft
-                        text: "Changes:"
-                        font.pointSize: 12; font.bold: false;
-
-                    }
-                }
-
-                // VerticalSpacer
-                Item {
-                    Layout.fillHeight: true
-                }
-
-            }
-
-            // VerticalSpacer
-            Item {
-                Layout.fillHeight: true
-            }
-        }
-    }
-
-    Tab {
-        title: "Installed Apps"
-
-        ColumnLayout {
-            anchors.fill: parent
-            anchors.margins: 20
-            spacing: 10
-
-            Text {
-                text: "Currently installed applications:"
-                font.pointSize: 14; font.bold: false
-            }
-
             ListView {
-                model: app.installedApps
+                model: app.updateableApps
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 boundsBehavior: Flickable.StopAtBounds
-                ScrollBar.vertical: ScrollBar {}
+                ScrollBar.vertical: ScrollBar { }
                 clip: true
 
                 delegate:
+                ColumnLayout {
+                    x:10
+                    width: parent.width - 20
+
                     RowLayout {
+
                         spacing: 10
                         Rectangle{
                             width: 64
@@ -167,12 +81,99 @@ TabView {
                             Layout.fillWidth: true
                         }
 
-                        // HorizontalSpacer (fixed)
-                        Item {
-                            Layout.minimumWidth: 20
+
+                        Text {
+                            Layout.alignment: Qt.AlignRight
+                            text: "Download"
+                            color: "blue"
+                            font.pointSize: 12; font.bold: false; font.underline: true
                         }
 
                     }
+
+                    RowLayout {
+                        spacing: 10
+                        Rectangle{
+                            width: 64
+                            //height: 64
+                            //color: "blue"
+                        }
+                        Text {
+                            Layout.alignment: Qt.AlignTop | Qt.AlignLeft
+                            text: modelData["changes"]
+                            font.pointSize: 12; font.bold: false;
+
+                        }
+                    }
+                }
+
+                // VerticalSpacer
+                Item {
+                    Layout.fillHeight: true
+                }
+
+            }
+        }
+    }
+    Tab {
+        title: "Installed Apps"
+
+        ColumnLayout {
+            anchors.fill: parent
+            spacing: 10
+
+            Text {
+                Layout.topMargin: 10
+                Layout.leftMargin: 10
+                text: "Currently installed applications:"
+                font.pointSize: 14; font.bold: false
+            }
+
+            ListView {
+                model: app.installedApps
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                boundsBehavior: Flickable.StopAtBounds
+                ScrollBar.vertical: ScrollBar { }
+                clip: true
+
+                delegate: RowLayout {
+                    x:10
+                    width: parent.width - 20
+                    spacing: 10
+                    Rectangle{
+                        width: 64
+                        height: 64
+                        //color: "red"
+                        Image {
+                            anchors.fill: parent
+                            fillMode: Image.PreserveAspectFit
+                            source: "../res/dewetron.ico"
+                        }
+                    }
+
+                    ColumnLayout {
+                        Text {
+                            text: modelData["name"]
+                            font.pointSize: 14; font.bold: false
+                        }
+                        Text {
+                            text: modelData["version"]
+                            font.pointSize: 12; font.bold: false
+                        }
+                    }
+
+                    // HorizontalSpacer
+                    Item {
+                        Layout.fillWidth: true
+                    }
+
+                    // HorizontalSpacer (fixed)
+                    Item {
+                        Layout.minimumWidth: 20
+                    }
+
+                }
 
             }
 

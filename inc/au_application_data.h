@@ -48,23 +48,27 @@ class AuApplicationData : public QObject
                 NOTIFY installedSoftwareChanged)
 
     Q_PROPERTY(QVariantList installedApps
-            READ getInstalledApps
-            NOTIFY installedAppsChanged)
+                READ getInstalledApps
+                NOTIFY installedAppsChanged)
 
+    Q_PROPERTY(QVariantList updateableApps
+                READ getUpdateableApps
+                NOTIFY updateableAppsChanged)
 
 public:
     AuApplicationData();
     ~AuApplicationData();
 
     QVariantList getInstalledSoftware();
-
     QVariantList getInstalledApps();
+    QVariantList getUpdateableApps();
 
     void update();
 
 Q_SIGNALS:
     void installedSoftwareChanged();
     void installedAppsChanged();
+    void updateableAppsChanged();
 
 private:
     std::string getBundleName(const std::string& sw_display_name) const;

@@ -60,6 +60,31 @@ QVariantList AuApplicationData::getInstalledApps()
     return apps;
 }
 
+QVariantList AuApplicationData::getUpdateableApps()
+{
+    QVariantList apps;
+    for (auto app : m_au_doc.m_apps) {
+
+        QVariantMap entry;
+        entry["name"] = app.first.c_str();
+
+        for (auto ver : app.second.m_app_versions)
+        {
+            entry["version"] = ver.second.version.c_str();
+            
+            QString changes("Changes:\n");
+            for (auto change : ver.second.changes) {
+                changes += "- " + QString(change.c_str()) + "\n";
+            }
+
+            entry["changes"] = changes;
+        }
+
+        apps.push_back(entry);
+    }
+    return apps;
+}
+
 void AuApplicationData::update()
 {
     // get update json document
