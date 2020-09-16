@@ -19,35 +19,147 @@ import QtQuick 2.0
 import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.12
 
-Rectangle {
-    id: page
-    width: 550; height: 400
-    color: "lightgray"
 
-    // Text {
-    //     id: helloText
-    //     text: "*Hello world!!!!!" + app.installedSoftware
-    //     y: 30
-    //     anchors.horizontalCenter: page.horizontalCenter
-    //     font.pointSize: 24; font.bold: true
-    // }
+TabView {
+    width: 550; height: 300
 
-    GridLayout {
-        columns: 3
+    Tab {
+        title: "Updates"
 
-        Repeater {
-            model: app.installedSoftware
+        ColumnLayout {
+            anchors.fill: parent
+            anchors.margins: 20
+            spacing: 10           
 
-            Repeater {
+            Text {
+                text: "New versions of your software have been released!"
+                font.pointSize: 14; font.bold: false
+            }
 
-                model: modelData
 
-                Text {
-                    text: modelData
-                    font.pointSize: 16; font.bold: true
+            ColumnLayout {
+                RowLayout {
+                    spacing: 10
+                    Rectangle{
+                        width: 64
+                        height: 64
+                        //color: "red"
+                        Image {
+                            anchors.fill: parent
+                            fillMode: Image.PreserveAspectFit
+                            source: "../res/dewetron.ico"
+                        }
+                    }
+
+                    ColumnLayout {
+                        Text {
+                            text: "DEWETRON OXYGEN 6.0"
+                            font.pointSize: 14; font.bold: false
+                        }
+                        Text {
+                            text: "Installed version: 3.l.0"
+                            font.pointSize: 12; font.bold: false
+                        }
+                    }
+
+                    // HorizontalSpacer
+                    Item {
+                        Layout.fillWidth: true
+                    }
+
+                    ColumnLayout {
+                        Text {
+                            Layout.alignment: Qt.AlignRight
+                            text: "Download"
+                            color: "blue"
+                            font.pointSize: 12; font.bold: false; font.underline: true
+                        }
+                    }
+
+                    // HorizontalSpacer (fixed)
+                    Item {
+                        Layout.minimumWidth: 20
+                    }
+
                 }
+
+                RowLayout {
+                    spacing: 10
+                    Rectangle{
+                        width: 64
+                        height: 64
+                        color : "blue"
+                    }
+                    Text {
+                        Layout.alignment: Qt.AlignTop | Qt.AlignLeft
+                        text: "Changes:"
+                        font.pointSize: 12; font.bold: false;
+
+                    }
+                }
+
+                // VerticalSpacer
+                Item {
+                    Layout.fillHeight: true
+                }
+
+            }
+
+            // VerticalSpacer
+            Item {
+                Layout.fillHeight: true
             }
         }
     }
 
+    Tab {
+        title: "Installed Apps"
+
+        Rectangle {
+            id: page
+
+            color: "white"
+
+            ColumnLayout {
+                id: mainColumn
+                anchors.fill: parent
+                anchors.margins: 20
+
+
+                ColumnLayout {
+                    Repeater {
+                        model: app.installedSoftware
+
+                        RowLayout {
+                            spacing: 10
+
+                            Rectangle {
+                                color: "blue"
+                                width: 20; height: 20
+                            }
+                            Text {
+                                Layout.minimumWidth: 250
+                                Layout.preferredWidth: 250
+                                text: modelData[0]
+                                font.pointSize: 12; font.bold: false
+                            }
+                            Text {
+                                Layout.minimumWidth: 100
+                                Layout.preferredWidth: 100
+                                text: modelData[1]
+                                font.pointSize: 12; font.bold: false
+                            }
+                            Text {
+                                Layout.minimumWidth: 100
+                                Layout.preferredWidth: 100
+                                text: modelData[2]
+                                font.pointSize: 12; font.bold: false
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
 }

@@ -82,6 +82,15 @@ au_doc::AuDoc AuUpdateJson::getDocument() const
                 }
                 );
 
+            auto changes = ver_val["changes"].toStringList();
+            au_ver.changes.resize(changes.size());
+            std::transform(changes.begin(), changes.end(), au_ver.changes.begin(),
+                [](QString entry) {
+                return entry.toStdString();
+            }
+            );
+
+
             au_app.m_app_versions.insert({ ver_it.key().toStdString(), au_ver});
         }
 

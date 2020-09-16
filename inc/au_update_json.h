@@ -37,6 +37,7 @@ namespace au_doc
         std::string url;
         std::string signature;
         std::vector<std::string> bundle;
+        std::vector<std::string> changes;
     };
 
     struct AuApp
