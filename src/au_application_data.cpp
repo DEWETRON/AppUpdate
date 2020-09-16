@@ -47,6 +47,19 @@ QVariantList AuApplicationData::getInstalledSoftware()
     return m_installed_software;
 }
 
+QVariantList AuApplicationData::getInstalledApps()
+{
+    QVariantList apps;
+    for (auto app : m_installed_software_internal) {
+        
+        QVariantMap entry;
+        entry["name"] = app.package_name.c_str();
+        entry["version"] = app.package_version.c_str();
+        apps.push_back(entry);
+    }
+    return apps;
+}
+
 void AuApplicationData::update()
 {
     // get update json document

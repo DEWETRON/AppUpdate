@@ -17,11 +17,15 @@
 
 import QtQuick 2.0
 import QtQuick.Controls 1.0
+import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
 
 TabView {
     width: 550; height: 300
+
+
+
 
     Tab {
         title: "Updates"
@@ -29,7 +33,7 @@ TabView {
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: 20
-            spacing: 10           
+            spacing: 10
 
             Text {
                 text: "New versions of your software have been released!"
@@ -88,7 +92,7 @@ TabView {
                     Rectangle{
                         width: 64
                         height: 64
-                        color : "blue"
+                        color: "blue"
                     }
                     Text {
                         Layout.alignment: Qt.AlignTop | Qt.AlignLeft
@@ -114,6 +118,70 @@ TabView {
 
     Tab {
         title: "Installed Apps"
+
+        ColumnLayout {
+            anchors.fill: parent
+            anchors.margins: 20
+            spacing: 10
+
+            Text {
+                text: "Currently installed applications:"
+                font.pointSize: 14; font.bold: false
+            }
+
+            ListView {
+                model: app.installedApps
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                boundsBehavior: Flickable.StopAtBounds
+                ScrollBar.vertical: ScrollBar {}
+                clip: true
+
+                delegate:
+                    RowLayout {
+                        spacing: 10
+                        Rectangle{
+                            width: 64
+                            height: 64
+                            //color: "red"
+                            Image {
+                                anchors.fill: parent
+                                fillMode: Image.PreserveAspectFit
+                                source: "../res/dewetron.ico"
+                            }
+                        }
+
+                        ColumnLayout {
+                            Text {
+                                text: modelData["name"]
+                                font.pointSize: 14; font.bold: false
+                            }
+                            Text {
+                                text: modelData["version"]
+                                font.pointSize: 12; font.bold: false
+                            }
+                        }
+
+                        // HorizontalSpacer
+                        Item {
+                            Layout.fillWidth: true
+                        }
+
+                        // HorizontalSpacer (fixed)
+                        Item {
+                            Layout.minimumWidth: 20
+                        }
+
+                    }
+
+            }
+
+        }
+    }
+
+
+    Tab {
+        title: "Installed Apps (old)"
 
         Rectangle {
             id: page
