@@ -103,7 +103,7 @@ std::vector<SwEntry> AuDpkg::enumerate()
                         version = version.substr(0, pos);
                     }
                     entry.m_sw_version = version;
-                    entry.m_publisher = "Dewetron";
+                    entry.m_publisher = "DEWETRON";
                     entries.push_back(entry);
                 }
             }
