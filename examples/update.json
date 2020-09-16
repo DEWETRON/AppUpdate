@@ -1,0 +1,65 @@
+{
+    "DEWETRON Oxygen": {
+        "5.2.1": {
+            "version": "5.2.1 Super",
+            "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
+            "release_date": "15.09.2020",
+            "license": "5",
+            "url": "https:://ccc.dewetron.com/A_UUID",
+            "signature": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw=="
+        },
+        "5.2.0": {
+            "version": "5.2.0 beta 123",
+            "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
+            "release_date": "15.07.2020",
+            "license": "5",
+            "url": "https:://ccc.dewetron.com/B_UUID",
+            "signature": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw=="
+        },
+        "3.7.1": {
+            "version": "3.7.1",
+            "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
+            "release_date": "15.07.2019",
+            "license": "3",
+            "url": "https:://ccc.dewetron.com/X_UUID",
+            "signature": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw=="
+        }
+    },
+    "DEWETRON TRION Applications": {
+        "5.2.1": {
+            "version": "5.2.1 Super",
+            "release_note_url": "https://www.dewetron.com/Trion/changelog.html",
+            "release_date": "15.09.2020",
+            "bundle": [
+                "DEWETRON TRION Driver",
+                "DEWETRON Explorer",
+                "DEWETRON DEWE2 Driver",
+                "DEWETRON TRIONCAL"
+            ],
+            "url": "https:://ccc.dewetron.com/C_UUID",
+            "signature": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw=="
+        },
+        "5.2.0": {
+            "version": "5.2.0 beta 0815",
+            "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
+            "release_date": "15.07.2020",
+            "bundle": [
+                "DEWETRON TRION Driver",
+                "DEWETRON Explorer",
+                "DEWETRON DEWE2 Driver",
+                "DEWETRON TRIONCAL"
+            ],
+            "url": "https:://ccc.dewetron.com/D_UUID",
+            "signature": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw=="
+        }
+    },
+    "DEWETRON AppUpdate": {
+        "1.0.0": {
+            "version": "1.0.0",
+            "release_note_url": "https://www.dewetron.com/AppUpdate/changelog.html",
+            "release_date": "15.09.2020",
+            "url": "https:://ccc.dewetron.com/C_UUID",
+            "signature": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw=="
+        }
+    }
+}

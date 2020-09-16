@@ -17,38 +17,21 @@
 
 #pragma once
 
-#include <functional>
-#include <memory>
-#include <string>
-#include <vector>
+#include <Qurl>
+#include <QJsonDocument>
+#include <QVariant>
 
-
-struct SwEntry
-{
-    std::string m_sw_display_name;
-    std::string m_sw_version;
-    std::string m_publisher;
-};
-
-
-class AuSoftwareEnumeratorSource
+class AuUpdateJson
 {
 public:
-    virtual ~AuSoftwareEnumeratorSource() = default;
-    virtual std::vector<SwEntry> enumerate() = 0;
-};
+    AuUpdateJson();
+    ~AuUpdateJson() = default;
 
+    bool update(QUrl remote_url);
 
-class AuSoftwareEnumerator
-{
-public:
-    AuSoftwareEnumerator();
-
-    std::vector<SwEntry> enumerate();
-
-    bool addFilter(std::function<bool(const SwEntry&)> f);
+    QVariantMap getVariantMap() const;
 
 private:
-    std::vector<std::shared_ptr<AuSoftwareEnumeratorSource>> m_sw_sources;
-    std::function<bool(const SwEntry&)> m_filter;
+    QJsonDocument m_update_doc;
+    QVariantMap   m_update_map;
 };

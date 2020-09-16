@@ -15,40 +15,38 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
-
-#include <functional>
-#include <memory>
-#include <string>
-#include <vector>
+#include "au_update_json.h"
+#include <QJsonDocument>
+#include <QFile>
 
 
-struct SwEntry
+AuUpdateJson::AuUpdateJson()
 {
-    std::string m_sw_display_name;
-    std::string m_sw_version;
-    std::string m_publisher;
-};
+}
 
 
-class AuSoftwareEnumeratorSource
+bool AuUpdateJson::update(QUrl remote_url)
 {
-public:
-    virtual ~AuSoftwareEnumeratorSource() = default;
-    virtual std::vector<SwEntry> enumerate() = 0;
-};
+    QFile update_file("../examples/update.json");
+
+    if (!update_file.open(QIODevice::ReadOnly)) {
+        qWarning("Couldn't open save file.");
+        return false;
+    }
+
+    QByteArray json_data = update_file.readAll();
+    QJsonParseError err;
+    m_update_doc = QJsonDocument::fromJson(json_data, &err);
+
+    auto debug = m_update_doc.toJson();
+
+    m_update_map = qvariant_cast<QVariantMap>(m_update_doc.toVariant());
+
+    return true;
+}
 
 
-class AuSoftwareEnumerator
+QVariantMap AuUpdateJson::getVariantMap() const
 {
-public:
-    AuSoftwareEnumerator();
-
-    std::vector<SwEntry> enumerate();
-
-    bool addFilter(std::function<bool(const SwEntry&)> f);
-
-private:
-    std::vector<std::shared_ptr<AuSoftwareEnumeratorSource>> m_sw_sources;
-    std::function<bool(const SwEntry&)> m_filter;
-};
+    return m_update_map;
+}

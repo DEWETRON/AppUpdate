@@ -21,7 +21,7 @@ import QtQuick.Layouts 1.12
 
 Rectangle {
     id: page
-    width: 320; height: 480
+    width: 550; height: 400
     color: "lightgray"
 
     // Text {
@@ -33,7 +33,7 @@ Rectangle {
     // }
 
     GridLayout {
-        columns: 2
+        columns: 3
 
         Repeater {
             model: app.installedSoftware
@@ -44,7 +44,7 @@ Rectangle {
 
                 Text {
                     text: modelData
-                    font.pointSize: 24; font.bold: true
+                    font.pointSize: 16; font.bold: true
                 }
             }
         }

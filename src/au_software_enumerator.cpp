@@ -47,8 +47,8 @@ AuSoftwareEnumerator::AuSoftwareEnumerator()
 {
 
 #ifdef WIN32
-    //m_sw_sources.push_back(std::make_shared<AuRegistry>());
-    m_sw_sources.push_back(std::make_shared<AuTestSource>());
+    m_sw_sources.push_back(std::make_shared<AuRegistry>());
+    //m_sw_sources.push_back(std::make_shared<AuTestSource>());
 #else
     //m_sw_sources.push_back(std::make_shared<AuTestSource>());
     m_sw_sources.push_back(std::make_shared<AuDpkg>());
@@ -63,7 +63,19 @@ std::vector<SwEntry> AuSoftwareEnumerator::enumerate()
     for (auto source : m_sw_sources)
     {
         auto sw_from_source = source->enumerate();
-        all_installed_sw.insert(all_installed_sw.end(), sw_from_source.begin(), sw_from_source.end());
+        for (const auto& sw_entry : sw_from_source)
+        {
+            if (m_filter && m_filter(sw_entry))
+            {
+                all_installed_sw.push_back(sw_entry);
+            }
+        }
     }
     return all_installed_sw;
+}
+
+bool AuSoftwareEnumerator::addFilter(std::function<bool(const SwEntry&)> f)
+{
+    m_filter = f;
+    return true;
 }
