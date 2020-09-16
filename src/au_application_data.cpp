@@ -24,6 +24,7 @@ AuApplicationData::AuApplicationData()
     , m_installed_software_internal{}
     , m_sw_enumerator()
     , m_bundle_map()
+    , m_au_doc()
 {
     // predefine bundles, which are only shown once
     m_bundle_map = std::map<std::string, std::string>
@@ -50,13 +51,13 @@ void AuApplicationData::update()
 {
     // get update json document
     AuUpdateJson au_json;
-    QVariantMap update_map;
 
     // TODO get remote json document
     if (au_json.update(QUrl{ "..." }))
     {
-        update_map = au_json.getVariantMap();
-        au_json.getDocument();
+        // update instance
+        m_au_doc = au_json.getDocument();
+        updateBundleMap();
     }
 
     // add a custom filter to display only relevant software packages
@@ -67,19 +68,7 @@ void AuApplicationData::update()
     // create list of installed sw
     for (const auto& sw_entry : sw_entries)
     {
-        QVersionNumber latest_version;
-        
-        auto it = update_map.find(sw_entry.m_sw_display_name.c_str());
-        if (it != update_map.end())
-        {
-            auto avail_versions = qvariant_cast<QVariantMap>(*it);
-            for (auto version_it = avail_versions.begin(); version_it != avail_versions.end(); version_it++)
-            {
-                auto qver = QVersionNumber::fromString(version_it.key());
-                if (qver > latest_version) latest_version = qver;
-            }
-        }
-
+        QVersionNumber latest_version(getHighestVersionNumber(sw_entry));
         addToSwList(sw_entry, latest_version);
     }
 
@@ -101,16 +90,16 @@ std::string AuApplicationData::getBundleName(const std::string& sw_display_name)
 void AuApplicationData::addToSwList(const SwEntry& sw_entry, const QVersionNumber& latest_version)
 {
     auto bundle_name = getBundleName(sw_entry.m_sw_display_name);
-
     std::string app_name = bundle_name.empty() ? sw_entry.m_sw_display_name : bundle_name;
 
     if (std::none_of(m_installed_software_internal.begin(), m_installed_software_internal.end(),
-        [app_name](SwEntry sw_entry) {
-            return sw_entry.m_sw_display_name == app_name;
+        [app_name](SwComponent sw_entry) {
+            return sw_entry.package_name == app_name;
         }))
     {
-        SwEntry one_entry{ app_name.c_str(),
+        SwComponent one_entry{ app_name.c_str(),
             sw_entry.m_sw_version.c_str(),
+            sw_entry.m_publisher.c_str(),
             latest_version.toString().toStdString()
         };
 
@@ -118,19 +107,59 @@ void AuApplicationData::addToSwList(const SwEntry& sw_entry, const QVersionNumbe
     }
 }
 
-QVariantList AuApplicationData::toVariantList(const std::vector<SwEntry>& sw_list)
+QVariantList AuApplicationData::toVariantList(const std::vector<SwComponent>& sw_list)
 {
     QVariantList v_list;
 
     for (const auto& sw_entry : sw_list)
     {
         QVariantList entry;
-        entry.push_back(sw_entry.m_sw_display_name.c_str());
-        entry.push_back(sw_entry.m_sw_version.c_str());
-        entry.push_back("");
+        entry.push_back(sw_entry.package_name.c_str());
+        entry.push_back(sw_entry.package_version.c_str());
+        entry.push_back(sw_entry.latest_package_version.c_str());
 
         v_list.push_back(entry);
     }
 
     return v_list;
+}
+
+QVersionNumber AuApplicationData::getHighestVersionNumber(const SwEntry& sw_entry)
+{
+    QVersionNumber highest_version;
+
+    auto bundle_name = getBundleName(sw_entry.m_sw_display_name);
+    std::string app_name = bundle_name.empty() ? sw_entry.m_sw_display_name : bundle_name;
+
+    auto it = m_au_doc.m_apps.find(app_name);
+    if (it != m_au_doc.m_apps.end())
+    {
+        auto avail_versions = it->second.m_app_versions;
+        for (auto version_it = avail_versions.begin(); version_it != avail_versions.end(); version_it++)
+        {
+            auto qver = QVersionNumber::fromString(version_it->first.c_str());
+            if (qver > highest_version) highest_version = qver;
+        }
+    }
+
+    return highest_version;
+}
+
+void AuApplicationData::updateBundleMap()
+{
+    std::map<std::string, std::string> bundle_map;
+
+    for (auto app : m_au_doc.m_apps)
+    {
+        for (auto ver : app.second.m_app_versions)
+        {
+            for (auto part_of_bundle : ver.second.bundle)
+            {
+                bundle_map.insert({ part_of_bundle, app.first});
+            }
+        }
+    }
+
+    // replace old map
+    m_bundle_map = bundle_map;
 }

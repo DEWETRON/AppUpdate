@@ -18,6 +18,7 @@
 #pragma once
 
 #include "au_software_enumerator.h"
+#include "au_update_json.h"
 
 #include <map>
 #include <QObject>
@@ -60,12 +61,15 @@ Q_SIGNALS:
 private:
     std::string getBundleName(const std::string& sw_display_name) const;
     void addToSwList(const SwEntry& sw_entry, const QVersionNumber& latest_version);
-    QVariantList toVariantList(const std::vector<SwEntry>& sw_list);
+    QVariantList toVariantList(const std::vector<SwComponent>& sw_list);
+    QVersionNumber getHighestVersionNumber(const SwEntry& sw_entry);
+    void updateBundleMap();
 
 private:
     QVariantList m_installed_software;
-    std::vector<SwEntry> m_installed_software_internal;
+    std::vector<SwComponent> m_installed_software_internal;
     AuSoftwareEnumerator m_sw_enumerator;
     std::map<std::string, std::string> m_bundle_map;
+    au_doc::AuDoc m_au_doc;
 };
 
