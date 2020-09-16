@@ -75,6 +75,7 @@ private:
     void addToSwList(const SwEntry& sw_entry, const QVersionNumber& latest_version);
     QVariantList toVariantList(const std::vector<SwComponent>& sw_list);
     QVersionNumber getHighestVersionNumber(const SwEntry& sw_entry);
+    QList<QVersionNumber> getSortedVersionNumbers(const std::string& app_name);
     void updateBundleMap();
 
 private:

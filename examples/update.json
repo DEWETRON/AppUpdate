@@ -85,8 +85,7 @@
             "url": "https:://ccc.dewetron.com/C_UUID",
             "signature": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
             "changes": [
-                "Better hw support",
-                "less bugs"
+                "Initial Release"
             ]
         }
     }

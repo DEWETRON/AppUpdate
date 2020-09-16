@@ -51,6 +51,12 @@ TabView {
                     x:10
                     width: parent.width - 20
 
+                    Rectangle {
+                        Layout.fillWidth: true
+                        height: 1
+                        color: "darkgrey"
+                    }
+
                     RowLayout {
 
                         spacing: 10
@@ -81,12 +87,13 @@ TabView {
                             Layout.fillWidth: true
                         }
 
-
-                        Text {
-                            Layout.alignment: Qt.AlignRight
-                            text: "Download"
-                            color: "blue"
-                            font.pointSize: 12; font.bold: false; font.underline: true
+                        ColumnLayout {
+                            Text {
+                                Layout.alignment: Qt.AlignRight
+                                text: "Download"
+                                color: "blue"
+                                font.pointSize: 12; font.bold: false; font.underline: true
+                            }
                         }
 
                     }
@@ -104,6 +111,17 @@ TabView {
                             font.pointSize: 12; font.bold: false;
 
                         }
+
+                        // HorizontalSpacer
+                        Item {
+                            Layout.fillWidth: true
+                        }
+
+                        Button {
+                            text: "Older Versions"
+                            enabled: modelData["older_versions"].length > 0
+                        }
+
                     }
                 }
 
@@ -137,42 +155,54 @@ TabView {
                 ScrollBar.vertical: ScrollBar { }
                 clip: true
 
-                delegate: RowLayout {
+                delegate: 
+                ColumnLayout {
                     x:10
                     width: parent.width - 20
-                    spacing: 10
-                    Rectangle{
-                        width: 64
-                        height: 64
-                        //color: "red"
-                        Image {
-                            anchors.fill: parent
-                            fillMode: Image.PreserveAspectFit
-                            source: "../res/dewetron.ico"
-                        }
-                    }
 
-                    ColumnLayout {
-                        Text {
-                            text: modelData["name"]
-                            font.pointSize: 14; font.bold: false
-                        }
-                        Text {
-                            text: modelData["version"]
-                            font.pointSize: 12; font.bold: false
-                        }
-                    }
-
-                    // HorizontalSpacer
-                    Item {
+                    Rectangle {
                         Layout.fillWidth: true
+                        height: 1
+                        color: "darkgrey"
                     }
 
-                    // HorizontalSpacer (fixed)
-                    Item {
-                        Layout.minimumWidth: 20
-                    }
+                    RowLayout {
+                        x:10
+                        width: parent.width - 20
+                        spacing: 10
+                        Rectangle{
+                            width: 64
+                            height: 64
+                            //color: "red"
+                            Image {
+                                anchors.fill: parent
+                                fillMode: Image.PreserveAspectFit
+                                source: "../res/dewetron.ico"
+                            }
+                        }
 
+                        ColumnLayout {
+                            Text {
+                                text: modelData["name"]
+                                font.pointSize: 14; font.bold: false
+                            }
+                            Text {
+                                text: modelData["version"]
+                                font.pointSize: 12; font.bold: false
+                            }
+                        }
+
+                        // HorizontalSpacer
+                        Item {
+                            Layout.fillWidth: true
+                        }
+
+                        // HorizontalSpacer (fixed)
+                        Item {
+                            Layout.minimumWidth: 20
+                        }
+
+                    }
                 }
 
             }

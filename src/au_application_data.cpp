@@ -67,18 +67,47 @@ QVariantList AuApplicationData::getUpdateableApps()
 
         QVariantMap entry;
         entry["name"] = app.first.c_str();
+        auto sorted_vn = getSortedVersionNumbers(app.first);
 
-        for (auto ver : app.second.m_app_versions)
+        if (sorted_vn.isEmpty()) continue;
+
+        // Highest version first
         {
-            entry["version"] = ver.second.version.c_str();
-            
+            auto ver = sorted_vn.first();
+            sorted_vn.pop_front();
+            auto app_version = app.second.m_app_versions[ver.toString().toStdString().c_str()];
+
+            entry["version"] = app_version.version.c_str();
+
             QString changes("Changes:\n");
-            for (auto change : ver.second.changes) {
+            for (auto change : app_version.changes) {
                 changes += "- " + QString(change.c_str()) + "\n";
             }
 
             entry["changes"] = changes;
         }
+        
+        QVariantList older_versions;
+
+        // look at older mentioned versions -> stored in entry.other map
+        for (auto ver : sorted_vn)
+        {
+            auto app_version = app.second.m_app_versions[ver.toString().toStdString().c_str()];
+            
+            QVariantMap other_entry;
+
+            other_entry["version"] = app_version.version.c_str();
+
+            QString changes("Changes:\n");
+            for (auto change : app_version.changes) {
+                changes += "- " + QString(change.c_str()) + "\n";
+            }
+
+            other_entry["changes"] = changes;
+
+            older_versions.push_back(other_entry);
+        }
+        entry["older_versions"] = older_versions;
 
         apps.push_back(entry);
     }
@@ -181,6 +210,36 @@ QVersionNumber AuApplicationData::getHighestVersionNumber(const SwEntry& sw_entr
     }
 
     return highest_version;
+}
+
+QList<QVersionNumber> AuApplicationData::getSortedVersionNumbers(const std::string& app_name)
+{
+    QList<QVersionNumber> sorted_version_numbers;
+
+    auto it = m_au_doc.m_apps.find(app_name);
+    if (it != m_au_doc.m_apps.end())
+    {
+        auto avail_versions = it->second.m_app_versions;
+        for (auto version_it = avail_versions.begin(); version_it != avail_versions.end(); version_it++)
+        {
+            auto curr_ver = QVersionNumber::fromString(version_it->first.c_str());
+            bool inserted = false;
+            for (auto it = sorted_version_numbers.begin(); it != sorted_version_numbers.end(); ++it)
+            {
+                if (curr_ver > *it)
+                {
+                    sorted_version_numbers.insert(it, curr_ver);
+                    inserted = true;
+                    break;
+                }
+            }
+            if (!inserted)
+            {
+                sorted_version_numbers.push_back(curr_ver);
+            }
+        }
+    }
+    return sorted_version_numbers;
 }
 
 void AuApplicationData::updateBundleMap()
