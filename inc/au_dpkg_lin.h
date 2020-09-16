@@ -15,39 +15,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 1.0
-import QtQuick.Layouts 1.12
+#pragma once
 
-Rectangle {
-    id: page
-    width: 550; height: 400
-    color: "lightgray"
+#include "au_software_enumerator.h"
+#include <vector>
+#include <string>
 
-    // Text {
-    //     id: helloText
-    //     text: "*Hello world!!!!!" + app.installedSoftware
-    //     y: 30
-    //     anchors.horizontalCenter: page.horizontalCenter
-    //     font.pointSize: 24; font.bold: true
-    // }
 
-    GridLayout {
-        columns: 3
+class AuDpkg : public AuSoftwareEnumeratorSource
+{
+public:
+    AuDpkg();
+    ~AuDpkg();
 
-        Repeater {
-            model: app.installedSoftware
+    std::vector<SwEntry> enumerate() override;
+private:
 
-            Repeater {
+};
 
-                model: modelData
-
-                Text {
-                    text: modelData
-                    font.pointSize: 16; font.bold: true
-                }
-            }
-        }
-    }
-
-}

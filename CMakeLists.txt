@@ -67,6 +67,17 @@ if(WIN32)
   )
 endif()
 
+if(UNIX)
+  set(AU_HEADER_FILES
+    ${AU_HEADER_FILES}
+    inc/au_dpkg_lin.h
+  )
+  set(AU_SOURCE_FILES
+    ${AU_SOURCE_FILES}
+    src/au_dpkg_lin.cpp
+  )
+endif()
+
 
 set(QT_HEADER_FILES
   inc/qml_reloader.h
