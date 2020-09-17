@@ -86,6 +86,7 @@ TabView {
                     x:10
                     width: parent.width - 20
 
+                    property var url : modelData["url"]
 
                     Rectangle {
                         Layout.fillWidth: true
@@ -136,12 +137,12 @@ TabView {
                                 text: qsTr("Download")
                                 color: "blue"
                                 font.pointSize: 12; font.bold: false; font.underline: true
-                                visible: modelData["url"] != null ? modelData["url"].length > 0 : false
+                                visible: url != null ? url.length > 0 : false
                                 
                                 MouseArea {
                                     anchors.fill: parent
                                     onClicked: { 
-                                        app.download(modelData["url"])
+                                        app.download(url)
                                     }
                                 }
                             }
@@ -162,12 +163,27 @@ TabView {
                             font.pointSize: 12; font.bold: false;
 
                         }
-
+                        
                         // HorizontalSpacer
                         Item {
                             Layout.fillWidth: true
                         }
 
+                    }
+
+                    ProgressBar {
+                        id: dlBar
+                        Layout.fillWidth: true
+                        from: 0
+                        to: 100
+                        value: 0
+                        //visible: app.getDownloadProgress(url) > 0
+                        visible: value > 0
+
+                        Connections {
+                            target: app
+                            onDownloadProgressChanged: { dlBar.value = app.getDownloadProgress(url) }
+                        }
                     }
 
                 }
@@ -186,13 +202,7 @@ TabView {
                 // Text {
                 //     text: app.downloadProgress
                 // }
-                ProgressBar {
-                    Layout.fillWidth: true
-                    from: 0
-                    to: 100
-                    value: app.downloadProgress
-                    visible: app.downloadProgress > 0
-                }
+
 
 
                 Text {

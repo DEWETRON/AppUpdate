@@ -38,7 +38,7 @@ public:
 Q_SIGNALS:
     void downloadFinished(QUrl, QString filename);
     void downloadError(QUrl);
-    void downloadProgress(qint64 curr, qint64 max);
+    void downloadProgress(QUrl, qint64 curr, qint64 max);
 
 private:
     Q_SLOT void fileDownloaded(QNetworkReply* reply);

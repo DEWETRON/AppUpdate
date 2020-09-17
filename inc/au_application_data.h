@@ -60,9 +60,9 @@ class AuApplicationData : public QObject
                 READ getMessage
                 NOTIFY messageChanged)
 
-    Q_PROPERTY(int downloadProgress
-                READ getDownloadProgress
-                NOTIFY downloadProgressChanged)
+    //Q_PROPERTY(int downloadProgress
+    //            READ getDownloadProgress
+    //            NOTIFY downloadProgressChanged)
 
 
 public:
@@ -74,11 +74,11 @@ public:
     QVariantList getUpdateableApps();
     QString getMessage() const;
     void setMessage(QString message);
-    int getDownloadProgress();
 
     Q_INVOKABLE void checkForUpdates();
     Q_INVOKABLE void updateAll();
     Q_INVOKABLE void download(QUrl download_url);
+    Q_INVOKABLE int getDownloadProgress(QUrl download_url);
 
 Q_SIGNALS:
     void installedSoftwareChanged();
@@ -90,7 +90,7 @@ Q_SIGNALS:
 private:
     Q_SLOT void downloadFinished(QUrl dl_url, QString filename);
     Q_SLOT void downloadError(QUrl dl_url);
-    Q_SLOT void downloadProgress(qint64 curr, qint64 max);
+    Q_SLOT void downloadProgress(QUrl dl_url, qint64 curr, qint64 max);
 
 private:
     void update();
@@ -112,6 +112,6 @@ private:
     au_doc::AuDoc m_au_doc;
     QMap<QUrl, AuDownloader*> m_downloads;
     QString m_message;
-    int m_progress;
+    QMap<QUrl, int> m_progress;
 };
 

@@ -29,7 +29,7 @@ AuApplicationData::AuApplicationData()
     , m_au_doc()
     , m_downloads()
     , m_message()
-    , m_progress(-1.0)
+    , m_progress()
 {
     // predefine bundles, which are only shown once
     m_bundle_map = std::map<std::string, std::string>
@@ -135,11 +135,6 @@ void AuApplicationData::setMessage(QString message)
     Q_EMIT messageChanged();
 }
 
-int AuApplicationData::getDownloadProgress()
-{
-    return m_progress;
-}
-
 void AuApplicationData::checkForUpdates()
 {
     update();
@@ -156,6 +151,11 @@ void AuApplicationData::updateAll()
 void AuApplicationData::download(QUrl download_url)
 {
     doDownload(download_url);
+}
+
+int AuApplicationData::getDownloadProgress(QUrl download_url)
+{
+    return m_progress[download_url];
 }
 
 void AuApplicationData::update()
@@ -378,6 +378,9 @@ void AuApplicationData::downloadFinished(QUrl dl_url, QString filename)
         setMessage(QString("File downloaded to ") + dest_file.fileName());
     }
 
+    m_progress[dl_url] = 0;
+    Q_EMIT downloadProgressChanged();
+
     m_downloads.erase(au_dl_it);
 }
 
@@ -399,8 +402,10 @@ void AuApplicationData::downloadError(QUrl dl_url)
     m_downloads.erase(au_dl_it);
 }
 
-void AuApplicationData::downloadProgress(qint64 curr, qint64 max)
+void AuApplicationData::downloadProgress(QUrl dl_url, qint64 curr, qint64 max)
 {
-    m_progress = (100.0 / max) * curr;
+    auto progress = (100.0 / max) * curr;
+    
+    m_progress[dl_url] = progress; 
     Q_EMIT downloadProgressChanged();
 }

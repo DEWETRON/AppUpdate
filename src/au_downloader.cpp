@@ -60,7 +60,7 @@ void AuDownloader::fileDownloaded(QNetworkReply* reply)
 
 void AuDownloader::dlProgress(qint64 curr, qint64 max)
 {
-    Q_EMIT downloadProgress(curr, max);
+    Q_EMIT downloadProgress(m_dl_url, curr, max);
 }
 
 
