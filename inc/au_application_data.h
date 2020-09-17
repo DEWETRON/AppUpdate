@@ -64,6 +64,8 @@ public:
     QVariantList getUpdateableApps();
 
     void update();
+    Q_INVOKABLE void checkForUpdates();
+
 
 Q_SIGNALS:
     void installedSoftwareChanged();
@@ -77,6 +79,7 @@ private:
     QVersionNumber getHighestVersionNumber(const SwEntry& sw_entry);
     QList<QVersionNumber> getSortedVersionNumbers(const std::string& app_name);
     void updateBundleMap();
+    bool hasUpdate(const std::string& app_name, const std::string& upd_ver) const;
 
 private:
     QVariantList m_installed_software;

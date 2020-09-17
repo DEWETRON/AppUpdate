@@ -26,10 +26,37 @@ TabView {
     width: 500; height: 440
 
     property var show_older_versions : false
+    property var show_updates_only : true
+    property var model: getModel(app.updateableApps)
 
-    onShow_older_versionsChanged:
-    {
-        console.log(show_older_versions)
+    function getModel(data) {
+        return getShowOlderVersions(getUpdatesOnly(data));
+    }
+
+    function getUpdatesOnly(data) {
+        if (!root.show_updates_only) return data
+
+        var filteredApps = []
+        var entry
+        for (entry of data) {
+            if (entry["has_update"] == true) {
+                filteredApps.push(entry)
+            }
+        }
+        return filteredApps
+    }
+
+    function getShowOlderVersions(data) {
+        if (show_older_versions) return data
+
+        var filteredApps = []
+        var entry
+        for (entry of data) {
+            if (entry["is_older_version"] != true) {
+                filteredApps.push(entry)
+            }
+        }
+        return filteredApps
     }
 
     Tab {
@@ -42,32 +69,17 @@ TabView {
             Text {
                 Layout.topMargin: 10
                 Layout.leftMargin: 10
-                text: qsTr("New versions of your software have been released!")
+                text: root.model.length > 0 ? qsTr("New versions of your software have been released!") : qsTr("Everything is up to date!")
                 font.pointSize: 12; font.bold: false
             }
 
             ListView {
-                model: getModel()
+                model: root.model
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 boundsBehavior: Flickable.StopAtBounds
                 ScrollBar.vertical: ScrollBar { }
                 clip: true
-
-                function getModel() {
-                    if (show_older_versions) return app.updateableApps
-
-                    var filteredApps = []
-                    var entry
-                    for (entry of app.updateableApps) {
-                        console.log(entry)
-                        if (entry["is_older_version"] != true) {
-                            filteredApps.push(entry)
-                        }
-
-                    }
-                    return filteredApps
-                }
 
                 delegate:
                 ColumnLayout {
@@ -100,9 +112,16 @@ TabView {
                                 text: modelData["name"]
                                 font.pointSize: 12; font.bold: false
                             }
-                            Text {
-                                text: modelData["version"]
-                                font.pointSize: 10; font.bold: false
+                            RowLayout {
+                                Text {
+                                    text: modelData["version"]
+                                    font.pointSize: 10; font.bold: false
+                                }
+                                Text {
+                                    text: modelData["has_update"] ? qsTr("New!") : ""
+                                    font.pointSize: 10; font.bold: false
+                                    color: "red"
+                                }
                             }
                         }
 
@@ -157,17 +176,34 @@ TabView {
             RowLayout {
                 spacing: 10
 
+                ColumnLayout {
+                    CheckBox {
+                        id: showUpdatesOnly
+                        text: qsTr("Show updates only")
+                        checked: root.show_updates_only
+                        onClicked: {
+                            root.show_updates_only = checked
+                        }
+                    }
+                    CheckBox {
+                        id: showOlderVersions
+                        text: qsTr("Show older versions")
+                        checked: root.show_older_versions
+                        onClicked: {
+                            root.show_older_versions = checked
+                        }
+                    }
+                }
+
                 // HorizontalSpacer
                 Item {
                     Layout.fillWidth: true
                 }
 
-                CheckBox {
-                    id: showOlderVersions
-                    text: qsTr("Show older versions")
-                    checked: root.show_older_versions
+                Button {
+                    text: qsTr("Check for Updates")
                     onClicked: {
-                        root.show_older_versions = checked
+                        app.checkForUpdates()
                     }
                 }
 

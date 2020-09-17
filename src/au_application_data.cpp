@@ -85,6 +85,9 @@ QVariantList AuApplicationData::getUpdateableApps()
                 changes += "- " + QString(change.c_str()) + "\n";
             }
 
+            // update available?
+            entry["has_update"] = hasUpdate(app.first, ver.toString().toStdString());
+
             entry["changes"] = changes;
         }
         apps.push_back(entry);
@@ -113,6 +116,13 @@ QVariantList AuApplicationData::getUpdateableApps()
     return apps;
 }
 
+
+void AuApplicationData::checkForUpdates()
+{
+    update();
+}
+
+
 void AuApplicationData::update()
 {
     // get update json document
@@ -140,6 +150,7 @@ void AuApplicationData::update()
 
     m_installed_software = toVariantList(m_installed_software_internal);
 
+    Q_EMIT updateableAppsChanged();
 }
 
 
@@ -258,4 +269,23 @@ void AuApplicationData::updateBundleMap()
 
     // replace old map
     m_bundle_map = bundle_map;
+}
+
+bool AuApplicationData::hasUpdate(const std::string& app_name, const std::string& upd_ver) const
+{
+    auto installed_app = std::find_if(m_installed_software_internal.begin(),
+        m_installed_software_internal.end(),
+        [app_name](const SwComponent& sw) {
+            return sw.package_name == app_name;
+    });
+
+    if (installed_app != m_installed_software_internal.end())
+    {
+        auto upd_version = QVersionNumber::fromString(upd_ver.c_str());
+        auto inst_version = QVersionNumber::fromString(installed_app->package_version.c_str());
+        return upd_version > inst_version;
+    }
+
+    // Not installed -> update true by default
+    return true;
 }
