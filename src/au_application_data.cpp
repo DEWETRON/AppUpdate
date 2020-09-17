@@ -17,7 +17,9 @@
 
 #include "au_application_data.h"
 #include "au_update_json.h"
+#include <QFile>
 #include <QVersionNumber>
+#include <QStandardPaths>
 
 AuApplicationData::AuApplicationData()
     : m_installed_software{}
@@ -25,6 +27,9 @@ AuApplicationData::AuApplicationData()
     , m_sw_enumerator()
     , m_bundle_map()
     , m_au_doc()
+    , m_downloads()
+    , m_message()
+    , m_progress(-1.0)
 {
     // predefine bundles, which are only shown once
     m_bundle_map = std::map<std::string, std::string>
@@ -78,6 +83,7 @@ QVariantList AuApplicationData::getUpdateableApps()
             auto app_version = app.second.m_app_versions[ver.toString().toStdString().c_str()];
 
             entry["version"] = app_version.version.c_str();
+            entry["url"] = app_version.url.c_str();
             entry["is_older_version"] = false;
 
             QString changes("Changes:\n");
@@ -101,6 +107,7 @@ QVariantList AuApplicationData::getUpdateableApps()
 
             other_entry["name"] = app.first.c_str();
             other_entry["version"] = app_version.version.c_str();
+            other_entry["url"] = app_version.url.c_str();
             other_entry["is_older_version"] = true;
 
             QString changes("Changes:\n");
@@ -117,11 +124,39 @@ QVariantList AuApplicationData::getUpdateableApps()
 }
 
 
+QString AuApplicationData::getMessage() const
+{
+    return m_message;
+}
+
+void AuApplicationData::setMessage(QString message)
+{
+    m_message = message;
+    Q_EMIT messageChanged();
+}
+
+int AuApplicationData::getDownloadProgress()
+{
+    return m_progress;
+}
+
 void AuApplicationData::checkForUpdates()
 {
     update();
 }
 
+void AuApplicationData::updateAll()
+{
+    // TODO:
+    // check for updates
+    // download updates
+    // install
+}
+
+void AuApplicationData::download(QUrl download_url)
+{
+    doDownload(download_url);
+}
 
 void AuApplicationData::update()
 {
@@ -288,4 +323,84 @@ bool AuApplicationData::hasUpdate(const std::string& app_name, const std::string
 
     // Not installed -> update true by default
     return true;
+}
+
+bool AuApplicationData::doDownload(QUrl download_url)
+{
+    auto dl_it = m_downloads.find(download_url);
+
+    if (dl_it != m_downloads.end())
+    {
+        // download in progress - ignore
+        return false;
+    }
+
+    setMessage(QString("Started downloading"));
+
+    auto au_dl = new AuDownloader(download_url, this);
+    m_downloads.insert(download_url, au_dl );
+
+    connect(au_dl, &AuDownloader::downloadFinished, this, &AuApplicationData::downloadFinished);
+    connect(au_dl, &AuDownloader::downloadError, this, &AuApplicationData::downloadError);
+    connect(au_dl, &AuDownloader::downloadProgress, this, &AuApplicationData::downloadProgress);
+
+    return false;
+}
+
+void AuApplicationData::downloadFinished(QUrl dl_url, QString filename)
+{
+    auto au_dl_it = m_downloads.find(dl_url);
+    if (au_dl_it != m_downloads.end())
+    {
+        auto au_dl = au_dl_it.value();
+        disconnect(au_dl, &AuDownloader::downloadFinished, this, &AuApplicationData::downloadFinished);
+        disconnect(au_dl, &AuDownloader::downloadError, this, &AuApplicationData::downloadError);
+        disconnect(au_dl, &AuDownloader::downloadProgress, this, &AuApplicationData::downloadProgress);
+    }
+
+    auto content = au_dl_it.value()->getDownload();
+
+    const QString downloads_folder = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
+    QFile dest_file(downloads_folder + "/" + filename);
+
+    if (dest_file.exists())
+    {
+        setMessage(QString("Download file already exists ") + dest_file.fileName());
+    }
+    else
+    {
+        if (!dest_file.open(QIODevice::WriteOnly))
+        {
+            setMessage(QString("Could not create ") + dest_file.fileName());
+        }
+        auto bytes_written = dest_file.write(content);
+        dest_file.close();
+        setMessage(QString("File downloaded to ") + dest_file.fileName());
+    }
+
+    m_downloads.erase(au_dl_it);
+}
+
+void AuApplicationData::downloadError(QUrl dl_url)
+{
+    auto au_dl_it = m_downloads.find(dl_url);
+    if (au_dl_it != m_downloads.end())
+    {
+        auto au_dl = au_dl_it.value();
+        disconnect(au_dl, &AuDownloader::downloadFinished, this, &AuApplicationData::downloadFinished);
+        disconnect(au_dl, &AuDownloader::downloadError, this, &AuApplicationData::downloadError);
+        disconnect(au_dl, &AuDownloader::downloadProgress, this, &AuApplicationData::downloadProgress);
+    }
+
+    auto error = QVariant::fromValue(au_dl_it.value()->getError()).toString();
+
+    setMessage(QString("Download error: %1").arg(error));
+
+    m_downloads.erase(au_dl_it);
+}
+
+void AuApplicationData::downloadProgress(qint64 curr, qint64 max)
+{
+    m_progress = (100.0 / max) * curr;
+    Q_EMIT downloadProgressChanged();
 }

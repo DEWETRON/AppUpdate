@@ -17,6 +17,7 @@
 
 #pragma once
 
+#include "au_downloader.h"
 #include "au_software_enumerator.h"
 #include "au_update_json.h"
 
@@ -55,6 +56,15 @@ class AuApplicationData : public QObject
                 READ getUpdateableApps
                 NOTIFY updateableAppsChanged)
 
+    Q_PROPERTY(QString message
+                READ getMessage
+                NOTIFY messageChanged)
+
+    Q_PROPERTY(int downloadProgress
+                READ getDownloadProgress
+                NOTIFY downloadProgressChanged)
+
+
 public:
     AuApplicationData();
     ~AuApplicationData();
@@ -62,17 +72,28 @@ public:
     QVariantList getInstalledSoftware();
     QVariantList getInstalledApps();
     QVariantList getUpdateableApps();
+    QString getMessage() const;
+    void setMessage(QString message);
+    int getDownloadProgress();
 
-    void update();
     Q_INVOKABLE void checkForUpdates();
-
+    Q_INVOKABLE void updateAll();
+    Q_INVOKABLE void download(QUrl download_url);
 
 Q_SIGNALS:
     void installedSoftwareChanged();
     void installedAppsChanged();
     void updateableAppsChanged();
+    void messageChanged();
+    void downloadProgressChanged();
 
 private:
+    Q_SLOT void downloadFinished(QUrl dl_url, QString filename);
+    Q_SLOT void downloadError(QUrl dl_url);
+    Q_SLOT void downloadProgress(qint64 curr, qint64 max);
+
+private:
+    void update();
     std::string getBundleName(const std::string& sw_display_name) const;
     void addToSwList(const SwEntry& sw_entry, const QVersionNumber& latest_version);
     QVariantList toVariantList(const std::vector<SwComponent>& sw_list);
@@ -81,11 +102,16 @@ private:
     void updateBundleMap();
     bool hasUpdate(const std::string& app_name, const std::string& upd_ver) const;
 
+    bool doDownload(QUrl download_url);
+
 private:
     QVariantList m_installed_software;
     std::vector<SwComponent> m_installed_software_internal;
     AuSoftwareEnumerator m_sw_enumerator;
     std::map<std::string, std::string> m_bundle_map;
     au_doc::AuDoc m_au_doc;
+    QMap<QUrl, AuDownloader*> m_downloads;
+    QString m_message;
+    int m_progress;
 };
 

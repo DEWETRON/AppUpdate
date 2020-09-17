@@ -1,24 +1,11 @@
 {
     "DEWETRON OXYGEN": {
-        "5.2.1": {
-            "version": "5.2.1 Super",
-            "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
-            "release_date": "15.09.2020",
-            "license": "5",
-            "url": "https:://ccc.dewetron.com/A_UUID",
-            "signature": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
-            "changes": [
-                "Better performance",
-                "less bugs",
-                "a lot more DEWETRON"
-            ]
-        },
-        "5.2.0": {
-            "version": "5.2.0 beta 123",
+        "5.2": {
+            "version": "5.2.0",
             "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
             "release_date": "15.07.2020",
             "license": "5",
-            "url": "https:://ccc.dewetron.com/B_UUID",
+            "url": "https://ccc.dewetron.com/dl/5ef9b29f-6f6c-461f-9170-524dd9c49a3c",
             "signature": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
             "changes": [
                 "Better performance",
@@ -26,12 +13,25 @@
                 "a lot more DEWETRON"
             ]
         },
-        "3.7.1": {
-            "version": "3.7.1",
+        "5.1.1": {
+            "version": "5.1.1",
+            "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
+            "release_date": "15.07.2020",
+            "license": "5",
+            "url": "https://ccc.dewetron.com/dl/5eafe612-866c-49c2-83da-1ac5d9c49a3c",
+            "signature": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
+            "changes": [
+                "Better performance",
+                "less bugs",
+                "a lot more DEWETRON"
+            ]
+        },
+        "3.7.0": {
+            "version": "3.7.0",
             "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
             "release_date": "15.07.2019",
             "license": "3",
-            "url": "https:://ccc.dewetron.com/X_UUID",
+            "url": "https://ccc.dewetron.com/dl/5d8ddb74-de58-41c4-8a32-7eabd9c49a3c",
             "signature": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
             "changes": [
                 "Better performance",
@@ -41,26 +41,8 @@
         }
     },
     "DEWETRON TRION Applications": {
-        "5.2.1": {
-            "version": "5.2.1 Ultra",
-            "release_note_url": "https://www.dewetron.com/Trion/changelog.html",
-            "release_date": "15.09.2020",
-            "bundle": [
-                "DEWETRON TRION Driver",
-                "DEWETRON Explorer",
-                "DEWETRON DEWE2 Driver",
-                "DEWETRON TRIONCAL"
-            ],
-            "url": "https:://ccc.dewetron.com/C_UUID",
-            "signature": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
-            "changes": [
-                "TRION-AO",
-                "Better hw support",
-                "less bugs"
-            ]
-        },
         "5.2.0": {
-            "version": "5.2.0 beta 0815",
+            "version": "5.2.0",
             "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
             "release_date": "15.07.2020",
             "bundle": [
@@ -69,7 +51,7 @@
                 "DEWETRON DEWE2 Driver",
                 "DEWETRON TRIONCAL"
             ],
-            "url": "https:://ccc.dewetron.com/D_UUID",
+            "url": "https://ccc.dewetron.com/dl/5ef9b29f-e1a8-4ea6-9e33-524dd9c49a3c",
             "signature": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
             "changes": [
                 "Better hw support",

@@ -40,7 +40,7 @@ add_subdirectory(qml)
 set(AU_HEADER_FILES
   inc/au_application.h
   inc/au_application_data.h
-  #inc/au_window.h
+  inc/au_downloader.h
   inc/au_window_qml.h
   inc/au_software_enumerator.h
   inc/au_update_json.h
@@ -50,7 +50,7 @@ set(AU_SOURCE_FILES
   src/app_update.cpp
   src/au_application.cpp
   src/au_application_data.cpp
-  #src/au_window.cpp
+  src/au_downloader.cpp
   src/au_window_qml.cpp
   src/au_software_enumerator.cpp
   src/au_update_json.cpp

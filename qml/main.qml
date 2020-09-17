@@ -136,6 +136,14 @@ TabView {
                                 text: qsTr("Download")
                                 color: "blue"
                                 font.pointSize: 12; font.bold: false; font.underline: true
+                                visible: modelData["url"] != null ? modelData["url"].length > 0 : false
+                                
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: { 
+                                        app.download(modelData["url"])
+                                    }
+                                }
                             }
                         }
 
@@ -173,44 +181,67 @@ TabView {
             }
 
 
-            RowLayout {
-                spacing: 10
+            ColumnLayout {
 
-                ColumnLayout {
-                    CheckBox {
-                        id: showUpdatesOnly
-                        text: qsTr("Show updates only")
-                        checked: root.show_updates_only
-                        onClicked: {
-                            root.show_updates_only = checked
-                        }
-                    }
-                    CheckBox {
-                        id: showOlderVersions
-                        text: qsTr("Show older versions")
-                        checked: root.show_older_versions
-                        onClicked: {
-                            root.show_older_versions = checked
-                        }
-                    }
-                }
-
-                // HorizontalSpacer
-                Item {
+                // Text {
+                //     text: app.downloadProgress
+                // }
+                ProgressBar {
                     Layout.fillWidth: true
+                    from: 0
+                    to: 100
+                    value: app.downloadProgress
+                    visible: app.downloadProgress > 0
                 }
 
-                Button {
-                    text: qsTr("Check for Updates")
-                    onClicked: {
-                        app.checkForUpdates()
+
+                Text {
+                    text: app.message
+                }
+
+                RowLayout {
+                    spacing: 10
+
+                    ColumnLayout {
+                        CheckBox {
+                            id: showUpdatesOnly
+                            text: qsTr("Show updates only")
+                            checked: root.show_updates_only
+                            onClicked: {
+                                root.show_updates_only = checked
+                            }
+                        }
+                        CheckBox {
+                            id: showOlderVersions
+                            text: qsTr("Show older versions")
+                            checked: root.show_older_versions
+                            onClicked: {
+                                root.show_older_versions = checked
+                            }
+                        }
                     }
-                }
 
-                Button {
-                    text: qsTr("Update All")
-                }
+                    // HorizontalSpacer
+                    Item {
+                        Layout.fillWidth: true
+                    }
 
+                    Button {
+                        text: qsTr("Check for Updates")
+                        onClicked: {
+                            app.checkForUpdates()
+                        }
+                    }
+
+                    Button {
+                        enabled: root.model.length > 0
+                        text: qsTr("Update All")
+                        onClicked: {
+                            app.updateAll()
+                        }
+                    }
+
+                }
             }
 
         }
