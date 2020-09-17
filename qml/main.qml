@@ -22,10 +22,18 @@ import QtQuick.Layouts 1.12
 
 
 TabView {
-    width: 550; height: 300
+    id: root
+    width: 500; height: 440
+
+    property var show_older_versions : false
+
+    onShow_older_versionsChanged:
+    {
+        console.log(show_older_versions)
+    }
 
     Tab {
-        title: "Updates"
+        title: qsTr("Updates")
         
         ColumnLayout {
             anchors.fill: parent
@@ -34,22 +42,38 @@ TabView {
             Text {
                 Layout.topMargin: 10
                 Layout.leftMargin: 10
-                text: "New versions of your software have been released!"
-                font.pointSize: 14; font.bold: false
+                text: qsTr("New versions of your software have been released!")
+                font.pointSize: 12; font.bold: false
             }
 
             ListView {
-                model: app.updateableApps
+                model: getModel()
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 boundsBehavior: Flickable.StopAtBounds
                 ScrollBar.vertical: ScrollBar { }
                 clip: true
 
+                function getModel() {
+                    if (show_older_versions) return app.updateableApps
+
+                    var filteredApps = []
+                    var entry
+                    for (entry of app.updateableApps) {
+                        console.log(entry)
+                        if (entry["is_older_version"] != true) {
+                            filteredApps.push(entry)
+                        }
+
+                    }
+                    return filteredApps
+                }
+
                 delegate:
                 ColumnLayout {
                     x:10
                     width: parent.width - 20
+
 
                     Rectangle {
                         Layout.fillWidth: true
@@ -74,11 +98,11 @@ TabView {
                         ColumnLayout {
                             Text {
                                 text: modelData["name"]
-                                font.pointSize: 14; font.bold: false
+                                font.pointSize: 12; font.bold: false
                             }
                             Text {
                                 text: modelData["version"]
-                                font.pointSize: 12; font.bold: false
+                                font.pointSize: 10; font.bold: false
                             }
                         }
 
@@ -90,7 +114,7 @@ TabView {
                         ColumnLayout {
                             Text {
                                 Layout.alignment: Qt.AlignRight
-                                text: "Download"
+                                text: qsTr("Download")
                                 color: "blue"
                                 font.pointSize: 12; font.bold: false; font.underline: true
                             }
@@ -117,13 +141,10 @@ TabView {
                             Layout.fillWidth: true
                         }
 
-                        Button {
-                            text: "Older Versions"
-                            enabled: modelData["older_versions"].length > 0
-                        }
-
                     }
+
                 }
+    
 
                 // VerticalSpacer
                 Item {
@@ -131,10 +152,35 @@ TabView {
                 }
 
             }
+
+
+            RowLayout {
+                spacing: 10
+
+                // HorizontalSpacer
+                Item {
+                    Layout.fillWidth: true
+                }
+
+                CheckBox {
+                    id: showOlderVersions
+                    text: qsTr("Show older versions")
+                    checked: root.show_older_versions
+                    onClicked: {
+                        root.show_older_versions = checked
+                    }
+                }
+
+                Button {
+                    text: qsTr("Update All")
+                }
+
+            }
+
         }
     }
     Tab {
-        title: "Installed Apps"
+        title: qsTr("Installed Apps")
 
         ColumnLayout {
             anchors.fill: parent
@@ -143,8 +189,8 @@ TabView {
             Text {
                 Layout.topMargin: 10
                 Layout.leftMargin: 10
-                text: "Currently installed applications:"
-                font.pointSize: 14; font.bold: false
+                text: qsTr("Currently installed applications:")
+                font.pointSize: 12; font.bold: false
             }
 
             ListView {
@@ -184,11 +230,11 @@ TabView {
                         ColumnLayout {
                             Text {
                                 text: modelData["name"]
-                                font.pointSize: 14; font.bold: false
+                                font.pointSize: 12; font.bold: false
                             }
                             Text {
                                 text: modelData["version"]
-                                font.pointSize: 12; font.bold: false
+                                font.pointSize: 10; font.bold: false
                             }
                         }
 
@@ -208,57 +254,5 @@ TabView {
             }
 
         }
-    }
-
-
-    Tab {
-        title: "Installed Apps (old)"
-
-        Rectangle {
-            id: page
-
-            color: "white"
-
-            ColumnLayout {
-                id: mainColumn
-                anchors.fill: parent
-                anchors.margins: 20
-
-
-                ColumnLayout {
-                    Repeater {
-                        model: app.installedSoftware
-
-                        RowLayout {
-                            spacing: 10
-
-                            Rectangle {
-                                color: "blue"
-                                width: 20; height: 20
-                            }
-                            Text {
-                                Layout.minimumWidth: 250
-                                Layout.preferredWidth: 250
-                                text: modelData[0]
-                                font.pointSize: 12; font.bold: false
-                            }
-                            Text {
-                                Layout.minimumWidth: 100
-                                Layout.preferredWidth: 100
-                                text: modelData[1]
-                                font.pointSize: 12; font.bold: false
-                            }
-                            Text {
-                                Layout.minimumWidth: 100
-                                Layout.preferredWidth: 100
-                                text: modelData[2]
-                                font.pointSize: 12; font.bold: false
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
     }
 }

@@ -78,6 +78,7 @@ QVariantList AuApplicationData::getUpdateableApps()
             auto app_version = app.second.m_app_versions[ver.toString().toStdString().c_str()];
 
             entry["version"] = app_version.version.c_str();
+            entry["is_older_version"] = false;
 
             QString changes("Changes:\n");
             for (auto change : app_version.changes) {
@@ -86,9 +87,8 @@ QVariantList AuApplicationData::getUpdateableApps()
 
             entry["changes"] = changes;
         }
+        apps.push_back(entry);
         
-        QVariantList older_versions;
-
         // look at older mentioned versions -> stored in entry.other map
         for (auto ver : sorted_vn)
         {
@@ -96,7 +96,9 @@ QVariantList AuApplicationData::getUpdateableApps()
             
             QVariantMap other_entry;
 
+            other_entry["name"] = app.first.c_str();
             other_entry["version"] = app_version.version.c_str();
+            other_entry["is_older_version"] = true;
 
             QString changes("Changes:\n");
             for (auto change : app_version.changes) {
@@ -104,12 +106,9 @@ QVariantList AuApplicationData::getUpdateableApps()
             }
 
             other_entry["changes"] = changes;
-
-            older_versions.push_back(other_entry);
+            apps.push_back(other_entry);
         }
-        entry["older_versions"] = older_versions;
-
-        apps.push_back(entry);
+        
     }
     return apps;
 }
