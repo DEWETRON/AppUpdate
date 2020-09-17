@@ -17,6 +17,7 @@
 
 #include "au_application_data.h"
 #include "au_update_json.h"
+#include <QDesktopServices>
 #include <QFile>
 #include <QVersionNumber>
 #include <QStandardPaths>
@@ -156,6 +157,13 @@ void AuApplicationData::download(QUrl download_url)
 int AuApplicationData::getDownloadProgress(QUrl download_url)
 {
     return m_progress[download_url];
+}
+
+void AuApplicationData::openDownloadFolder(QUrl download_url)
+{
+    const QString downloads_folder = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
+    //QDesktopServices::openUrl(QUrl("file:///C:/Documents and Settings/All Users/Desktop", QUrl::TolerantMode));
+    QDesktopServices::openUrl(QUrl(downloads_folder, QUrl::TolerantMode));
 }
 
 void AuApplicationData::update()
@@ -378,7 +386,7 @@ void AuApplicationData::downloadFinished(QUrl dl_url, QString filename)
         setMessage(QString("File downloaded to ") + dest_file.fileName());
     }
 
-    m_progress[dl_url] = 0;
+    m_progress[dl_url] = 200;  // signal finished dl
     Q_EMIT downloadProgressChanged();
 
     m_downloads.erase(au_dl_it);

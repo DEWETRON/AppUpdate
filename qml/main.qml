@@ -146,6 +146,24 @@ TabView {
                                     }
                                 }
                             }
+                            
+                            // VerticalSpacer
+                            Item {
+                                Layout.fillHeight: true
+                            }
+
+                            Button {
+                                id: btnOpenDownloads
+                                text: qsTr("Open Downloads..")
+                                visible: false
+                                Connections {
+                                    target: app
+                                    onDownloadProgressChanged: { btnOpenDownloads.visible = app.getDownloadProgress(url) > 100 }
+                                }
+                                onClicked: {
+                                    app.openDownloadFolder(url);
+                                }
+                            }
                         }
 
                     }
@@ -177,12 +195,15 @@ TabView {
                         from: 0
                         to: 100
                         value: 0
-                        //visible: app.getDownloadProgress(url) > 0
                         visible: value > 0
 
                         Connections {
                             target: app
-                            onDownloadProgressChanged: { dlBar.value = app.getDownloadProgress(url) }
+                            onDownloadProgressChanged: { 
+                                var v = app.getDownloadProgress(url)
+                                dlBar.value = v
+                                dlBar.visible = (v > 0) && (v <= 100)
+                             }
                         }
                     }
 
@@ -243,13 +264,13 @@ TabView {
                         }
                     }
 
-                    Button {
-                        enabled: root.model.length > 0
-                        text: qsTr("Update All")
-                        onClicked: {
-                            app.updateAll()
-                        }
-                    }
+                    // Button {
+                    //     enabled: root.model.length > 0
+                    //     text: qsTr("Update All")
+                    //     onClicked: {
+                    //         app.updateAll()
+                    //     }
+                    // }
 
                 }
             }

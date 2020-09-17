@@ -79,7 +79,7 @@ public:
     Q_INVOKABLE void updateAll();
     Q_INVOKABLE void download(QUrl download_url);
     Q_INVOKABLE int getDownloadProgress(QUrl download_url);
-
+    Q_INVOKABLE void openDownloadFolder(QUrl download_url);
 Q_SIGNALS:
     void installedSoftwareChanged();
     void installedAppsChanged();
