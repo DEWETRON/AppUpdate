@@ -8,7 +8,7 @@ project(${APPNAME})
 
 #
 # define SW_APP_ROOT == Projects root directory
-get_filename_component(SW_APP_ROOT . ABSOLUTE)
+get_filename_component(SW_APP_ROOT .. ABSOLUTE)
 
 
 # expand cmake search path to check for project settings

@@ -20,7 +20,7 @@ def deploy_qt(script_path, destination, qt_directory, arch, build_type, special_
 
 def main(argv):
     script_path = os.path.dirname(os.path.abspath(os.path.realpath(__file__)))
-    repo_root = script_path
+    repo_root = os.path.normpath(os.path.join(script_path, ".."))
     build_util_bin_path = os.path.normpath(os.path.join(repo_root, "build_util", "bin"))
 
     print(build_util_bin_path)
