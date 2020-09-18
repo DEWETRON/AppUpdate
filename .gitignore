@@ -33,6 +33,7 @@
 *.exe
 *.out
 *.app
+*.msi
 
 # VS Code
 .vs/
@@ -44,3 +45,4 @@
 build/
 build64/
 tmp/
+PKGS/
