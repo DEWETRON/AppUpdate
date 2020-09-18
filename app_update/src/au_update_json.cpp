@@ -29,7 +29,8 @@ AuUpdateJson::AuUpdateJson()
 
 bool AuUpdateJson::update(QUrl remote_url)
 {
-    QFile update_file("../examples/update.json");
+    // TODO retrieve file from server CCC
+    QFile update_file("examples/update.json");
 
     if (!update_file.open(QIODevice::ReadOnly)) {
         qWarning("Couldn't open save file.");

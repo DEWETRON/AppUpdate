@@ -136,8 +136,14 @@ if (WIN32)
           RUNTIME DESTINATION ${RUNTIME_PATH})
 
   # install QT libs (dll's) ..
-  set(PACKAGE "widgets" )
-  InstallQTRuntimeSinglePackage(${SW_APP_ROOT} ${CMAKE_INSTALL_PREFIX}/${architecture} ${PACKAGE} ${QT_VERSION})
+  set(PACKAGE "widgets quick2 network" )
+  InstallQTRuntimeSinglePackage(${SW_APP_ROOT} ${CMAKE_INSTALL_PREFIX}/${architecture} widgets ${QT_VERSION})
+  InstallQTRuntimeSinglePackage(${SW_APP_ROOT} ${CMAKE_INSTALL_PREFIX}/${architecture} quick2 ${QT_VERSION})
+  InstallQTRuntimeSinglePackage(${SW_APP_ROOT} ${CMAKE_INSTALL_PREFIX}/${architecture} network ${QT_VERSION})
+
+  # example update json
+  install(FILES examples/update.json DESTINATION ${RUNTIME_PATH}/examples)
+  install(FILES res/dewetron.ico DESTINATION ${RUNTIME_PATH}/res)
 
   # QT: qml and more
   if (NOT PACK_QML_FILES)

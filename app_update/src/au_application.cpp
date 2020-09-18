@@ -46,7 +46,7 @@ bool AuApplication::init()
 
     // Setup main.qml
     // TODO other paths, qrc ...
-    m_qml_main_file = "../qml/main.qml";
+    m_qml_main_file = "qml/main.qml";
     QFileInfo qml_file_info(m_qml_main_file);
     auto qml_path = qml_file_info.absolutePath();
 
