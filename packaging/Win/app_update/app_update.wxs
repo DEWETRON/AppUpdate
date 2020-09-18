@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+    MSI installer for DEWETRON TRION-CAL.
+-->
+
+<?define PRODUCT_UPGRADE_CODE = "B4DD7E72-70B2-4D3B-92B0-A7E20FA06C6B"?>
+<?define PRODUCT_NAME = "DEWETRON AppUpdate" ?>
+
+<?define PRODUCT_VERSION = "1.0.0.0"?>
+<!--
+
+<?define PRODUCT_VERSION = "!(bind.fileVersion.EXE_FILE)"?>
+-->
+
+<?include dewetron.wxi ?>
+<?include program_files_folder.wxi ?>
+
+
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+
+    <Product Name='DEWETRON $(var.PRODUCT_NAME)'
+             Id='*'
+             UpgradeCode='$(var.PRODUCT_UPGRADE_CODE)'
+             Language='1033'
+             Version='$(var.PRODUCT_VERSION)'
+             Manufacturer='$(var.MANUFACTURER)'>
+
+    <Package Id='*'
+             Keywords='TRION'
+             Description='DEWETRON $(var.PRODUCT_NAME)'
+             Comments='Installs DEWETRON Application Updater'
+             Languages='1033'
+             Compressed='yes'
+             SummaryCodepage='1252'
+             InstallerVersion ='405'
+             />
+
+    <!--
+        Add icon to show up in "Programms"
+    -->
+    <Icon Id='app_update.ico' SourceFile='SourceDir\app_update.ico' />
+    <Property Id="ARPPRODUCTICON" Value="app_update.ico" />
+
+
+    <Media Id='1'
+           Cabinet='AppUpdate.cab'
+           EmbedCab='yes' />
+
+    <!--
+        - Define the directory structure
+        - add exe file
+        - add shortcuts for Desktop and ProgMenu
+        - make reg entry
+    -->
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+        <Directory Id="$(var.PlatformProgramFilesFolder)">
+            <Directory Id='DEWEDIR' Name="DEWETRON">
+                <Directory Id='APPLICATIONINSTALLDIR' Name='$(var.PRODUCT_NAME)'>
+                    <Component Id="MainExecutable" Guid="2F1CE9AD-6968-4E0D-AA9A-3F1D5D7CE9C9">
+                        <File Id="EXE_FILE" Name="AppUpdate.exe" DiskId="1" Source="$(var.filesdir)AppUpdate.exe" KeyPath="yes">
+                            <Shortcut Id="startmenu_link" Directory="ApplicationProgramsFolder" Name="DEWETRON AppUpdate" WorkingDirectory="APPLICATIONINSTALLDIR" Icon="app_update.ico" IconIndex="0" Advertise="no" />
+                        </File>
+                        <RemoveFolder Id="APPLICATIONINSTALLDIR" On="uninstall" />
+                    </Component>
+                    <Component Id="AppLicense" Guid="3681CC7E-0784-4F8B-ABB1-99ABC33D77DF" DiskId="1">
+                        <File Id="LicenseFile" Name="gpl-3.0.rtf" Source="gpl-3.0.rtf"/>
+                    </Component>
+                    <Component Id="appupdate_reg" Guid="AC3635E1-9AAA-41E9-AF5C-1F95363D3041">
+                        <RegistryKey Root="HKLM"
+                                     Key="Software\DEWETRON\APP_UPDATE"
+                                     ForceCreateOnInstall="yes"
+                                     ForceDeleteOnUninstall="yes">
+                            <RegistryValue Type="string" Name="reg_id" Value="Version $(var.PRODUCT_VERSION) installed" KeyPath="yes"/>
+                        </RegistryKey>
+                    </Component>
+                </Directory>
+            </Directory>
+        </Directory>
+        <Directory Id="ProgramMenuFolder">
+            <Directory Id="ApplicationProgramsFolder" Name="DEWETRON">
+                <Component Id="ApplicationProgramsFolder" Guid="700B9E0B-2ABC-4B97-9879-23B5536070B8">
+                    <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
+                </Component>
+            </Directory>
+        </Directory>
+        <Directory Id="DesktopFolder" Name="Desktop" />
+    </Directory>
+
+
+    <!--
+        Merge Module for VisualStudio 2019
+    -->
+    <DirectoryRef Id="TARGETDIR">
+        <Merge Id="VCRedist" SourceFile="MergeModule_xANY.msm" DiskId="1" Language="0"/>
+    </DirectoryRef>
+
+
+    <!--
+        Tell Wix what to install
+    -->
+    <Feature Id='DEWETRON_TRION_CAL' Title='DEWETRON AppUpdate' Level='1'>
+        <ComponentRef Id='appupdate_reg' />
+        <ComponentRef Id='MainExecutable' />
+        <ComponentRef Id='AppLicense' />
+        <ComponentRef Id='ApplicationProgramsFolder' />
+        <ComponentGroupRef Id="ExtFiles"/>
+        <MergeRef Id="VCRedist"/>
+    </Feature>
+
+    <!--
+        Using the Wix UI library.
+
+        WixUI_Minimal is the most basic of the WixUI stock dialog sets.
+        Its sole dialog combines the welcome and license-agreement 
+        dialogs and omits the feature customization dialog. 
+        WixUI_Minimal is appropriate when your product has no optional 
+        features.
+    -->
+		
+        <!--
+            Dewetron Eula Text
+        -->
+        <WixVariable Id='WixUILicenseRtf' Value='gpl-3.0.rtf' />
+
+		<!-- First page -->
+		<WixVariable Id="WixUIDialogBmp" Value="first_page.bmp" />		
+		
+		<!-- on top of the second and all following pages -->
+		<WixVariable Id="WixUIBannerBmp" Value="banner.bmp" />
+		
+		<UIRef Id="WixUI_Minimal"/>
+
+	    <!--
+        	- Allow upgrades
+	        - Allow downgrades
+	    -->
+    	<MajorUpgrade AllowDowngrades='yes'/>
+
+    </Product>
+</Wix>
