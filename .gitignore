@@ -26,6 +26,9 @@
 *.a
 *.lib
 
+# Python comüpiled files
+*.pyc
+
 # Executables
 *.exe
 *.out
@@ -40,3 +43,4 @@
 # build directories
 build/
 build64/
+tmp/

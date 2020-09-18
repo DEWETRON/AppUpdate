@@ -1,0 +1,9 @@
+{
+    "app_update":{
+        "arch" : "x64",
+        "project_dir": ".",
+        "install" : true,
+        "msi" : true,
+        "setup_name" : "DEWETRON-AppUpdate-Setup-%ARCH%.msi"
+    }
+}

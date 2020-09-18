@@ -14,10 +14,11 @@ get_filename_component(SW_APP_ROOT . ABSOLUTE)
 # expand cmake search path to check for project settings
 set(CMAKE_MODULE_PATH
   ${CMAKE_MODULE_PATH}
-  ${SW_APP_ROOT}/cmake
+  ${SW_APP_ROOT}/build_util/cmake
 )
 
 include(QtSettings)
+include(CMakeInstallUtil)
 
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
@@ -105,3 +106,30 @@ add_executable(${APPNAME} WIN32
 )
 
 qt5_use_modules(${APPNAME} Widgets Quick)
+
+
+#
+# Install section
+#
+
+#
+# Install should not depend on ALL
+set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY TRUE)
+
+if (WIN32)
+  # install binary
+  set(RUNTIME_PATH ${CMAKE_INSTALL_PREFIX})
+
+  install(TARGETS ${APPNAME}
+          RUNTIME DESTINATION ${RUNTIME_PATH})
+
+  # install QT libs (dll's) ..
+  set(PACKAGE "widgets" )
+  InstallQTRuntimeSinglePackage(${SW_APP_ROOT} ${CMAKE_INSTALL_PREFIX}/${architecture} ${PACKAGE} ${QT_VERSION})
+
+  # QT: qml and more
+  if (NOT PACK_QML_FILES)
+    install(DIRECTORY qml DESTINATION ${CMAKE_INSTALL_PREFIX})
+  endif()
+
+endif()
