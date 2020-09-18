@@ -635,8 +635,10 @@ def install(PACKAGE, project_dir, install_prefix, package_base_path, build_dir, 
             install_msbuild(exec_install, build_type, arch)
 
     # Copy packaging/Win/apps/[xxx] stuff
-    install_filecopy(os.path.join(package_base_path,
-                                 project_dir), install_prefix, ['*.*'])
+    # Hint *.wxs
+    src = os.path.join(package_base_path, project_dir)
+    verbose("install other: %s %s %s" % (src, install_prefix, '*.*'))
+    install_filecopy(src, install_prefix, ['*.*'])
     return True
 
 

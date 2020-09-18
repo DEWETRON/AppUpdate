@@ -20,6 +20,18 @@ set(CMAKE_MODULE_PATH
 include(QtSettings)
 include(CMakeInstallUtil)
 
+#
+# Check for 64 bit build
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+  set(BUILD_X64 TRUE)
+  set(BUILD_X86 FALSE)
+  set(architecture "x64")
+else()
+  set(BUILD_X64 FALSE)
+  set(BUILD_X86 TRUE)
+  set(architecture "x86")
+endif()
+
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
 # Whether to handle rcc automatically for Qt targets.
@@ -118,7 +130,7 @@ set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY TRUE)
 
 if (WIN32)
   # install binary
-  set(RUNTIME_PATH ${CMAKE_INSTALL_PREFIX})
+  set(RUNTIME_PATH ${CMAKE_INSTALL_PREFIX}/${architecture})
 
   install(TARGETS ${APPNAME}
           RUNTIME DESTINATION ${RUNTIME_PATH})
@@ -129,7 +141,7 @@ if (WIN32)
 
   # QT: qml and more
   if (NOT PACK_QML_FILES)
-    install(DIRECTORY qml DESTINATION ${CMAKE_INSTALL_PREFIX})
+    install(DIRECTORY qml DESTINATION ${CMAKE_INSTALL_PREFIX}/${architecture})
   endif()
 
 endif()
