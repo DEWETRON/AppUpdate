@@ -131,6 +131,7 @@ set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY TRUE)
 if (WIN32)
   # install binary
   set(RUNTIME_PATH ${CMAKE_INSTALL_PREFIX}/${architecture})
+  install(FILES "res/qt.conf" DESTINATION ${RUNTIME_PATH})
 
   install(TARGETS ${APPNAME}
           RUNTIME DESTINATION ${RUNTIME_PATH})
