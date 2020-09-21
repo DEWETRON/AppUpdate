@@ -21,7 +21,6 @@
 
 #include <QMessageBox>
 #include <QSystemTrayIcon>
-//#include "au_window.h"
 #include "au_application.h"
 
 
@@ -41,9 +40,6 @@ int main(int argc, char* argv[])
     }
     QApplication::setQuitOnLastWindowClosed(false);
 
-    // AuWindow window;
-    // window.show();
-    // return app.exec();
 
     if (!app.init()) return -1;
     return app.run();

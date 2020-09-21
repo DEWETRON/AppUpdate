@@ -19,6 +19,7 @@
 #include "au_application_data.h"
 #include "au_window_qml.h"
 
+#include "QFile"
 #include <QFileInfo>
 #include <QQmlContext>
 #include <QQmlEngine>
@@ -44,16 +45,35 @@ bool AuApplication::init()
 {
     m_app_data = new AuApplicationData;
 
-    // Setup main.qml
-    // TODO other paths, qrc ...
-    m_qml_main_file = "qml/main.qml";
-    QFileInfo qml_file_info(m_qml_main_file);
-    auto qml_path = qml_file_info.absolutePath();
+    m_qml_main_file.clear();
 
-    // Handle dynamic qml changes
-    m_qml_reloader = new QmlReloader;
-    m_qml_reloader->addDirectoryToWatch(qml_path, QStringList() << "*.qml" << "*.js", true);
-  
+    // Setup main.qml
+    QStringList main_qml_candidates = { "../qml/main.qml" };
+
+    for (QString main_qml : main_qml_candidates)
+    {
+        QFile mq_file(main_qml);
+        if (mq_file.exists())
+        {
+            m_qml_main_file = main_qml;
+            break;
+        }
+    }
+
+    if (m_qml_main_file.isEmpty())
+    {
+        m_qml_main_file = "qrc:qml/main.qml";
+    }
+    else
+    {
+        QFileInfo qml_file_info(m_qml_main_file);
+        auto qml_path = qml_file_info.absolutePath();
+
+        // Handle dynamic qml changes
+        m_qml_reloader = new QmlReloader;
+        m_qml_reloader->addDirectoryToWatch(qml_path, QStringList() << "*.qml" << "*.js", true);
+    }
+ 
 
     if (!initGui()) return false;
 
@@ -74,7 +94,10 @@ bool AuApplication::initGui()
     m_main_window->rootContext()->setContextProperty("app", m_app_data);
     
     m_main_window->show();
-    m_qml_reloader->addView(m_main_window);
+    if (m_qml_reloader) 
+    {
+        m_qml_reloader->addView(m_main_window);
+    }
 
     return true;
 }

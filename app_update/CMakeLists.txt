@@ -102,7 +102,7 @@ set(QT_SOURCE_FILES
 
 
 set(AU_RESOURCE_FILES
-  res/au_resources.qrc
+  au_resources.qrc
 )
 qt5_add_resources(RESOURCE_ADDED ${QT_RESOURCE_FILES})
 

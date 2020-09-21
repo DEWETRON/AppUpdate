@@ -104,7 +104,7 @@ TabView {
                             Image {
                                 anchors.fill: parent
                                 fillMode: Image.PreserveAspectFit
-                                source: "../res/dewetron.ico"
+                                source: ":res/dewetron.ico"
                             }
                         }
 
@@ -321,7 +321,7 @@ TabView {
                             Image {
                                 anchors.fill: parent
                                 fillMode: Image.PreserveAspectFit
-                                source: "../res/dewetron.ico"
+                                source: ":res/dewetron.ico"
                             }
                         }
 

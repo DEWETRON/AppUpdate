@@ -99,7 +99,8 @@ void AuWindowQml::createTrayIcon()
     m_trayIcon = new QSystemTrayIcon(this);
     m_trayIcon->setContextMenu(m_trayIconMenu);
 
-    auto icon = QIcon(":/dewetron.ico");
+    
+    auto icon = QIcon(":/res/dewetron.ico");
     m_trayIcon->setIcon(icon);
     this->setIcon(icon);
 
