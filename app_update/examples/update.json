@@ -6,8 +6,8 @@
             "release_date": "15.07.2020",
             "license": "5",
             "url": "https://ccc.dewetron.com/dl/5ef9b29f-6f6c-461f-9170-524dd9c49a3c",
-            "md5": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
-            "sha1": "",
+            "md5": "85d85d607d589004faf72e82df99c866",
+            "sha1": "96d7ec76d0c4e67ce00022efa0cb42d11c083b7c",
             "changes": [
                 "Better performance",
                 "less bugs",
@@ -20,8 +20,8 @@
             "release_date": "15.07.2020",
             "license": "5",
             "url": "https://ccc.dewetron.com/dl/5eafe612-866c-49c2-83da-1ac5d9c49a3c",
-            "md5": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
-            "sha1": "",
+            "md5": "b9084c2778bf80cc46431ecdb39f92a4",
+            "sha1": "c4e40a9ac1d1df4edf609105b532a76e9ee9d5c9",
             "changes": [
                 "Better performance",
                 "less bugs",
@@ -34,8 +34,8 @@
             "release_date": "15.07.2019",
             "license": "3",
             "url": "https://ccc.dewetron.com/dl/5d8ddb74-de58-41c4-8a32-7eabd9c49a3c",
-            "md5": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
-            "sha1": "",
+            "md5": "ed42db65c79c5b32b7d1dc8c7991bb6e",
+            "sha1": "8f78f6ac562b6c816866c3e439f147ce8981b552",
             "changes": [
                 "Better performance",
                 "less bugs",
@@ -55,8 +55,8 @@
                 "DEWETRON TRIONCAL"
             ],
             "url": "https://ccc.dewetron.com/dl/5ef9b29f-e1a8-4ea6-9e33-524dd9c49a3c",
-            "md5": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
-            "sha1": "",
+            "md5": "bbb95dbfb1a1069a07fb6d7ba19d6949",
+            "sha1": "a97e80a352b1b8e10bda1cee2ed726e3ed6d7e57",
             "changes": [
                 "Better hw support",
                 "less bugs"
