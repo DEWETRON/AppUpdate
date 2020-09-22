@@ -6,7 +6,8 @@
             "release_date": "15.07.2020",
             "license": "5",
             "url": "https://ccc.dewetron.com/dl/5ef9b29f-6f6c-461f-9170-524dd9c49a3c",
-            "signature": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
+            "md5": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
+            "sha1": "",
             "changes": [
                 "Better performance",
                 "less bugs",
@@ -19,7 +20,8 @@
             "release_date": "15.07.2020",
             "license": "5",
             "url": "https://ccc.dewetron.com/dl/5eafe612-866c-49c2-83da-1ac5d9c49a3c",
-            "signature": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
+            "md5": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
+            "sha1": "",
             "changes": [
                 "Better performance",
                 "less bugs",
@@ -32,7 +34,8 @@
             "release_date": "15.07.2019",
             "license": "3",
             "url": "https://ccc.dewetron.com/dl/5d8ddb74-de58-41c4-8a32-7eabd9c49a3c",
-            "signature": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
+            "md5": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
+            "sha1": "",
             "changes": [
                 "Better performance",
                 "less bugs",
@@ -52,7 +55,8 @@
                 "DEWETRON TRIONCAL"
             ],
             "url": "https://ccc.dewetron.com/dl/5ef9b29f-e1a8-4ea6-9e33-524dd9c49a3c",
-            "signature": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
+            "md5": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
+            "sha1": "",
             "changes": [
                 "Better hw support",
                 "less bugs"
@@ -65,7 +69,8 @@
             "release_note_url": "https://www.dewetron.com/AppUpdate/changelog.html",
             "release_date": "15.09.2020",
             "url": "https:://ccc.dewetron.com/C_UUID",
-            "signature": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
+            "md5": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
+            "sha1": "",
             "changes": [
                 "Initial Release"
             ]
