@@ -24,6 +24,7 @@
 #include <map>
 #include <QObject>
 #include <QStringList>
+#include <QTimer>
 #include <QVariant>
 
 class QVersionNumber;
@@ -113,5 +114,6 @@ private:
     QMap<QUrl, AuDownloader*> m_downloads;
     QString m_message;
     QMap<QUrl, int> m_progress;
+    QTimer* m_update_timer;
 };
 

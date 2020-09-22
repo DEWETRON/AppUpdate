@@ -36,6 +36,7 @@ AuApplicationData::AuApplicationData()
     , m_downloads()
     , m_message()
     , m_progress()
+    , m_update_timer()
 {
     // predefine bundles, which are only shown once
     m_bundle_map = std::map<std::string, std::string>
@@ -46,11 +47,16 @@ AuApplicationData::AuApplicationData()
         { "DEWETRON TRIONCAL",     "DEWETRON TRION Applications" }
     };
 
+    m_update_timer = new QTimer(this);
+    connect(m_update_timer, &QTimer::timeout, this, QOverload<>::of(&AuApplicationData::update));
+    m_update_timer->start(1000 * 60 * 60 * 24);   // check every 24hours
+
     update();
 }
 
 AuApplicationData::~AuApplicationData()
 {
+    delete m_update_timer;
 }
 
 QVariantList AuApplicationData::getInstalledSoftware()
