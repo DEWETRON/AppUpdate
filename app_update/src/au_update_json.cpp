@@ -30,14 +30,26 @@ AuUpdateJson::AuUpdateJson()
 bool AuUpdateJson::update(QUrl remote_url)
 {
     // TODO retrieve file from server CCC
-    QFile update_file("examples/update.json");
+    QStringList update_candidates{ "examples/update.json", "../examples/update.json" };
+    QByteArray json_data;
 
-    if (!update_file.open(QIODevice::ReadOnly)) {
-        qWarning("Couldn't open save file.");
-        return false;
+    if (remote_url.isEmpty())
+    {
+        for (const auto& candidate : update_candidates)
+        {
+            QFile uf(candidate);
+            if (uf.open(QIODevice::ReadOnly))
+            {
+                json_data = uf.readAll();
+                break;
+            }
+        }
+    }
+    else
+    {
+        // TODO request json from url
     }
 
-    QByteArray json_data = update_file.readAll();
     QJsonParseError err;
     m_update_doc = QJsonDocument::fromJson(json_data, &err);
 

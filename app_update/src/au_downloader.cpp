@@ -25,12 +25,14 @@ AuDownloader::AuDownloader(QUrl dl_url, QObject* parent)
     , m_net_access()
     , m_downloaded_data()
     , m_error()
+    , m_ssl_errors()
 {
     connect(&m_net_access, &QNetworkAccessManager::finished, this, &AuDownloader::fileDownloaded);
 
     QNetworkRequest request(m_dl_url);
     auto reply = m_net_access.get(request);
     connect(reply, &QNetworkReply::downloadProgress, this, &AuDownloader::dlProgress);
+    connect(reply, &QNetworkReply::sslErrors, this, &AuDownloader::sslErrors);
 }
 
 AuDownloader::~AuDownloader()
@@ -64,6 +66,12 @@ void AuDownloader::dlProgress(qint64 curr, qint64 max)
 }
 
 
+void AuDownloader::sslErrors(const QList<QSslError>& ssl_errors)
+{
+    m_ssl_errors = ssl_errors;
+}
+
+
 const QByteArray& AuDownloader::getDownload() const
 {
     return m_downloaded_data;
@@ -74,7 +82,18 @@ QUrl AuDownloader::getUrl() const
     return m_dl_url;
 }
 
-QNetworkReply::NetworkError AuDownloader::getError() const
+QString AuDownloader::getError() const
 {
-    return m_error;
+    QString error_string;
+    if (m_error != QNetworkReply::NetworkError::NoError)
+    {
+        error_string += QVariant::fromValue(m_error).toString();
+
+        for (const auto& ssl_err : m_ssl_errors)
+        {
+            error_string += QString("\n%1").arg(ssl_err.errorString());
+        }
+    }
+
+    return error_string;
 }

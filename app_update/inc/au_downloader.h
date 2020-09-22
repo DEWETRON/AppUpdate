@@ -19,6 +19,7 @@
 
 #include <QObject>
 #include <QByteArray>
+#include <QList>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QUrl>
@@ -33,7 +34,7 @@ public:
 
     const QByteArray& getDownload() const;
     QUrl getUrl() const;
-    QNetworkReply::NetworkError getError() const;
+    QString getError() const;
 
 Q_SIGNALS:
     void downloadFinished(QUrl, QString filename);
@@ -43,10 +44,12 @@ Q_SIGNALS:
 private:
     Q_SLOT void fileDownloaded(QNetworkReply* reply);
     Q_SLOT void dlProgress(qint64 ist, qint64 max);
+    Q_SLOT void sslErrors(const QList<QSslError>& ssl_errors);
 
 private:
     QUrl m_dl_url;
     QNetworkAccessManager m_net_access;
     QByteArray m_downloaded_data;
     QNetworkReply::NetworkError m_error;
+    QList<QSslError> m_ssl_errors;
 };

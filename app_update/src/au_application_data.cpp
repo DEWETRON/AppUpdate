@@ -172,7 +172,7 @@ void AuApplicationData::update()
     AuUpdateJson au_json;
 
     // TODO get remote json document
-    if (au_json.update(QUrl{ "..." }))
+    if (au_json.update(QUrl{ "" }))
     {
         // update instance
         m_au_doc = au_json.getDocument();
@@ -401,11 +401,9 @@ void AuApplicationData::downloadError(QUrl dl_url)
         disconnect(au_dl, &AuDownloader::downloadFinished, this, &AuApplicationData::downloadFinished);
         disconnect(au_dl, &AuDownloader::downloadError, this, &AuApplicationData::downloadError);
         disconnect(au_dl, &AuDownloader::downloadProgress, this, &AuApplicationData::downloadProgress);
+
+        setMessage(QString("Download error: %1").arg(au_dl->getError()));
     }
-
-    auto error = QVariant::fromValue(au_dl_it.value()->getError()).toString();
-
-    setMessage(QString("Download error: %1").arg(error));
 
     m_downloads.erase(au_dl_it);
 }
