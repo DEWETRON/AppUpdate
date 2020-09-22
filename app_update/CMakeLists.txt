@@ -67,6 +67,7 @@ set(AU_HEADER_FILES
   inc/au_application_data.h
   inc/au_downloader.h
   inc/au_window_qml.h
+  inc/au_single_instance.h
   inc/au_software_enumerator.h
   inc/au_update_json.h
 )
@@ -77,6 +78,7 @@ set(AU_SOURCE_FILES
   src/au_application_data.cpp
   src/au_downloader.cpp
   src/au_window_qml.cpp
+  src/au_single_instance.cpp
   src/au_software_enumerator.cpp
   src/au_update_json.cpp
 )

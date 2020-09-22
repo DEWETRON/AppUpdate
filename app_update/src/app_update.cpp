@@ -22,6 +22,7 @@
 #include <QMessageBox>
 #include <QSystemTrayIcon>
 #include "au_application.h"
+#include "au_single_instance.h"
 
 
 int main(int argc, char* argv[])
@@ -29,6 +30,9 @@ int main(int argc, char* argv[])
     Q_INIT_RESOURCE(au_resources);
 
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+
+    AuSingleInstance assure_single_instance("AppUpdate");
+    if (!assure_single_instance.isFirstInstance()) return 0;
 
     AuApplication app(argc, argv);
 
