@@ -67,12 +67,12 @@
         "1.1.0": {
             "version": "1.1.0",
             "release_note_url": "https://www.dewetron.com/AppUpdate/changelog.html",
-            "release_date": "15.09.2020",
-            "url": "https:://ccc.dewetron.com/C_UUID",
-            "md5": "MEQCICh10SofkNHa5iJgVWDi2O8RBYyN+nxkFEL7u/tBuWboAiB6VOV/WQMRJE+kRoICZXAhq5b24WkgqcDs0z7gyBkGVw==",
-            "sha1": "",
+            "release_date": "22.09.2020",
+            "url": "https://ccc.dewetron.com/dl/5f69e6b8-1a78-43c1-8945-29ded9c49a3c",
+            "md5": "a444f780f4d6e0ba66611085579dc3fa",
+            "sha1": "000687c5135bb8113b8382b8650df510e88b7a4e",
             "changes": [
-                "Initial Release"
+                "Beta version"
             ]
         }
     }
