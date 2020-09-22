@@ -60,8 +60,8 @@
         }
     },
     "DEWETRON AppUpdate": {
-        "1.0.0": {
-            "version": "1.0.0",
+        "1.1.0": {
+            "version": "1.1.0",
             "release_note_url": "https://www.dewetron.com/AppUpdate/changelog.html",
             "release_date": "15.09.2020",
             "url": "https:://ccc.dewetron.com/C_UUID",
