@@ -69,9 +69,20 @@ TabView {
             Text {
                 Layout.topMargin: 10
                 Layout.leftMargin: 10
-                text: root.model.length > 0 ? qsTr("New versions of your software have been released!") : qsTr("Everything is up to date!")
+                text: getUpdatesAvailableText(root.model)
                 font.pointSize: 12; font.bold: false
             }
+
+            function getUpdatesAvailableText(data) {
+                var entry
+                for (entry of data) {
+                    if (entry["has_update"] == true) {
+                        return qsTr("New versions of your software have been released!")
+                    }
+                }
+                return qsTr("Everything is up to date!")
+            }
+
 
             ListView {
                 model: root.model
@@ -154,7 +165,7 @@ TabView {
 
                             Button {
                                 id: btnOpenDownloads
-                                text: qsTr("Open Downloads..")
+                                text: qsTr("Open Download")
                                 visible: false
                                 Connections {
                                     target: app
@@ -264,14 +275,9 @@ TabView {
                         }
                     }
 
-                    // Button {
-                    //     enabled: root.model.length > 0
-                    //     text: qsTr("Update All")
-                    //     onClicked: {
-                    //         app.updateAll()
-                    //     }
-                    // }
-
+                    Item {
+                        width: 1
+                    }
                 }
             }
 
