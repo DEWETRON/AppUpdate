@@ -36,6 +36,7 @@ AuApplicationData::AuApplicationData()
     , m_downloads()
     , m_message()
     , m_progress()
+    , m_filename_map()
     , m_update_timer()
 {
     // predefine bundles, which are only shown once
@@ -172,9 +173,15 @@ int AuApplicationData::getDownloadProgress(QUrl download_url)
 
 void AuApplicationData::openDownloadFolder(QUrl download_url)
 {
+    QString file_name;
+    auto file_name_it = m_filename_map.find(download_url);
+    if (file_name_it != m_filename_map.end())
+    {
+        file_name = file_name_it.value();
+    }
+
     const QString downloads_folder = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
-    //QDesktopServices::openUrl(QUrl("file:///C:/Documents and Settings/All Users/Desktop", QUrl::TolerantMode));
-    QDesktopServices::openUrl(QUrl(downloads_folder, QUrl::TolerantMode));
+    QDesktopServices::openUrl(QUrl(downloads_folder + "/" + file_name, QUrl::TolerantMode));
 }
 
 void AuApplicationData::update()
@@ -362,6 +369,8 @@ void AuApplicationData::downloadFinished(QUrl dl_url, QString filename)
         updateJson(content);
         return;
     }
+
+    m_filename_map[dl_url] = filename;
 
     const QString downloads_folder = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
     QFile dest_file(downloads_folder + "/" + filename);
