@@ -1,0 +1,82 @@
+//
+// resourcetest.RC2 - resources Microsoft Visual C++ does not edit directly
+//
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+// 0_SENSEI_ICON            ICON      "sensei.ico"
+
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+#include "version_info.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+#include "version_info.h"
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+/* Note: the weird way to create a string is due to the fact
+that the resource compiler will not concatenate
+"two "" strings" into one as the C[++] compiler does. */
+
+#define STR2(x) #x
+#define STR(x) STR2(x)
+#define VERSION_STRING STR(MAJOR_VERSION.MINOR_VERSION.MICRO_VERSION)
+#define HASH STR(_HG_CHANGESET_HASH_SHORT)
+
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_DEFAULT
+#pragma code_page(949)
+#endif //_WIN32
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION MAJOR_VERSION,MINOR_VERSION,MICRO_VERSION
+ PRODUCTVERSION MAJOR_VERSION,MINOR_VERSION,MICRO_VERSION
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE    VFT_APP
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "000004b0"
+        BEGIN
+            VALUE "CompanyName",      "DEWETRON GmbH"
+            VALUE "FileDescription",  "DEWETRON AppUpdate" //HASH
+            VALUE "FileVersion",      VERSION_STRING
+            VALUE "InternalName",     "DEWETRON AppUpdate"
+            VALUE "LegalCopyright",   "Copyright (C) 2009-2020. DEWETRON GmbH"
+            VALUE "OriginalFilename", "AppUpdate.exe"
+            VALUE "ProductName",      "DEWETRON AppUpdate"
+            VALUE "ProductVersion",   VERSION_STRING
+            VALUE "Comments",         "GNU GENERAL PUBLIC LICENSE Version 3"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0, 1200
+
+    END
+END
+
+01 ICON "dewetron.ico"

@@ -55,6 +55,7 @@ find_package(Qt5Widgets)
 
 include_directories(
   inc
+  version_info
   ${CMAKE_CURRENT_BINARY_DIR}
 )
 
@@ -102,7 +103,6 @@ if(UNIX)
   )
 endif()
 
-
 set(QT_HEADER_FILES
   inc/qml_reloader.h
 )
@@ -111,6 +111,17 @@ set(QT_SOURCE_FILES
   src/qml_reloader.cpp
 )
 
+
+set(AU_VERSION_INFO
+  version_info/buildinfo.h
+  version_info/buildinfo.cpp
+  version_info/MajorVersion.h
+  version_info/version_info.h
+)
+
+set(VER_RESOURCE_FILES
+  res/version.rc
+)
 
 set(AU_RESOURCE_FILES
   au_resources.qrc
@@ -123,9 +134,10 @@ add_executable(${APPNAME} WIN32
   ${AU_RESOURCE_FILES}
   ${QT_HEADER_FILES}
   ${QT_SOURCE_FILES}
-  ${VERSION_SOURCE_FILES}
+  ${AU_VERSION_INFO}
   ${QT_GUI_FORMS_HEADERS}
   ${RESOURCE_ADDED}
+  ${VER_RESOURCE_FILES}
 )
 
 qt5_use_modules(${APPNAME} Widgets Quick)

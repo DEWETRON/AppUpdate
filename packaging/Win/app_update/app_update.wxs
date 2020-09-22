@@ -7,11 +7,11 @@
 <?define PRODUCT_UPGRADE_CODE = "B4DD7E72-70B2-4D3B-92B0-A7E20FA06C6B"?>
 <?define PRODUCT_NAME = "AppUpdate" ?>
 
-<?define PRODUCT_VERSION = "1.0.0.0"?>
 <!--
+<?define PRODUCT_VERSION = "1.0.0.0"?>
+-->
 
 <?define PRODUCT_VERSION = "!(bind.fileVersion.EXE_FILE)"?>
--->
 
 <?include dewetron.wxi ?>
 <?include program_files_folder.wxi ?>
