@@ -32,6 +32,17 @@ else()
   set(architecture "x86")
 endif()
 
+if (WIN32)
+  if (NOT DEFINED OPEN_SSL_PATH)
+    if (BUILD_X64)
+      set(OPEN_SSL_PATH "C:/Qt/Tools/OpenSSL/Win_x64/bin")
+    else()
+      set(OPEN_SSL_PATH "C:/Qt/Tools/OpenSSL/Win_x86/bin")
+    endif()
+    message(WARNING "Please provide -DOPEN_SSL_PATH if default value ${OPEN_SSL_PATH} is not valid for your build")
+  endif()
+endif()
+
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
 # Whether to handle rcc automatically for Qt targets.
@@ -138,9 +149,14 @@ if (WIN32)
 
   # install QT libs (dll's) ..
   set(PACKAGE "widgets quick2 network" )
-  InstallQTRuntimeSinglePackage(${SW_APP_ROOT} ${CMAKE_INSTALL_PREFIX}/${architecture} widgets ${QT_VERSION})
-  InstallQTRuntimeSinglePackage(${SW_APP_ROOT} ${CMAKE_INSTALL_PREFIX}/${architecture} quick2 ${QT_VERSION})
-  InstallQTRuntimeSinglePackage(${SW_APP_ROOT} ${CMAKE_INSTALL_PREFIX}/${architecture} network ${QT_VERSION})
+  InstallQTRuntimeSinglePackage(${SW_APP_ROOT} ${RUNTIME_PATH} widgets ${QT_VERSION})
+  InstallQTRuntimeSinglePackage(${SW_APP_ROOT} ${RUNTIME_PATH} quick2 ${QT_VERSION})
+  InstallQTRuntimeSinglePackage(${SW_APP_ROOT} ${RUNTIME_PATH} network ${QT_VERSION})
+
+  # Open SSL
+  if (OPEN_SSL_PATH)
+    install_openssl(${SW_APP_ROOT} ${RUNTIME_PATH} ${OPEN_SSL_PATH})
+  endif()
 
   # example update json
   install(FILES examples/update.json DESTINATION ${RUNTIME_PATH}/examples)

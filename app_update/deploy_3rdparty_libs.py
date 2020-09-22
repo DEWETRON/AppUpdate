@@ -1,6 +1,8 @@
 ﻿#!/usr/bin/env python
 import argparse
+import glob
 import os
+import shutil
 import subprocess
 import sys
 
@@ -17,6 +19,20 @@ def deploy_qt(script_path, destination, qt_directory, arch, build_type, special_
     command = deploy_script_path + " " + args
     print(command)
     os.system(command)
+
+
+def deploy_openssl(script_path, arch, destination):
+    """
+    default get it from Qt
+    """
+    openssl_base_dir = "C:/Qt/Tools/OpenSSL/Win_x86/bin"
+    if arch ==  'x64':
+        openssl_base_dir = "C:/Qt/Tools/OpenSSL/Win_x64/bin"
+
+    ssl_dlls = glob.glob(os.path.join(openssl_base_dir, "*.dll"))
+    for f in ssl_dlls:
+        shutil.copy(os.path.join(openssl_base_dir, f), destination)
+
 
 def main(argv):
     script_path = os.path.dirname(os.path.abspath(os.path.realpath(__file__)))
@@ -76,7 +92,8 @@ def main(argv):
 
     destination_path = os.path.abspath(args.destination)
 
-    deploy_qt(build_util_bin_path, destination_path, args.qt_directory, args.architecture, args.build_type, args.qt_special_build, args.qt_version, args.qt_debug == 'true')
+    #deploy_qt(build_util_bin_path, destination_path, args.qt_directory, args.architecture, args.build_type, args.qt_special_build, args.qt_version, args.qt_debug == 'true')
+    deploy_openssl(build_util_bin_path, arch=args.architecture, destination=destination_path)
     return 0
 
 #----------------------------------------------------------------------

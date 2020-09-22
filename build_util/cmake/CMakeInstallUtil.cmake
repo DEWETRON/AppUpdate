@@ -46,3 +46,26 @@ macro(InstallQTRuntimeSinglePackage SW_APP_ROOT DEST_DIR PACKAGE QT_VERSION)
   endif()
 
 endmacro()
+
+macro(get_arch ARCH)
+  set(_ARCH "x64")  #default
+  if (BUILD_X86)
+    set(_ARCH "x86")
+  endif()
+  if (BUILD_X64)
+    set(_ARCH "x64")
+  endif()
+endmacro()
+
+#
+# Install openssl
+macro(install_openssl SW_APP_ROOT DEST_DIR OPEN_SSL_PATH)
+  get_arch(_ARCH)
+  if (BUILD_X64)
+    install(FILES ${OPEN_SSL_PATH}/libcrypto-1_1-x64.dll DESTINATION ${DEST_DIR})
+    install(FILES ${OPEN_SSL_PATH}/libssl-1_1-x64.dll DESTINATION ${DEST_DIR})
+  else()
+    install(FILES ${OPEN_SSL_PATH}/libcrypto-1_1.dll DESTINATION ${DEST_DIR})
+    install(FILES ${OPEN_SSL_PATH}/libssl-1_1.dll DESTINATION ${DEST_DIR})
+  endif()
+endmacro()
