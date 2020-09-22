@@ -99,11 +99,14 @@ private:
     void addToSwList(const SwEntry& sw_entry, const QVersionNumber& latest_version);
     QVariantList toVariantList(const std::vector<SwComponent>& sw_list);
     QVersionNumber getHighestVersionNumber(const SwEntry& sw_entry);
-    QList<QVersionNumber> getSortedVersionNumbers(const std::string& app_name);
+    QList<QVersionNumber> getSortedVersionNumbers(const std::string& app_name) const;
     void updateBundleMap();
     bool hasUpdate(const std::string& app_name, const std::string& upd_ver) const;
     bool doDownload(QUrl download_url, const QString nice_name);
     void updateJson(const QByteArray& json);
+
+    bool compareHashMd5(QUrl download_url, const QByteArray& checksum) const;
+    bool compareHashSha1(QUrl download_url, const QByteArray& checksum) const;
 
 private:
     QVariantList m_installed_software;

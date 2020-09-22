@@ -17,6 +17,7 @@
 
 #include "au_application_data.h"
 #include "au_update_json.h"
+#include <QCryptographicHash>
 #include <QDesktopServices>
 #include <QFile>
 #include <QVersionNumber>
@@ -286,7 +287,7 @@ QVersionNumber AuApplicationData::getHighestVersionNumber(const SwEntry& sw_entr
     return highest_version;
 }
 
-QList<QVersionNumber> AuApplicationData::getSortedVersionNumbers(const std::string& app_name)
+QList<QVersionNumber> AuApplicationData::getSortedVersionNumbers(const std::string& app_name) const
 {
     QList<QVersionNumber> sorted_version_numbers;
 
@@ -391,6 +392,27 @@ void AuApplicationData::downloadFinished(QUrl dl_url, QString filename)
 
     auto content = au_dl_it.value()->getDownload();
 
+    // Check signaturues
+    {
+        QCryptographicHash md5(QCryptographicHash::Md5);
+        md5.addData(content);
+        if (!compareHashMd5(dl_url, md5.result()))
+        {
+            setMessage(QString("MD5 checksum failure for file %1").arg(filename));
+            return;
+        }
+    }
+
+    {
+        QCryptographicHash sha1(QCryptographicHash::Sha1);
+        sha1.addData(content);
+        if (!compareHashSha1(dl_url, sha1.result()))
+        {
+            setMessage(QString("SHA1 checksum failure for file %1").arg(filename));
+            return;
+        }
+    }
+
     if ((QUrl(UPDATE_PORTAL) == dl_url) && (filename == UPDATE_FILE))
     {
         m_downloads.erase(au_dl_it);
@@ -493,4 +515,72 @@ void AuApplicationData::updateJson(const QByteArray& json)
     m_installed_software = toVariantList(m_installed_software_internal);
 
     Q_EMIT updateableAppsChanged();
+}
+
+bool AuApplicationData::compareHashMd5(QUrl download_url, const QByteArray& checksum) const
+{
+    for (auto app : m_au_doc.m_apps) {
+
+        auto sorted_vn = getSortedVersionNumbers(app.first);
+
+        if (sorted_vn.isEmpty()) continue;
+
+        // Highest version first
+        {
+            auto ver = sorted_vn.first();
+            sorted_vn.pop_front();
+            auto app_version = app.second.m_app_versions[ver.toString().toStdString().c_str()];
+
+            if (app_version.url == download_url.toString().toStdString())
+            {
+                return app_version.md5 == checksum.toHex().toStdString();
+            }
+        }
+        // look at older mentioned versions -> stored in entry.other map
+        for (auto ver : sorted_vn)
+        {
+            auto app_version = app.second.m_app_versions[ver.toString().toStdString().c_str()];
+
+            if (app_version.url == download_url.toString().toStdString())
+            {
+                return app_version.md5 == checksum.toStdString();
+            }
+        }
+    }
+
+    return false;
+}
+
+bool AuApplicationData::compareHashSha1(QUrl download_url, const QByteArray& checksum) const
+{
+    for (auto app : m_au_doc.m_apps) {
+
+        auto sorted_vn = getSortedVersionNumbers(app.first);
+
+        if (sorted_vn.isEmpty()) continue;
+
+        // Highest version first
+        {
+            auto ver = sorted_vn.first();
+            sorted_vn.pop_front();
+            auto app_version = app.second.m_app_versions[ver.toString().toStdString().c_str()];
+
+            if (app_version.url == download_url.toString().toStdString())
+            {
+                return app_version.sha1 == checksum.toHex().toStdString();
+            }
+        }
+        // look at older mentioned versions -> stored in entry.other map
+        for (auto ver : sorted_vn)
+        {
+            auto app_version = app.second.m_app_versions[ver.toString().toStdString().c_str()];
+
+            if (app_version.url == download_url.toString().toStdString())
+            {
+                return app_version.sha1 == checksum.toStdString();
+            }
+        }
+    }
+
+    return false;
 }
