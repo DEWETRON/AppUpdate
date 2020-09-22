@@ -22,36 +22,17 @@
 
 using namespace au_doc;
 
-AuUpdateJson::AuUpdateJson()
+AuUpdateJson::AuUpdateJson(const QByteArray& byte_array)
+    : m_byte_array(byte_array)
+    , m_update_doc()
+    , m_update_map()
 {
 }
 
-
-bool AuUpdateJson::update(QUrl remote_url)
+bool AuUpdateJson::update()
 {
-    // TODO retrieve file from server CCC
-    QStringList update_candidates{ "examples/update.json", "../examples/update.json" };
-    QByteArray json_data;
-
-    if (remote_url.isEmpty())
-    {
-        for (const auto& candidate : update_candidates)
-        {
-            QFile uf(candidate);
-            if (uf.open(QIODevice::ReadOnly))
-            {
-                json_data = uf.readAll();
-                break;
-            }
-        }
-    }
-    else
-    {
-        // TODO request json from url
-    }
-
     QJsonParseError err;
-    m_update_doc = QJsonDocument::fromJson(json_data, &err);
+    m_update_doc = QJsonDocument::fromJson(m_byte_array, &err);
 
     auto debug = m_update_doc.toJson();
 
@@ -85,7 +66,8 @@ au_doc::AuDoc AuUpdateJson::getDocument() const
             au_ver.release_date = ver_val["release_date"].toString().toStdString();
             au_ver.license = ver_val["license"].toString().toStdString();
             au_ver.url = ver_val["url"].toString().toStdString();
-            au_ver.signature = ver_val["signature"].toString().toStdString();
+            au_ver.md5 = ver_val["md5"].toString().toStdString();
+            au_ver.sha1 = ver_val["sha1"].toString().toStdString();
             
             auto bundle = ver_val["bundle"].toStringList();
             au_ver.bundle.resize(bundle.size());

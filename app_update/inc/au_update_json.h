@@ -35,7 +35,8 @@ namespace au_doc
         std::string release_date;
         std::string license;
         std::string url;
-        std::string signature;
+        std::string md5;
+        std::string sha1;
         std::vector<std::string> bundle;
         std::vector<std::string> changes;
     };
@@ -56,15 +57,16 @@ namespace au_doc
 class AuUpdateJson
 {
 public:
-    AuUpdateJson();
+    AuUpdateJson(const QByteArray& byte_array);
     ~AuUpdateJson() = default;
 
-    bool update(QUrl remote_url);
+    bool update();
 
     QVariantMap getVariantMap() const;
     au_doc::AuDoc getDocument() const;
 
 private:
+    QByteArray m_byte_array;
     QJsonDocument m_update_doc;
     QVariantMap   m_update_map;
 };

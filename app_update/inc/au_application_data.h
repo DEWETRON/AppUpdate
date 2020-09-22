@@ -101,8 +101,8 @@ private:
     QList<QVersionNumber> getSortedVersionNumbers(const std::string& app_name);
     void updateBundleMap();
     bool hasUpdate(const std::string& app_name, const std::string& upd_ver) const;
-
-    bool doDownload(QUrl download_url);
+    bool doDownload(QUrl download_url, const QString nice_name);
+    void updateJson(const QByteArray& json);
 
 private:
     QVariantList m_installed_software;

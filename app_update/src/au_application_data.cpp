@@ -22,6 +22,11 @@
 #include <QVersionNumber>
 #include <QStandardPaths>
 
+
+#define UPDATE_PORTAL "https://ccc.dewetron.com/dl/update.json"
+#define UPDATE_FILE   "update.json"
+
+
 AuApplicationData::AuApplicationData()
     : m_installed_software{}
     , m_installed_software_internal{}
@@ -151,7 +156,7 @@ void AuApplicationData::updateAll()
 
 void AuApplicationData::download(QUrl download_url)
 {
-    doDownload(download_url);
+    doDownload(download_url, {});
 }
 
 int AuApplicationData::getDownloadProgress(QUrl download_url)
@@ -168,32 +173,8 @@ void AuApplicationData::openDownloadFolder(QUrl download_url)
 
 void AuApplicationData::update()
 {
-    // get update json document
-    AuUpdateJson au_json;
-
-    // TODO get remote json document
-    if (au_json.update(QUrl{ "" }))
-    {
-        // update instance
-        m_au_doc = au_json.getDocument();
-        updateBundleMap();
-    }
-
-    // add a custom filter to display only relevant software packages
-    m_sw_enumerator.addFilter([](const SwEntry& sw) { return sw.m_publisher.find("DEWETRON") != std::string::npos; });
-
-    auto sw_entries = m_sw_enumerator.enumerate();
-
-    // create list of installed sw
-    for (const auto& sw_entry : sw_entries)
-    {
-        QVersionNumber latest_version(getHighestVersionNumber(sw_entry));
-        addToSwList(sw_entry, latest_version);
-    }
-
-    m_installed_software = toVariantList(m_installed_software_internal);
-
-    Q_EMIT updateableAppsChanged();
+    // download latest update.json file from server
+    doDownload(QUrl(UPDATE_PORTAL), UPDATE_FILE);
 }
 
 
@@ -333,7 +314,7 @@ bool AuApplicationData::hasUpdate(const std::string& app_name, const std::string
     return true;
 }
 
-bool AuApplicationData::doDownload(QUrl download_url)
+bool AuApplicationData::doDownload(QUrl download_url, const QString nice_name)
 {
     auto dl_it = m_downloads.find(download_url);
 
@@ -343,7 +324,7 @@ bool AuApplicationData::doDownload(QUrl download_url)
         return false;
     }
 
-    setMessage(QString("Started downloading"));
+    setMessage(QString("Downloading %1").arg(nice_name));
 
     auto au_dl = new AuDownloader(download_url, this);
     m_downloads.insert(download_url, au_dl );
@@ -357,6 +338,8 @@ bool AuApplicationData::doDownload(QUrl download_url)
 
 void AuApplicationData::downloadFinished(QUrl dl_url, QString filename)
 {
+    setMessage({});
+
     auto au_dl_it = m_downloads.find(dl_url);
     if (au_dl_it != m_downloads.end())
     {
@@ -367,6 +350,12 @@ void AuApplicationData::downloadFinished(QUrl dl_url, QString filename)
     }
 
     auto content = au_dl_it.value()->getDownload();
+
+    if ((QUrl(UPDATE_PORTAL) == dl_url) && (filename == UPDATE_FILE))
+    {
+        updateJson(content);
+        return;
+    }
 
     const QString downloads_folder = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
     QFile dest_file(downloads_folder + "/" + filename);
@@ -405,6 +394,22 @@ void AuApplicationData::downloadError(QUrl dl_url)
         setMessage(QString("Download error: %1").arg(au_dl->getError()));
     }
 
+    if ((QUrl(UPDATE_PORTAL) == dl_url))
+    {
+        QStringList update_candidates{ "examples/update.json", "../examples/update.json" };
+        QByteArray json_data;
+        for (const auto& candidate : update_candidates)
+        {
+            QFile uf(candidate);
+            if (uf.open(QIODevice::ReadOnly))
+            {
+                json_data = uf.readAll();
+                updateJson(json_data);
+                break;
+            }
+        }
+    }
+
     m_downloads.erase(au_dl_it);
 }
 
@@ -414,4 +419,32 @@ void AuApplicationData::downloadProgress(QUrl dl_url, qint64 curr, qint64 max)
     
     m_progress[dl_url] = progress; 
     Q_EMIT downloadProgressChanged();
+}
+
+void AuApplicationData::updateJson(const QByteArray& json)
+{
+    // get update json document
+    AuUpdateJson au_json(json);
+
+    if (au_json.update())
+    {
+        m_au_doc = au_json.getDocument();
+        updateBundleMap();
+    }
+
+    // add a custom filter to display only relevant software packages
+    m_sw_enumerator.addFilter([](const SwEntry& sw) { return sw.m_publisher.find("DEWETRON") != std::string::npos; });
+
+    auto sw_entries = m_sw_enumerator.enumerate();
+
+    // create list of installed sw
+    for (const auto& sw_entry : sw_entries)
+    {
+       QVersionNumber latest_version(getHighestVersionNumber(sw_entry));
+       addToSwList(sw_entry, latest_version);
+    }
+
+    m_installed_software = toVariantList(m_installed_software_internal);
+
+    Q_EMIT updateableAppsChanged();
 }
