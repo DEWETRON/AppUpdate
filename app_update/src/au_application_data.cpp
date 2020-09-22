@@ -37,7 +37,8 @@ AuApplicationData::AuApplicationData()
     , m_message()
     , m_progress()
     , m_filename_map()
-    , m_update_timer()
+    , m_daily_timer()
+    , m_fast_timer()
 {
     // predefine bundles, which are only shown once
     m_bundle_map = std::map<std::string, std::string>
@@ -48,16 +49,24 @@ AuApplicationData::AuApplicationData()
         { "DEWETRON TRIONCAL",     "DEWETRON TRION Applications" }
     };
 
-    m_update_timer = new QTimer(this);
-    connect(m_update_timer, &QTimer::timeout, this, QOverload<>::of(&AuApplicationData::update));
-    m_update_timer->start(1000 * 60 * 60 * 24);   // check every 24hours
+    m_daily_timer = new QTimer(this);
+    connect(m_daily_timer, &QTimer::timeout, this, QOverload<>::of(&AuApplicationData::update));
+    m_daily_timer->start(1000 * 60 * 60 * 24);   // check every 24hours
 
     update();
 }
 
 AuApplicationData::~AuApplicationData()
 {
-    delete m_update_timer;
+    if (m_daily_timer)
+    {
+        delete m_daily_timer;
+    }
+
+    if (m_fast_timer)
+    {
+        delete m_fast_timer;
+    }
 }
 
 QVariantList AuApplicationData::getInstalledSoftware()
@@ -186,10 +195,24 @@ void AuApplicationData::openDownloadFolder(QUrl download_url)
 
     const QString downloads_folder = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
     QDesktopServices::openUrl(QUrl(downloads_folder + "/" + file_name, QUrl::TolerantMode));
+
+    if (!m_fast_timer)
+    {
+        m_fast_timer = new QTimer(this);
+        connect(m_fast_timer, &QTimer::timeout, this, QOverload<>::of(&AuApplicationData::update));
+        m_fast_timer->setSingleShot(true);
+        m_fast_timer->start(1000 * 60);   // check after a minute
+    }
 }
 
 void AuApplicationData::update()
 {
+    if (m_fast_timer)
+    {
+        m_fast_timer->stop();
+        delete m_fast_timer;
+        m_fast_timer = nullptr;
+    }
     // download latest update.json file from server
     doDownload(QUrl(UPDATE_PORTAL), UPDATE_FILE);
 }
@@ -370,6 +393,7 @@ void AuApplicationData::downloadFinished(QUrl dl_url, QString filename)
 
     if ((QUrl(UPDATE_PORTAL) == dl_url) && (filename == UPDATE_FILE))
     {
+        m_downloads.erase(au_dl_it);
         updateJson(content);
         return;
     }
@@ -415,6 +439,7 @@ void AuApplicationData::downloadError(QUrl dl_url)
 
     if ((QUrl(UPDATE_PORTAL) == dl_url))
     {
+        m_downloads.erase(au_dl_it);
         QStringList update_candidates{ "examples/update.json", "../examples/update.json" };
         QByteArray json_data;
         for (const auto& candidate : update_candidates)

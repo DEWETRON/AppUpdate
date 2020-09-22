@@ -115,6 +115,7 @@ private:
     QString m_message;
     QMap<QUrl, int> m_progress;
     QMap<QUrl, QString> m_filename_map;
-    QTimer* m_update_timer;
+    QTimer* m_daily_timer;
+    QTimer* m_fast_timer;
 };
 
