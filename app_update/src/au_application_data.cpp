@@ -392,7 +392,15 @@ void AuApplicationData::downloadFinished(QUrl dl_url, QString filename)
 
     auto content = au_dl_it.value()->getDownload();
 
-    // Check signaturues
+
+    if ((QUrl(UPDATE_PORTAL) == dl_url) && (filename == UPDATE_FILE))
+    {
+        m_downloads.erase(au_dl_it);
+        updateJson(content);
+        return;
+    }
+
+    // Check signatures
     {
         QCryptographicHash md5(QCryptographicHash::Md5);
         md5.addData(content);
@@ -411,13 +419,6 @@ void AuApplicationData::downloadFinished(QUrl dl_url, QString filename)
             setMessage(QString("SHA1 checksum failure for file %1").arg(filename));
             return;
         }
-    }
-
-    if ((QUrl(UPDATE_PORTAL) == dl_url) && (filename == UPDATE_FILE))
-    {
-        m_downloads.erase(au_dl_it);
-        updateJson(content);
-        return;
     }
 
     m_filename_map[dl_url] = filename;
