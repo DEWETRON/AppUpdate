@@ -96,6 +96,8 @@ QVariantList AuApplicationData::getUpdateableApps()
             auto app_version = app.second.m_app_versions[ver.toString().toStdString().c_str()];
 
             entry["version"] = app_version.version.c_str();
+            entry["release_date"] = app_version.release_date.c_str();
+            entry["license"] = app_version.license.c_str();
             entry["url"] = app_version.url.c_str();
             entry["is_older_version"] = false;
 
@@ -119,7 +121,9 @@ QVariantList AuApplicationData::getUpdateableApps()
             QVariantMap other_entry;
 
             other_entry["name"] = app.first.c_str();
+            other_entry["release_date"] = app_version.release_date.c_str();
             other_entry["version"] = app_version.version.c_str();
+            other_entry["license"] = app_version.license.c_str();
             other_entry["url"] = app_version.url.c_str();
             other_entry["is_older_version"] = true;
 
@@ -451,6 +455,8 @@ void AuApplicationData::updateJson(const QByteArray& json)
     m_sw_enumerator.addFilter([](const SwEntry& sw) { return sw.m_publisher.find("DEWETRON") != std::string::npos; });
 
     auto sw_entries = m_sw_enumerator.enumerate();
+
+    m_installed_software_internal.clear();
 
     // create list of installed sw
     for (const auto& sw_entry : sw_entries)

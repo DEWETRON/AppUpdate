@@ -59,6 +59,13 @@ TabView {
         return filteredApps
     }
 
+    function getLicenseText(license) {
+        if (license != "") {
+            return qsTr("License version") + ": " + license
+        }
+        return ""
+    }
+
     Tab {
         title: qsTr("Updates")
         
@@ -120,9 +127,21 @@ TabView {
                         }
 
                         ColumnLayout {
-                            Text {
-                                text: modelData["name"]
-                                font.pointSize: 12; font.bold: false
+                            RowLayout {
+                                Text {
+                                    text: modelData["name"]
+                                    font.pointSize: 12; font.bold: false
+                                }
+                                
+                                // HorizontalSpacer
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+                                Text {                                   
+                                    text: modelData["release_date"]
+                                    font.pointSize: 10; font.bold: false
+                                    horizontalAlignment: Text.AlignRight
+                                }
                             }
                             RowLayout {
                                 Text {
@@ -134,6 +153,15 @@ TabView {
                                     font.pointSize: 10; font.bold: false
                                     color: "red"
                                 }
+                                // HorizontalSpacer
+                                Item {
+                                    Layout.fillWidth: true
+                                }
+                                Text {                                   
+                                    text: getLicenseText(modelData["license"])
+                                    font.pointSize: 10; font.bold: false
+                                    horizontalAlignment: Text.AlignRight
+                                }
                             }
                         }
 
@@ -143,6 +171,11 @@ TabView {
                         }
 
                         ColumnLayout {
+                            // VerticalSpacer
+                            Item {
+                                Layout.fillHeight: true
+                            }
+
                             Text {
                                 Layout.alignment: Qt.AlignRight
                                 text: qsTr("Download")
@@ -158,6 +191,8 @@ TabView {
                                 }
                             }
                             
+                            Item {}
+
                             // VerticalSpacer
                             Item {
                                 Layout.fillHeight: true
