@@ -433,18 +433,18 @@ void AuApplicationData::downloadFinished(QUrl dl_url, QString filename)
 
     if (dest_file.exists())
     {
-        setMessage(QString("Download file already exists ") + dest_file.fileName());
+        // removing old file
+        dest_file.remove();
     }
-    else
+
+    if (!dest_file.open(QIODevice::WriteOnly))
     {
-        if (!dest_file.open(QIODevice::WriteOnly))
-        {
-            setMessage(QString("Could not create ") + dest_file.fileName());
-        }
-        auto bytes_written = dest_file.write(content);
-        dest_file.close();
-        setMessage(QString("File downloaded to ") + dest_file.fileName());
+        setMessage(QString("Could not create ") + dest_file.fileName());
     }
+    auto bytes_written = dest_file.write(content);
+    dest_file.close();
+    setMessage(QString("File downloaded to ") + dest_file.fileName());
+    
 
     m_progress[dl_url] = 200;  // signal finished dl
     Q_EMIT downloadProgressChanged();
