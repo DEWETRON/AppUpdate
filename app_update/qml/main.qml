@@ -96,7 +96,9 @@ TabView {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 boundsBehavior: Flickable.StopAtBounds
-                ScrollBar.vertical: ScrollBar { }
+                ScrollBar.vertical: ScrollBar {
+                    policy: ScrollBar.AlwaysOn
+                }
                 clip: true
 
                 delegate:
@@ -337,7 +339,9 @@ TabView {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 boundsBehavior: Flickable.StopAtBounds
-                ScrollBar.vertical: ScrollBar { }
+                ScrollBar.vertical: ScrollBar {
+                    policy: ScrollBar.AlwaysOn
+                }
                 clip: true
 
                 delegate: 
