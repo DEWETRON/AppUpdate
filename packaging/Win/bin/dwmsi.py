@@ -348,7 +348,7 @@ def dwmsi(argv):
 
 
     wix_cfg = {
-        "wix_ext" : [ '%WIX_PATH%/WixUIExtension.dll' ],
+        "wix_ext" : [ '%WIX_PATH%/WixUIExtension.dll', '%WIX_PATH%/WixUtilExtension.dll' ],
         "msi_file" : args.installer_file,
         "arch" : args.arch
     }

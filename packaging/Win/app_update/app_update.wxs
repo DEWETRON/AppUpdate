@@ -130,13 +130,27 @@
 		<!-- on top of the second and all following pages -->
 		<WixVariable Id="WixUIBannerBmp" Value="banner.bmp" />
 		
-		<UIRef Id="WixUI_Minimal"/>
+        <UI>
+		    <UIRef Id="WixUI_Minimal"/>
+            <Publish Dialog="ExitDialog" 
+                Control="Finish" 
+                Event="DoAction" 
+                Value="LaunchApplication">NOT Installed</Publish>
+        </UI>
+        
 
 	    <!--
         	- Allow upgrades
 	        - Allow downgrades
 	    -->
     	<MajorUpgrade AllowDowngrades='yes'/>
+
+
+        <Property Id="WixShellExecTarget" Value="[#EXE_FILE]" />
+        <CustomAction Id="LaunchApplication" 
+            BinaryKey="WixCA" 
+            DllEntry="WixShellExec"
+            Impersonate="yes" />
 
     </Product>
 </Wix>
