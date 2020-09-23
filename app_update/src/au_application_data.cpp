@@ -25,7 +25,7 @@
 #include <QStandardPaths>
 
 
-#define UPDATE_PORTAL "https://ccccc.dewetron.com/dl/update.json"
+#define UPDATE_PORTAL "https://ccc.dewetron.com/dl/update.json"
 #define UPDATE_FILE   "update.json"
 
 
