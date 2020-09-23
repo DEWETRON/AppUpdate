@@ -30,6 +30,7 @@ int main(int argc, char* argv[])
     Q_INIT_RESOURCE(au_resources);
 
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     AuSingleInstance assure_single_instance("AppUpdate");
     if (!assure_single_instance.isFirstInstance()) return 0;
