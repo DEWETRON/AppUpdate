@@ -17,14 +17,15 @@
 
 #include "au_application_data.h"
 #include "au_update_json.h"
+#include "au_version_number.h"
 #include <QCryptographicHash>
 #include <QDesktopServices>
 #include <QFile>
-#include <QVersionNumber>
+
 #include <QStandardPaths>
 
 
-#define UPDATE_PORTAL "https://ccc.dewetron.com/dl/update.json"
+#define UPDATE_PORTAL "https://ccccc.dewetron.com/dl/update.json"
 #define UPDATE_FILE   "update.json"
 
 
@@ -105,6 +106,7 @@ QVariantList AuApplicationData::getUpdateableApps()
             sorted_vn.pop_front();
             auto app_version = app.second.m_app_versions[ver.toString().toStdString().c_str()];
 
+            entry["beta"] = app_version.beta.c_str();
             entry["version"] = app_version.version.c_str();
             entry["release_date"] = app_version.release_date.c_str();
             entry["license"] = app_version.license.c_str();
@@ -136,6 +138,7 @@ QVariantList AuApplicationData::getUpdateableApps()
             QVariantMap other_entry;
 
             other_entry["name"] = app.first.c_str();
+            other_entry["beta"] = app_version.beta.c_str();
             other_entry["release_date"] = app_version.release_date.c_str();
             other_entry["version"] = app_version.version.c_str();
             other_entry["license"] = app_version.license.c_str();
@@ -234,7 +237,7 @@ std::string AuApplicationData::getBundleName(const std::string& sw_display_name)
     return {};
 }
 
-void AuApplicationData::addToSwList(const SwEntry& sw_entry, const QVersionNumber& latest_version)
+void AuApplicationData::addToSwList(const SwEntry& sw_entry, const AuVersionNumber& latest_version)
 {
     auto bundle_name = getBundleName(sw_entry.m_sw_display_name);
     std::string app_name = bundle_name.empty() ? sw_entry.m_sw_display_name : bundle_name;
@@ -271,9 +274,9 @@ QVariantList AuApplicationData::toVariantList(const std::vector<SwComponent>& sw
     return v_list;
 }
 
-QVersionNumber AuApplicationData::getHighestVersionNumber(const SwEntry& sw_entry)
+AuVersionNumber AuApplicationData::getHighestVersionNumber(const SwEntry& sw_entry)
 {
-    QVersionNumber highest_version;
+    AuVersionNumber highest_version;
 
     auto bundle_name = getBundleName(sw_entry.m_sw_display_name);
     std::string app_name = bundle_name.empty() ? sw_entry.m_sw_display_name : bundle_name;
@@ -284,17 +287,19 @@ QVersionNumber AuApplicationData::getHighestVersionNumber(const SwEntry& sw_entr
         auto avail_versions = it->second.m_app_versions;
         for (auto version_it = avail_versions.begin(); version_it != avail_versions.end(); version_it++)
         {
-            auto qver = QVersionNumber::fromString(version_it->first.c_str());
+            auto qver = AuVersionNumber::fromString(version_it->first.c_str());
             if (qver > highest_version) highest_version = qver;
         }
     }
 
+    auto debug = highest_version.toString();
+
     return highest_version;
 }
 
-QList<QVersionNumber> AuApplicationData::getSortedVersionNumbers(const std::string& app_name) const
+QList<AuVersionNumber> AuApplicationData::getSortedVersionNumbers(const std::string& app_name) const
 {
-    QList<QVersionNumber> sorted_version_numbers;
+    QList<AuVersionNumber> sorted_version_numbers;
 
     auto it = m_au_doc.m_apps.find(app_name);
     if (it != m_au_doc.m_apps.end())
@@ -302,7 +307,7 @@ QList<QVersionNumber> AuApplicationData::getSortedVersionNumbers(const std::stri
         auto avail_versions = it->second.m_app_versions;
         for (auto version_it = avail_versions.begin(); version_it != avail_versions.end(); version_it++)
         {
-            auto curr_ver = QVersionNumber::fromString(version_it->first.c_str());
+            auto curr_ver = AuVersionNumber::fromString(version_it->first.c_str());
             bool inserted = false;
             for (auto it = sorted_version_numbers.begin(); it != sorted_version_numbers.end(); ++it)
             {
@@ -351,8 +356,8 @@ bool AuApplicationData::hasUpdate(const std::string& app_name, const std::string
 
     if (installed_app != m_installed_software_internal.end())
     {
-        auto upd_version = QVersionNumber::fromString(upd_ver.c_str());
-        auto inst_version = QVersionNumber::fromString(installed_app->package_version.c_str());
+        auto upd_version = AuVersionNumber::fromString(upd_ver.c_str());
+        auto inst_version = AuVersionNumber::fromString(installed_app->package_version.c_str());
         return upd_version > inst_version;
     }
 
@@ -467,7 +472,6 @@ void AuApplicationData::downloadError(QUrl dl_url)
 
     if ((QUrl(UPDATE_PORTAL) == dl_url))
     {
-        m_downloads.erase(au_dl_it);
         QStringList update_candidates{ "examples/update.json", "../examples/update.json" };
         QByteArray json_data;
         for (const auto& candidate : update_candidates)
@@ -514,7 +518,7 @@ void AuApplicationData::updateJson(const QByteArray& json)
     // create list of installed sw
     for (const auto& sw_entry : sw_entries)
     {
-       QVersionNumber latest_version(getHighestVersionNumber(sw_entry));
+       AuVersionNumber latest_version(getHighestVersionNumber(sw_entry));
        addToSwList(sw_entry, latest_version);
     }
 

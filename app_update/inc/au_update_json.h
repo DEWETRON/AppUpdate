@@ -30,6 +30,7 @@ namespace au_doc
 {
     struct AuAppVersion
     {
+        std::string beta;
         std::string version;
         std::string release_note_url;
         std::string release_date;

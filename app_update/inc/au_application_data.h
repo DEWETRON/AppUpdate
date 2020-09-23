@@ -27,7 +27,7 @@
 #include <QTimer>
 #include <QVariant>
 
-class QVersionNumber;
+class AuVersionNumber;
 
 struct SwComponent
 {
@@ -97,10 +97,10 @@ private:
 private:
     void update();
     std::string getBundleName(const std::string& sw_display_name) const;
-    void addToSwList(const SwEntry& sw_entry, const QVersionNumber& latest_version);
+    void addToSwList(const SwEntry& sw_entry, const AuVersionNumber& latest_version);
     QVariantList toVariantList(const std::vector<SwComponent>& sw_list);
-    QVersionNumber getHighestVersionNumber(const SwEntry& sw_entry);
-    QList<QVersionNumber> getSortedVersionNumbers(const std::string& app_name) const;
+    AuVersionNumber getHighestVersionNumber(const SwEntry& sw_entry);
+    QList<AuVersionNumber> getSortedVersionNumbers(const std::string& app_name) const;
     void updateBundleMap();
     bool hasUpdate(const std::string& app_name, const std::string& upd_ver) const;
     bool doDownload(QUrl download_url, const QString nice_name);

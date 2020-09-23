@@ -27,11 +27,25 @@ TabView {
 
     property var show_older_versions : false
     property var show_updates_only : true
+    property var show_releases_only : true
     property var model: getModel(app.updateableApps)
 
     function getModel(data) {
-        return getShowOlderVersions(getUpdatesOnly(data));
+        return getShowOlderVersions(getUpdatesOnly(getReleasesOnly(data)));
     }
+
+    function getReleasesOnly(data) {
+        if (!root.show_releases_only) return data
+
+        var filteredApps = []
+        var entry
+        for (entry of data) {
+            if (entry["beta"] != "1") {
+                filteredApps.push(entry)
+            }
+        }
+        return filteredApps
+    }    
 
     function getUpdatesOnly(data) {
         if (!root.show_updates_only) return data
@@ -281,15 +295,19 @@ TabView {
                 RowLayout {
                     spacing: 10
 
-                    ColumnLayout {
+                    GridLayout {
+                        columns: 2
+                        rows: 2
+
                         CheckBox {
-                            id: showUpdatesOnly
+                            id: showBetaVersions
                             text: qsTr("Show updates only")
                             checked: root.show_updates_only
                             onClicked: {
                                 root.show_updates_only = checked
-                            }
+                            }                    
                         }
+
                         CheckBox {
                             id: showOlderVersions
                             text: qsTr("Show older versions")
@@ -298,7 +316,17 @@ TabView {
                                 root.show_older_versions = checked
                             }
                         }
+
+                        CheckBox {
+                            id: showUpdatesOnly
+                            text: qsTr("Show beta versions")
+                            checked: !root.show_releases_only
+                            onClicked: {
+                                root.show_releases_only = !checked
+                            }
+                        }
                     }
+
 
                     // HorizontalSpacer
                     Item {

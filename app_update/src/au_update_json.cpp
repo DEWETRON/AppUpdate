@@ -61,6 +61,7 @@ au_doc::AuDoc AuUpdateJson::getDocument() const
         {
             AuAppVersion au_ver;
             QVariantMap ver_val = qvariant_cast<QVariantMap>(ver_it.value());
+            au_ver.beta = ver_val["beta"].toString().toStdString();
             au_ver.version = ver_val["version"].toString().toStdString();
             au_ver.release_note_url = ver_val["release_note_url"].toString().toStdString();
             au_ver.release_date = ver_val["release_date"].toString().toStdString();

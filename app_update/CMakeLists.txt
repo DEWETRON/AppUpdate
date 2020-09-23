@@ -70,6 +70,7 @@ set(AU_HEADER_FILES
   inc/au_single_instance.h
   inc/au_software_enumerator.h
   inc/au_update_json.h
+  inc/au_version_number.h
 )
 
 set(AU_SOURCE_FILES
@@ -81,6 +82,7 @@ set(AU_SOURCE_FILES
   src/au_single_instance.cpp
   src/au_software_enumerator.cpp
   src/au_update_json.cpp
+  src/au_version_number.cpp
 )
 
 if(WIN32)
