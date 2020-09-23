@@ -1,5 +1,18 @@
 {
     "DEWETRON OXYGEN": {
+        "5.3 RC1": {
+            "beta": "1",
+            "version": "5.3 RC1",
+            "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
+            "release_date": "23.09.2020",
+            "license": "5",
+            "url": "https://ccc.dewetron.com/dl/5ef9b29f-6f6c-461f-9170-524dd9c49a3c",
+            "md5": "392cead9edc847bf3776b8aecf8284ba",
+            "sha1": "9f66b751ddeeef744fcf0eac390d65e1580ed59f",
+            "changes": [
+                "5.3 Release Candidate 1"
+            ]
+        },
         "5.2": {
             "version": "5.2.0",
             "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
@@ -44,6 +57,24 @@
         }
     },
     "DEWETRON TRION Applications": {
+        "5.3.0 RC1": {
+            "beta": "1",
+            "version": "5.3.0 RC1",
+            "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
+            "release_date": "23.09.2020",
+            "bundle": [
+                "DEWETRON TRION Driver",
+                "DEWETRON Explorer",
+                "DEWETRON DEWE2 Driver",
+                "DEWETRON TRIONCAL"
+            ],
+            "url": "https://ccc.dewetron.com/dl/5ef9b29f-e1a8-4ea6-9e33-524dd9c49a3c",
+            "md5": "f9fe956ad2a1c2804154713d3ae7bdcd",
+            "sha1": "c4528b8a70b61fd6b60fc4d8bf20d2cfee514858",
+            "changes": [
+                "5.3 Release Candidate 1"
+            ]
+        },
         "5.2.0": {
             "version": "5.2.0",
             "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
@@ -63,11 +94,25 @@
             ]
         }
     },
+    "DEWETRON TRIONet Firmware": {
+        "5.3.0 RC1": {
+            "beta": "1",
+            "version": "5.3.0 RC1",
+            "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
+            "release_date": "23.09.2020",
+            "url": "https://ccc.dewetron.com/dl/5ef9b29f-e1a8-4ea6-9e33-524dd9c49a3c",
+            "md5": "f6bd30dbc9c6e5220b015f2a76fb4384",
+            "sha1": "5d2391b9d957cbcf94dd352be2f783d8c92bc676",
+            "changes": [
+                "5.3 Release Candidate 1"
+            ]
+        }
+    },
     "DEWETRON AppUpdate": {
-        "1.1.0": {
-            "version": "1.1.0",
+        "1.2.0": {
+            "version": "1.2.0",
             "release_note_url": "https://www.dewetron.com/AppUpdate/changelog.html",
-            "release_date": "22.09.2020",
+            "release_date": "23.09.2020",
             "url": "https://ccc.dewetron.com/dl/5f69e6b8-1a78-43c1-8945-29ded9c49a3c",
             "md5": "354ca5018369653ebfddc658be65fd73",
             "sha1": "e12b8c779b59091f884d830cc6e123be571df9a4",
