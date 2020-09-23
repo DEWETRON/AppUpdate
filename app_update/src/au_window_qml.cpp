@@ -39,7 +39,7 @@ bool AuWindowQml::event(QEvent* event)
     if (event->type() == QEvent::Close) {
         if (m_trayIcon->isVisible())
         {
-            QMessageBox::information(nullptr, tr("Systray"),
+            QMessageBox::information(nullptr, tr("DEWETRON AppUpdate"),
                 tr("The program will keep running in the "
                     "system tray. To terminate the program, "
                     "choose <b>Quit</b> in the context menu "
@@ -69,6 +69,12 @@ void AuWindowQml::iconActivated(QSystemTrayIcon::ActivationReason reason)
     default:
         ;
     }
+}
+
+
+void AuWindowQml::showNotification(const QString& title, const QString& body)
+{
+    m_trayIcon->showMessage(title, body);
 }
 
 void AuWindowQml::createActions()

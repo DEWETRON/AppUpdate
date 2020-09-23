@@ -87,6 +87,7 @@ Q_SIGNALS:
     void updateableAppsChanged();
     void messageChanged();
     void downloadProgressChanged();
+    void showNotification(const QString& title, const QString& body);
 
 private:
     Q_SLOT void downloadFinished(QUrl dl_url, QString filename);

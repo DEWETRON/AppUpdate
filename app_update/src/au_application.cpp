@@ -99,6 +99,8 @@ bool AuApplication::initGui()
         m_qml_reloader->addView(m_main_window);
     }
 
+    connect(m_app_data, &AuApplicationData::showNotification, m_main_window, &AuWindowQml::showNotification);
+
     return true;
 }
 

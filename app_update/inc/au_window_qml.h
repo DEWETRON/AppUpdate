@@ -31,9 +31,13 @@ public:
 
     bool event(QEvent* event) override;
 
+public Q_SLOTS:
+    void showNotification(const QString& title, const QString& body);
+
 private Q_SLOTS:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void close();
+
 
 private:
     void createActions();
