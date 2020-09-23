@@ -27,6 +27,7 @@ AuWindowQml::AuWindowQml()
     createTrayIcon();
 
     connect(m_trayIcon, &QSystemTrayIcon::activated, this, &AuWindowQml::iconActivated);
+    connect(m_trayIcon, &QSystemTrayIcon::messageClicked, this, &AuWindowQml::messageClicked);
 
     m_trayIcon->show();
 
@@ -75,6 +76,12 @@ void AuWindowQml::iconActivated(QSystemTrayIcon::ActivationReason reason)
 void AuWindowQml::showNotification(const QString& title, const QString& body)
 {
     m_trayIcon->showMessage(title, body);
+}
+
+void AuWindowQml::messageClicked()
+{
+    this->raise();
+    this->showNormal();
 }
 
 void AuWindowQml::createActions()

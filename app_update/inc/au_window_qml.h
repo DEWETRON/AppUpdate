@@ -37,7 +37,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void close();
-
+    void messageClicked();
 
 private:
     void createActions();
