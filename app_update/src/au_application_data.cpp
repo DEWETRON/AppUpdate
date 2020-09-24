@@ -121,10 +121,10 @@ QVariantList AuApplicationData::getUpdateableApps()
             // update available?
             bool has_update = hasUpdate(app.first, ver.toString().toStdString());
             entry["has_update"] = has_update;
-            if (has_update)
-            {
-                showNotification(app.first.c_str(), QString(tr("New update %1 available")).arg(app_version.version.c_str()));
-            }
+            //if (has_update)
+            //{
+            //    showNotification(app.first.c_str(), QString(tr("New update %1 available")).arg(app_version.version.c_str()));
+            //}
 
             entry["changes"] = changes;
         }
@@ -212,6 +212,11 @@ void AuApplicationData::openDownloadFolder(QUrl download_url)
         m_fast_timer->setSingleShot(true);
         m_fast_timer->start(1000 * 60);   // check after a minute
     }
+}
+
+void AuApplicationData::showNotification(const QString& title, const QString& body)
+{
+    Q_EMIT doShowNotification(title, body);
 }
 
 void AuApplicationData::update()

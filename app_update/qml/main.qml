@@ -55,6 +55,7 @@ TabView {
         for (entry of data) {
             if (entry["has_update"] == true) {
                 filteredApps.push(entry)
+                app.showNotification(entry["name"], qsTr("New update %1 available").arg(entry["version"]));
             }
         }
         return filteredApps

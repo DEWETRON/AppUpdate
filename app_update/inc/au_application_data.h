@@ -61,10 +61,6 @@ class AuApplicationData : public QObject
                 READ getMessage
                 NOTIFY messageChanged)
 
-    //Q_PROPERTY(int downloadProgress
-    //            READ getDownloadProgress
-    //            NOTIFY downloadProgressChanged)
-
 
 public:
     AuApplicationData();
@@ -81,13 +77,15 @@ public:
     Q_INVOKABLE void download(QUrl download_url);
     Q_INVOKABLE int getDownloadProgress(QUrl download_url);
     Q_INVOKABLE void openDownloadFolder(QUrl download_url);
+    Q_INVOKABLE void showNotification(const QString& title, const QString& body);
+
 Q_SIGNALS:
     void installedSoftwareChanged();
     void installedAppsChanged();
     void updateableAppsChanged();
     void messageChanged();
     void downloadProgressChanged();
-    void showNotification(const QString& title, const QString& body);
+    void doShowNotification(const QString& title, const QString& body);
 
 private:
     Q_SLOT void downloadFinished(QUrl dl_url, QString filename);
