@@ -92,7 +92,7 @@ def main(argv):
 
     destination_path = os.path.abspath(args.destination)
 
-    #deploy_qt(build_util_bin_path, destination_path, args.qt_directory, args.architecture, args.build_type, args.qt_special_build, args.qt_version, args.qt_debug == 'true')
+    deploy_qt(build_util_bin_path, destination_path, args.qt_directory, args.architecture, args.build_type, args.qt_special_build, args.qt_version, args.qt_debug == 'true')
     deploy_openssl(build_util_bin_path, arch=args.architecture, destination=destination_path)
     return 0
 
