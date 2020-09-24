@@ -57,4 +57,4 @@ gunther.laure@dewetron.com
 
 
 # License
-GPL V3
+GPL-3.0 License 
