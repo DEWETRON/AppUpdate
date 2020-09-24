@@ -24,6 +24,35 @@
 #include <QQmlContext>
 #include <QQmlEngine>
 
+
+#ifdef Q_OS_WIN32
+#include <QAbstractNativeEventFilter>
+#include <Windows.h>
+
+class WindowsEventFilter : public QAbstractNativeEventFilter
+{
+    virtual bool nativeEventFilter(const QByteArray& eventType, void* message, long* result) override
+    {
+        MSG* msg = reinterpret_cast<MSG*>(message);
+        if (msg->message == WM_QUERYENDSESSION)
+        {
+            qApp->quit();
+            return true;
+        }
+        else if (msg->message == WM_ENDSESSION
+            && (msg->lParam & ENDSESSION_CLOSEAPP)
+            && msg->wParam == TRUE)
+        {
+            qApp->quit();
+            return true;
+        }
+
+        return false;
+    }
+};
+
+#endif
+
 AuApplication::AuApplication(int& argc, char** argv)
     : QObject(nullptr)
     , m_app(argc, argv)
@@ -32,6 +61,9 @@ AuApplication::AuApplication(int& argc, char** argv)
     , m_qml_main_file()
     , m_qml_reloader(nullptr)
 {
+#ifdef Q_OS_WIN32
+    qApp->installNativeEventFilter(new WindowsEventFilter);
+#endif
 }
 
 AuApplication::~AuApplication()
