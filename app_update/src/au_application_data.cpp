@@ -121,11 +121,6 @@ QVariantList AuApplicationData::getUpdateableApps()
             // update available?
             bool has_update = hasUpdate(app.first, ver.toString().toStdString());
             entry["has_update"] = has_update;
-            //if (has_update)
-            //{
-            //    showNotification(app.first.c_str(), QString(tr("New update %1 available")).arg(app_version.version.c_str()));
-            //}
-
             entry["changes"] = changes;
         }
         apps.push_back(entry);
@@ -221,6 +216,8 @@ void AuApplicationData::showNotification(const QString& title, const QString& bo
 
 void AuApplicationData::update()
 {
+    Q_EMIT resetAlertIcon();
+
     if (m_fast_timer)
     {
         m_fast_timer->stop();

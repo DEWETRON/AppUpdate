@@ -32,6 +32,7 @@ public:
     bool event(QEvent* event) override;
 
 public Q_SLOTS:
+    void resetAlertIcon();
     void showNotification(const QString& title, const QString& body);
 
 private Q_SLOTS:

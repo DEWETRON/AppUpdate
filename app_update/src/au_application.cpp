@@ -132,6 +132,7 @@ bool AuApplication::initGui()
     }
 
     connect(m_app_data, &AuApplicationData::doShowNotification, m_main_window, &AuWindowQml::showNotification);
+    connect(m_app_data, &AuApplicationData::resetAlertIcon, m_main_window, &AuWindowQml::resetAlertIcon);
 
     return true;
 }

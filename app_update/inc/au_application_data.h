@@ -86,6 +86,7 @@ Q_SIGNALS:
     void messageChanged();
     void downloadProgressChanged();
     void doShowNotification(const QString& title, const QString& body);
+    void resetAlertIcon();
 
 private:
     Q_SLOT void downloadFinished(QUrl dl_url, QString filename);

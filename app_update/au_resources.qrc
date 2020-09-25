@@ -2,6 +2,7 @@
     <qresource>
         <file>qml/main.qml</file>
         <file>res/dewetron.ico</file>
+        <file>res/dewetron_alert.ico</file>
         <file>res/dewetron.png</file>
     </qresource>
 </RCC>
