@@ -326,6 +326,14 @@ TabView {
                                 root.show_releases_only = !checked
                             }
                         }
+
+                        CheckBox {
+                            text: qsTr("Autostart AppUpdate")
+                            checked: app.autostart
+                            onClicked: {
+                                app.autostart = checked
+                            }
+                        }
                     }
 
 

@@ -61,6 +61,12 @@ class AuApplicationData : public QObject
                 READ getMessage
                 NOTIFY messageChanged)
 
+    Q_PROPERTY(bool autostart
+                READ getAutostart
+                WRITE setAutostart
+                NOTIFY autostartChanged)
+
+
 
 public:
     AuApplicationData();
@@ -71,6 +77,9 @@ public:
     QVariantList getUpdateableApps();
     QString getMessage() const;
     void setMessage(QString message);
+
+    bool getAutostart() const;
+    void setAutostart(bool autostart_enable);
 
     Q_INVOKABLE void checkForUpdates();
     Q_INVOKABLE void updateAll();
@@ -87,6 +96,7 @@ Q_SIGNALS:
     void downloadProgressChanged();
     void doShowNotification(const QString& title, const QString& body);
     void resetAlertIcon();
+    void autostartChanged();
 
 private:
     Q_SLOT void downloadFinished(QUrl dl_url, QString filename);
@@ -120,5 +130,6 @@ private:
     QMap<QUrl, QString> m_filename_map;
     QTimer* m_daily_timer;
     QTimer* m_fast_timer;
+    bool m_autostart;
 };
 

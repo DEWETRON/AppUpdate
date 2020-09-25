@@ -18,15 +18,20 @@
 #include "au_application_data.h"
 #include "au_update_json.h"
 #include "au_version_number.h"
+#include <QCoreApplication>
 #include <QCryptographicHash>
 #include <QDesktopServices>
+#include <QDir>
 #include <QFile>
-
 #include <QStandardPaths>
 
 
 #define UPDATE_PORTAL "https://ccc.dewetron.com/dl/update.json"
 #define UPDATE_FILE   "update.json"
+
+
+bool getAutostartSetting();
+void setAutostartSetting(bool autostart);
 
 
 AuApplicationData::AuApplicationData()
@@ -41,6 +46,7 @@ AuApplicationData::AuApplicationData()
     , m_filename_map()
     , m_daily_timer()
     , m_fast_timer()
+    , m_autostart(false)
 {
     // predefine bundles, which are only shown once
     m_bundle_map = std::map<std::string, std::string>
@@ -54,6 +60,8 @@ AuApplicationData::AuApplicationData()
     m_daily_timer = new QTimer(this);
     connect(m_daily_timer, &QTimer::timeout, this, QOverload<>::of(&AuApplicationData::update));
     m_daily_timer->start(1000 * 60 * 60 * 24);   // check every 24hours
+
+    m_autostart = getAutostartSetting();
 
     update();
 }
@@ -163,6 +171,22 @@ void AuApplicationData::setMessage(QString message)
 {
     m_message = message;
     Q_EMIT messageChanged();
+}
+
+bool AuApplicationData::getAutostart() const
+{
+    return m_autostart;
+}
+
+void AuApplicationData::setAutostart(bool autostart_enable)
+{
+#ifdef Q_OS_WIN
+    m_autostart = autostart_enable;
+    setAutostartSetting(m_autostart);
+#else
+    // TODO other OS
+#endif
+    Q_EMIT autostartChanged();
 }
 
 void AuApplicationData::checkForUpdates()
@@ -596,3 +620,99 @@ bool AuApplicationData::compareHashSha1(QUrl download_url, const QByteArray& che
 
     return false;
 }
+
+//bool getAutoStartSetting()
+//{
+//
+//    //QSettings boot_up_settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::Registry64Format);
+//    //return boot_up_settings.contains("DEWETRON AppUpdate");
+//#else
+//    return false;
+//#endif
+//}
+
+#ifdef Q_OS_WIN
+
+#include "windows.h"
+
+bool getAutostartSetting()
+{
+    //QSettings boot_up_settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::Registry64Format);
+//QString app_path = QCoreApplication::applicationFilePath();
+//if (autostart_enable)
+//{
+//    boot_up_settings.setValue("DEWETRON AppUpdate", app_path);
+//}
+//else 
+//{
+//    boot_up_settings.remove("DEWETRON AppUpdate");
+//}
+//boot_up_settings.sync();
+
+    HKEY hrun = NULL;
+    DWORD dwType = KEY_ALL_ACCESS;
+    char app_path[1024] = { 0 };
+    DWORD app_path_size = sizeof(app_path);
+    const char* root = "Software\\Microsoft\\Windows\\CurrentVersion\\Run";
+    bool autostart_enabled = false;
+
+    if (RegOpenKeyEx(HKEY_CURRENT_USER, root, 0, KEY_READ, &hrun) != ERROR_SUCCESS)
+    {
+        return autostart_enabled;
+    }
+   
+    if (RegQueryValueEx(hrun, "DEWETRON AppUpdate", NULL, 
+            &dwType, (unsigned char*)app_path, &app_path_size) == ERROR_SUCCESS)
+    {
+        autostart_enabled = true;
+    }
+
+    RegCloseKey(hrun);
+
+    return autostart_enabled;
+}
+
+void setAutostartSetting(bool autostart)
+{
+    HKEY hrun = NULL;
+    DWORD dwType = KEY_ALL_ACCESS;
+    char app_path[1024] = { 0 };
+    DWORD app_path_size = sizeof(app_path);
+    const char* root = "Software\\Microsoft\\Windows\\CurrentVersion\\Run";
+    //bool autostart_enabled = false;
+
+    if (RegOpenKeyEx(HKEY_CURRENT_USER, root, 0, KEY_ALL_ACCESS, &hrun) != ERROR_SUCCESS)
+    {
+        return;
+    }
+
+    if (!autostart)
+    {
+        RegDeleteValue(hrun, "DEWETRON AppUpdate");
+        RegDeleteKey(hrun, "DEWETRON AppUpdate");
+    }
+    else
+    {
+
+        QString app_path = "\"" + QDir::toNativeSeparators(QCoreApplication::applicationFilePath()) + "\"";
+        if (RegSetValueEx(hrun, "DEWETRON AppUpdate", 0, REG_SZ, (unsigned char*)app_path.toStdString().data(), app_path.toStdString().size()) != ERROR_SUCCESS)
+        {
+            RegCloseKey(hrun);
+            return;
+        }
+    }
+
+    RegCloseKey(hrun);
+}
+#endif
+
+#ifdef Q_OS_UNIX
+bool getAutostartSetting()
+{
+    return false;
+}
+void setAutostartSetting(bool autostart)
+{
+
+}
+#endif
