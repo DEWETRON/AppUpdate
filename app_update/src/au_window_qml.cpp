@@ -76,15 +76,14 @@ void AuWindowQml::resetAlertIcon()
 {
     auto icon = QIcon(":/res/dewetron.ico");
     m_trayIcon->setIcon(icon);
-    this->setIcon(icon);
+    //this->setIcon(icon);
 }
 
 void AuWindowQml::showNotification(const QString& title, const QString& body)
 {
     auto icon = QIcon(":/res/dewetron_alert.ico");
     m_trayIcon->setIcon(icon);
-    this->setIcon(icon);
-
+    //this->setIcon(icon);
 
     m_trayIcon->showMessage(title, body);
 }
@@ -123,7 +122,9 @@ void AuWindowQml::createTrayIcon()
     m_trayIcon = new QSystemTrayIcon(this);
     m_trayIcon->setContextMenu(m_trayIconMenu);
 
-    resetAlertIcon();
+    auto icon = QIcon(":/res/dewetron.ico");
+    m_trayIcon->setIcon(icon);
+    this->setIcon(icon);
 
     m_trayIcon->setToolTip("DEWETRON AppUpdate");
 }
