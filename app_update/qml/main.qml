@@ -341,7 +341,15 @@ TabView {
                     Item {
                         Layout.fillWidth: true
                     }
+                    
 
+                    Image {
+                        fillMode: Image.PreserveAspectFit
+                        // sourceSize.width: 64
+                        // sourceSize.height: 64
+                        source: "qrc:/res/gear.svg"
+                    }
+                    
                     Button {
                         text: qsTr("Check for Updates")
                         onClicked: {

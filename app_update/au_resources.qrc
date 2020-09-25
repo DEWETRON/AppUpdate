@@ -4,5 +4,6 @@
         <file>res/dewetron.ico</file>
         <file>res/dewetron_alert.ico</file>
         <file>res/dewetron.png</file>
+        <file>res/gear.svg</file>
     </qresource>
 </RCC>
