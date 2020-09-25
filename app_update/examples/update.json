@@ -109,15 +109,17 @@
         }
     },
     "DEWETRON AppUpdate": {
-        "1.2.0": {
-            "version": "1.2.0",
+        "1.2.1": {
+            "version": "1.2.1",
             "release_note_url": "https://www.dewetron.com/AppUpdate/changelog.html",
             "release_date": "23.09.2020",
             "url": "https://ccc.dewetron.com/dl/5f69e6b8-1a78-43c1-8945-29ded9c49a3c",
-            "md5": "9d3bfd5d04c9dc4e703a89daca23302e",
-            "sha1": "a959947f38554d88c16f0552abc3081f58855838",
+            "md5": "15903a606f91e7f99ec5c8d2b76b75b5",
+            "sha1": "974f67c669493459fd3a12a9ec93617d2da5da96",
             "changes": [
-                "Beta version"
+                "Autostart added",
+                "Alert icon",
+                "Notifications filtered"
             ]
         }
     }
