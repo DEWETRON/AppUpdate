@@ -191,15 +191,6 @@ QVariantList AuApplicationData::optionFilter(const QVariantList& apps)
     {
         QVariantMap entry = qvariant_cast<QVariantMap>(*it);
 
-        //if (show_update_only)
-        //{
-        //    if (!entry["has_update"].toBool())
-        //    {
-        //        it = filtered_apps.erase(it);
-        //        continue;
-        //    }
-        //}
-        //else
         {
             if (!m_show_beta_versions)
             {
@@ -220,6 +211,24 @@ QVariantList AuApplicationData::optionFilter(const QVariantList& apps)
             }
         }
         it++;
+    }
+
+    {
+        auto it = filtered_apps.begin();
+        while (it != filtered_apps.end())
+        {
+            QVariantMap entry = qvariant_cast<QVariantMap>(*it);
+
+            if (show_update_only)
+            {
+                if (!entry["has_update"].toBool())
+                {
+                    it = filtered_apps.erase(it);
+                    continue;
+                }
+            }
+            it++;
+        }
     }
 
     return filtered_apps;
