@@ -47,7 +47,7 @@ class AuApplicationData : public QObject
 
     Q_PROPERTY(QVariantList installedSoftware
                 READ getInstalledSoftware
-                NOTIFY installedSoftwareChanged)
+                NOTIFY installedSoftwareChanged);
 
     Q_PROPERTY(QVariantList installedApps
                 READ getInstalledApps
@@ -66,6 +66,15 @@ class AuApplicationData : public QObject
                 WRITE setAutostart
                 NOTIFY autostartChanged)
 
+    Q_PROPERTY(bool showBetaVersions
+                READ getShowBetaVersion
+                WRITE setShowBetaVersion
+                NOTIFY showBetaVersionsChanged)
+
+    Q_PROPERTY(bool showOlderVersions
+                READ getShowOlderVersion
+                WRITE setShowOlderVersion
+                NOTIFY showOlderVersionsChanged)
 
 
 public:
@@ -77,9 +86,6 @@ public:
     QVariantList getUpdateableApps();
     QString getMessage() const;
     void setMessage(QString message);
-
-    bool getAutostart() const;
-    void setAutostart(bool autostart_enable);
 
     Q_INVOKABLE void checkForUpdates();
     Q_INVOKABLE void updateAll();
@@ -97,6 +103,8 @@ Q_SIGNALS:
     void doShowNotification(const QString& title, const QString& body);
     void resetAlertIcon();
     void autostartChanged();
+    void showBetaVersionsChanged();
+    void showOlderVersionsChanged();
 
 private:
     Q_SLOT void downloadFinished(QUrl dl_url, QString filename);
@@ -118,6 +126,17 @@ private:
     bool compareHashMd5(QUrl download_url, const QByteArray& checksum) const;
     bool compareHashSha1(QUrl download_url, const QByteArray& checksum) const;
 
+    QVariantList optionFilter(const QVariantList& apps);
+
+    bool getAutostart() const;
+    void setAutostart(bool autostart_enable);
+
+    bool getShowBetaVersion() const;
+    void setShowBetaVersion(bool beta_version);
+
+    bool getShowOlderVersion() const;
+    void setShowOlderVersion(bool older_version);
+
 private:
     QVariantList m_installed_software;
     std::vector<SwComponent> m_installed_software_internal;
@@ -131,5 +150,7 @@ private:
     QTimer* m_daily_timer;
     QTimer* m_fast_timer;
     bool m_autostart;
+    bool m_show_beta_versions;
+    bool m_show_older_versions;
 };
 

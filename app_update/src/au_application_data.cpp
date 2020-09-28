@@ -47,6 +47,8 @@ AuApplicationData::AuApplicationData()
     , m_daily_timer()
     , m_fast_timer()
     , m_autostart(false)
+    , m_show_beta_versions(false)
+    , m_show_older_versions(false)
 {
     // predefine bundles, which are only shown once
     m_bundle_map = std::map<std::string, std::string>
@@ -131,9 +133,12 @@ QVariantList AuApplicationData::getUpdateableApps()
             entry["has_update"] = has_update;
             entry["changes"] = changes;
         }
-        apps.push_back(entry);
+
         
+        apps.push_back(entry);
+       
         // look at older mentioned versions -> stored in entry.other map
+
         for (auto ver : sorted_vn)
         {
             auto app_version = app.second.m_app_versions[ver.toString().toStdString().c_str()];
@@ -158,7 +163,8 @@ QVariantList AuApplicationData::getUpdateableApps()
         }
         
     }
-    return apps;
+
+    return optionFilter(apps);
 }
 
 
@@ -171,6 +177,52 @@ void AuApplicationData::setMessage(QString message)
 {
     m_message = message;
     Q_EMIT messageChanged();
+}
+
+QVariantList AuApplicationData::optionFilter(const QVariantList& apps)
+{
+    bool show_update_only = (!m_show_beta_versions && !m_show_older_versions);
+
+    QVariantList filtered_apps(apps);
+
+    // Filter out invalid entries
+    auto it = filtered_apps.begin();
+    while (it != filtered_apps.end())
+    {
+        QVariantMap entry = qvariant_cast<QVariantMap>(*it);
+
+        //if (show_update_only)
+        //{
+        //    if (!entry["has_update"].toBool())
+        //    {
+        //        it = filtered_apps.erase(it);
+        //        continue;
+        //    }
+        //}
+        //else
+        {
+            if (!m_show_beta_versions)
+            {
+                if (entry["beta"].toString() == "1")
+                {
+                    it = filtered_apps.erase(it);
+                    continue;
+                }
+            }
+
+            if (!m_show_older_versions)
+            {
+                if (entry["is_older_version"].toBool())
+                {
+                    it = filtered_apps.erase(it);
+                    continue;
+                }
+            }
+        }
+        it++;
+    }
+
+    return filtered_apps;
 }
 
 bool AuApplicationData::getAutostart() const
@@ -621,15 +673,30 @@ bool AuApplicationData::compareHashSha1(QUrl download_url, const QByteArray& che
     return false;
 }
 
-//bool getAutoStartSetting()
-//{
-//
-//    //QSettings boot_up_settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::Registry64Format);
-//    //return boot_up_settings.contains("DEWETRON AppUpdate");
-//#else
-//    return false;
-//#endif
-//}
+bool AuApplicationData::getShowBetaVersion() const
+{
+    return m_show_beta_versions;
+}
+
+void AuApplicationData::setShowBetaVersion(bool beta_version)
+{
+    m_show_beta_versions = beta_version;
+    Q_EMIT showBetaVersionsChanged();
+    Q_EMIT updateableAppsChanged();
+}
+
+bool AuApplicationData::getShowOlderVersion() const
+{
+    return m_show_older_versions;
+}
+
+void AuApplicationData::setShowOlderVersion(bool older_version)
+{
+    m_show_older_versions = older_version;
+    Q_EMIT showOlderVersionsChanged();
+    Q_EMIT updateableAppsChanged();
+}
+
 
 #ifdef Q_OS_WIN
 
@@ -637,18 +704,6 @@ bool AuApplicationData::compareHashSha1(QUrl download_url, const QByteArray& che
 
 bool getAutostartSetting()
 {
-    //QSettings boot_up_settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::Registry64Format);
-//QString app_path = QCoreApplication::applicationFilePath();
-//if (autostart_enable)
-//{
-//    boot_up_settings.setValue("DEWETRON AppUpdate", app_path);
-//}
-//else 
-//{
-//    boot_up_settings.remove("DEWETRON AppUpdate");
-//}
-//boot_up_settings.sync();
-
     HKEY hrun = NULL;
     DWORD dwType = KEY_ALL_ACCESS;
     char app_path[1024] = { 0 };
@@ -695,7 +750,7 @@ void setAutostartSetting(bool autostart)
     {
 
         QString app_path = "\"" + QDir::toNativeSeparators(QCoreApplication::applicationFilePath()) + "\"";
-        if (RegSetValueEx(hrun, "DEWETRON AppUpdate", 0, REG_SZ, (unsigned char*)app_path.toStdString().data(), app_path.toStdString().size()) != ERROR_SUCCESS)
+        if (RegSetValueEx(hrun, "DEWETRON AppUpdate", 0, REG_SZ, (unsigned char*)app_path.toStdString().data(), (DWORD)app_path.toStdString().size()) != ERROR_SUCCESS)
         {
             RegCloseKey(hrun);
             return;
@@ -716,3 +771,5 @@ void setAutostartSetting(bool autostart)
 
 }
 #endif
+
+

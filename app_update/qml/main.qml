@@ -25,55 +25,8 @@ TabView {
     id: root
     width: 500; height: 440
 
-    property var show_older_versions : false
-    property var show_updates_only : true
-    property var show_releases_only : true
-    property var model: getModel(app.updateableApps)
+    property var model: app.updateableApps
     property var show_setup : false
-
-    function getModel(data) {
-        return getShowOlderVersions(getUpdatesOnly(getReleasesOnly(data)));
-    }
-
-    function getReleasesOnly(data) {
-        if (!root.show_releases_only) return data
-
-        var filteredApps = []
-        var entry
-        for (entry of data) {
-            if (entry["beta"] != "1") {
-                filteredApps.push(entry)
-            }
-        }
-        return filteredApps
-    }    
-
-    function getUpdatesOnly(data) {
-        if (!root.show_updates_only) return data
-
-        var filteredApps = []
-        var entry
-        for (entry of data) {
-            if (entry["has_update"] == true) {
-                filteredApps.push(entry)
-                app.showNotification(entry["name"], qsTr("New update %1 available").arg(entry["version"]));
-            }
-        }
-        return filteredApps
-    }
-
-    function getShowOlderVersions(data) {
-        if (show_older_versions) return data
-
-        var filteredApps = []
-        var entry
-        for (entry of data) {
-            if (entry["is_older_version"] != true) {
-                filteredApps.push(entry)
-            }
-        }
-        return filteredApps
-    }
 
     function getLicenseText(license) {
         if (license != "") {
@@ -300,32 +253,22 @@ TabView {
                     GridLayout {
                         columns: 2
                         rows: 2
-                        visible: root. show_setup
-
-                        CheckBox {
-                            id: showBetaVersions
-                            text: qsTr("Show updates only")
-                            checked: root.show_updates_only
-                            onClicked: {
-                                root.show_updates_only = checked
-                            }                    
-                        }
+                        visible: root.show_setup
 
                         CheckBox {
                             id: showOlderVersions
                             text: qsTr("Show older versions")
-                            checked: root.show_older_versions
+                            checked: app.showOlderVersions
                             onClicked: {
-                                root.show_older_versions = checked
+                                app.showOlderVersions = checked
                             }
                         }
 
                         CheckBox {
-                            id: showUpdatesOnly
                             text: qsTr("Show beta versions")
-                            checked: !root.show_releases_only
+                            checked: app.showBetaVersions
                             onClicked: {
-                                root.show_releases_only = !checked
+                                app.showBetaVersions = checked
                             }
                         }
 
