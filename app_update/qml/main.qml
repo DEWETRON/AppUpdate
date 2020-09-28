@@ -304,6 +304,10 @@ TabView {
                                 app.checkForUpdates()
                             }
                         }
+
+                        Item {
+                            height: 1
+                        }
                     }
                     Item {
                         width: 1
