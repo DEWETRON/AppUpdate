@@ -29,6 +29,7 @@ TabView {
     property var show_updates_only : true
     property var show_releases_only : true
     property var model: getModel(app.updateableApps)
+    property var show_setup : false
 
     function getModel(data) {
         return getShowOlderVersions(getUpdatesOnly(getReleasesOnly(data)));
@@ -299,6 +300,7 @@ TabView {
                     GridLayout {
                         columns: 2
                         rows: 2
+                        visible: root. show_setup
 
                         CheckBox {
                             id: showBetaVersions
@@ -343,20 +345,23 @@ TabView {
                     }
                     
 
-                    Image {
-                        fillMode: Image.PreserveAspectFit
-                        // sourceSize.width: 64
-                        // sourceSize.height: 64
-                        source: "qrc:/res/gear.svg"
-                    }
-                    
-                    Button {
-                        text: qsTr("Check for Updates")
-                        onClicked: {
-                            app.checkForUpdates()
+                    ColumnLayout {
+                        Button {
+                            icon.source: "qrc:/res/gear.svg"
+                            text: qsTr("Setup")
+                            highlighted: root.show_setup
+                            onClicked: {
+                                root.show_setup = !root.show_setup
+                            }
+                        }
+                        
+                        Button {
+                            text: qsTr("Check")
+                            onClicked: {
+                                app.checkForUpdates()
+                            }
                         }
                     }
-
                     Item {
                         width: 1
                     }
