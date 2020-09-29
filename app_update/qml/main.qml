@@ -37,223 +37,286 @@ TabView {
 
     Tab {
         title: qsTr("Updates")
-        
-        ColumnLayout {
+
+        Item {
             anchors.fill: parent
-            spacing: 10
+            ColumnLayout {
+                anchors.fill: parent
+                spacing: 10
 
-            Text {
-                Layout.topMargin: 10
-                Layout.leftMargin: 10
-                text: getUpdatesAvailableText(root.model)
-                font.pointSize: 12; font.bold: false
-            }
-
-            function getUpdatesAvailableText(data) {
-                var entry
-                for (entry of data) {
-                    if (entry["has_update"] == true) {
-                        return qsTr("New versions of your software have been released!")
-                    }
+                Text {
+                    Layout.topMargin: 10
+                    Layout.leftMargin: 10
+                    text: getUpdatesAvailableText(root.model)
+                    font.pointSize: 12; font.bold: false
                 }
-                return qsTr("Everything is up to date!")
-            }
 
-
-            ListView {
-                model: root.model
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                boundsBehavior: Flickable.StopAtBounds
-                ScrollBar.vertical: ScrollBar {
-                    policy: ScrollBar.AlwaysOn
-                }
-                clip: true
-
-                delegate:
-                ColumnLayout {
-                    x:10
-                    width: parent.width - 20
-
-                    property var url : modelData["url"]
-
-                    Rectangle {
-                        Layout.fillWidth: true
-                        height: 1
-                        color: "darkgrey"
+                function getUpdatesAvailableText(data) {
+                    var entry
+                    for (entry of data) {
+                        if (entry["has_update"] == true) {
+                            return qsTr("New versions of your software have been released!")
+                        }
                     }
+                    return qsTr("Everything is up to date!")
+                }
 
-                    RowLayout {
 
-                        spacing: 10
-                        Rectangle{
-                            width: 64
-                            height: 64
-                            //color: "red"
-                            Image {
-                                anchors.fill: parent
-                                fillMode: Image.PreserveAspectFit
-                                source: "qrc:/res/dewetron.ico"
-                            }
-                        }
+                ListView {
+                    model: root.model
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    boundsBehavior: Flickable.DragOverBounds
+                    ScrollBar.vertical: ScrollBar {
+                        policy: ScrollBar.AlwaysOn
+                    }
+                    clip: true
 
-                        ColumnLayout {
-                            RowLayout {
-                                Text {
-                                    text: modelData["name"]
-                                    font.pointSize: 12; font.bold: false
-                                }
-                                
-                                // HorizontalSpacer
-                                Item {
-                                    Layout.fillWidth: true
-                                }
-                                Text {                                   
-                                    text: modelData["release_date"]
-                                    font.pointSize: 10; font.bold: false
-                                    horizontalAlignment: Text.AlignRight
-                                }
-                            }
-                            RowLayout {
-                                Text {
-                                    text: modelData["version"]
-                                    font.pointSize: 10; font.bold: false
-                                }
-                                Text {
-                                    text: modelData["has_update"] ? qsTr("New!") : ""
-                                    font.pointSize: 10; font.bold: false
-                                    color: "red"
-                                }
-                                // HorizontalSpacer
-                                Item {
-                                    Layout.fillWidth: true
-                                }
-                                Text {                                   
-                                    text: getLicenseText(modelData["license"])
-                                    font.pointSize: 10; font.bold: false
-                                    horizontalAlignment: Text.AlignRight
-                                }
-                            }
-                        }
+                    delegate:
+                    ColumnLayout {
+                        x:10
+                        width: parent.width - 20
 
-                        // HorizontalSpacer
-                        Item {
+                        property var url : modelData["url"]
+
+                        Rectangle {
                             Layout.fillWidth: true
+                            height: 1
+                            color: "darkgrey"
                         }
 
-                        ColumnLayout {
-                            // VerticalSpacer
-                            Item {
-                                Layout.fillHeight: true
+                        RowLayout {
+
+                            spacing: 10
+                            Rectangle{
+                                width: 64
+                                height: 64
+                                //color: "red"
+                                Image {
+                                    anchors.fill: parent
+                                    fillMode: Image.PreserveAspectFit
+                                    source: "qrc:/res/dewetron.ico"
+                                }
                             }
 
-                            Text {
-                                Layout.alignment: Qt.AlignRight
-                                text: qsTr("Download")
-                                color: "blue"
-                                font.pointSize: 12; font.bold: false; font.underline: true
-                                visible: url != null ? url.length > 0 : false
-                                
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: { 
-                                        app.download(url)
+                            ColumnLayout {
+                                RowLayout {
+                                    Text {
+                                        text: modelData["name"]
+                                        font.pointSize: 12; font.bold: false
+                                    }
+
+                                    // HorizontalSpacer
+                                    Item {
+                                        Layout.fillWidth: true
+                                    }
+                                    Text {
+                                        text: modelData["release_date"]
+                                        font.pointSize: 10; font.bold: false
+                                        horizontalAlignment: Text.AlignRight
+                                    }
+                                }
+                                RowLayout {
+                                    Text {
+                                        text: modelData["version"]
+                                        font.pointSize: 10; font.bold: false
+                                    }
+                                    Text {
+                                        text: modelData["has_update"] ? qsTr("New!") : ""
+                                        font.pointSize: 10; font.bold: false
+                                        color: "red"
+                                    }
+                                    // HorizontalSpacer
+                                    Item {
+                                        Layout.fillWidth: true
+                                    }
+                                    Text {
+                                        text: getLicenseText(modelData["license"])
+                                        font.pointSize: 10; font.bold: false
+                                        horizontalAlignment: Text.AlignRight
                                     }
                                 }
                             }
-                            
-                            Item {}
 
-                            // VerticalSpacer
+                            // HorizontalSpacer
                             Item {
-                                Layout.fillHeight: true
+                                Layout.fillWidth: true
                             }
 
-                            Button {
-                                id: btnOpenDownloads
-                                text: qsTr("Open Download")
-                                visible: false
-                                Connections {
-                                    target: app
-                                    onDownloadProgressChanged: { btnOpenDownloads.visible = app.getDownloadProgress(url) > 100 }
+                            ColumnLayout {
+                                // VerticalSpacer
+                                Item {
+                                    Layout.fillHeight: true
                                 }
-                                onClicked: {
-                                    app.openDownloadFolder(url);
+
+                                Text {
+                                    Layout.alignment: Qt.AlignRight
+                                    text: qsTr("Download")
+                                    color: "blue"
+                                    font.pointSize: 12; font.bold: false; font.underline: true
+                                    visible: url != null ? url.length > 0 : false
+
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: {
+                                            app.download(url)
+                                        }
+                                    }
                                 }
+
+                                Item {}
+
+                                // VerticalSpacer
+                                Item {
+                                    Layout.fillHeight: true
+                                }
+
+                                Button {
+                                    id: btnOpenDownloads
+                                    text: qsTr("Open Download")
+                                    visible: false
+                                    Connections {
+                                        target: app
+                                        onDownloadProgressChanged: { btnOpenDownloads.visible = app.getDownloadProgress(url) > 100 }
+                                    }
+                                    onClicked: {
+                                        app.openDownloadFolder(url);
+                                    }
+                                }
+                            }
+
+                        }
+
+                        RowLayout {
+                            spacing: 10
+                            Rectangle{
+                                width: 64
+                                //height: 64
+                                //color: "blue"
+                            }
+                            Text {
+                                Layout.alignment: Qt.AlignTop | Qt.AlignLeft
+                                text: modelData["changes"]
+                                font.pointSize: 12; font.bold: false;
+
+                            }
+
+                            // HorizontalSpacer
+                            Item {
+                                Layout.fillWidth: true
+                            }
+
+                        }
+
+                        ProgressBar {
+                            id: dlBar
+                            Layout.fillWidth: true
+                            from: 0
+                            to: 100
+                            value: 0
+                            visible: value > 0
+
+                            Connections {
+                                target: app
+                                onDownloadProgressChanged: {
+                                    var v = app.getDownloadProgress(url)
+                                    dlBar.value = v
+                                    dlBar.visible = (v > 0) && (v <= 100)
+                                 }
                             }
                         }
 
                     }
 
+
+                    // VerticalSpacer
+                    Item {
+                        Layout.fillHeight: true
+                    }
+
+                }
+
+
+                ColumnLayout {
+
+                    // Text {
+                    //     text: app.downloadProgress
+                    // }
+
+
+
+                    Text {
+                        text: app.message
+                    }
+
                     RowLayout {
                         spacing: 10
-                        Rectangle{
-                            width: 64
-                            //height: 64
-                            //color: "blue"
-                        }
-                        Text {
-                            Layout.alignment: Qt.AlignTop | Qt.AlignLeft
-                            text: modelData["changes"]
-                            font.pointSize: 12; font.bold: false;
+                        visible: false
 
-                        }
-                        
+
                         // HorizontalSpacer
                         Item {
                             Layout.fillWidth: true
                         }
 
-                    }
 
-                    ProgressBar {
-                        id: dlBar
-                        Layout.fillWidth: true
-                        from: 0
-                        to: 100
-                        value: 0
-                        visible: value > 0
+                        ColumnLayout {
+                            Button {
+                                icon.source: "qrc:/res/gear.svg"
+                                text: qsTr("Setup")
+                                highlighted: root.show_setup
+                                onClicked: {
+                                    root.show_setup = !root.show_setup
+                                }
+                            }
 
-                        Connections {
-                            target: app
-                            onDownloadProgressChanged: { 
-                                var v = app.getDownloadProgress(url)
-                                dlBar.value = v
-                                dlBar.visible = (v > 0) && (v <= 100)
-                             }
+                            Button {
+                                text: qsTr("Check")
+                                onClicked: {
+                                    app.checkForUpdates()
+                                }
+                            }
+
+                            Item {
+                                height: 1
+                            }
+                        }
+                        Item {
+                            width: 1
                         }
                     }
-
-                }
-    
-
-                // VerticalSpacer
-                Item {
-                    Layout.fillHeight: true
                 }
 
             }
 
+            Item {
+                y: parent.height - height
+                height: extended ? content.height : 0
+                width: parent.width
 
-            ColumnLayout {
+                property bool extended: false
 
-                // Text {
-                //     text: app.downloadProgress
-                // }
-
-
-
-                Text {
-                    text: app.message
+                Button {
+                    id: extendButton
+                    y: -height
+                    height: 20
+                    text: parent.extended ? "\\/" : "/\\"
+                    onClicked: {
+                        parent.extended = !parent.extended
+                    }
                 }
 
-                RowLayout {
-                    spacing: 10
+                Rectangle {
+                    id: content
+                    width: parent.width
+                    height: childrenRect.height
+                    color: "white"
 
                     GridLayout {
                         columns: 2
                         rows: 2
-                        visible: root.show_setup
+                        width: parent.width
+                        height: implicitHeight
 
                         CheckBox {
                             id: showOlderVersions
@@ -280,41 +343,9 @@ TabView {
                             }
                         }
                     }
-
-
-                    // HorizontalSpacer
-                    Item {
-                        Layout.fillWidth: true
-                    }
-                    
-
-                    ColumnLayout {
-                        Button {
-                            icon.source: "qrc:/res/gear.svg"
-                            text: qsTr("Setup")
-                            highlighted: root.show_setup
-                            onClicked: {
-                                root.show_setup = !root.show_setup
-                            }
-                        }
-                        
-                        Button {
-                            text: qsTr("Check")
-                            onClicked: {
-                                app.checkForUpdates()
-                            }
-                        }
-
-                        Item {
-                            height: 1
-                        }
-                    }
-                    Item {
-                        width: 1
-                    }
                 }
-            }
 
+            }
         }
     }
     Tab {
@@ -341,7 +372,7 @@ TabView {
                 }
                 clip: true
 
-                delegate: 
+                delegate:
                 ColumnLayout {
                     x:10
                     width: parent.width - 20
