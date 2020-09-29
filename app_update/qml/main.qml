@@ -26,7 +26,7 @@ TabView {
     width: 500; height: 440
 
     property var model: app.updateableApps
-    property var show_setup : false
+    property var show_setup: false
 
     function getLicenseText(license) {
         if (license != "") {
@@ -34,6 +34,17 @@ TabView {
         }
         return ""
     }
+
+    function getUpdatesAvailableText(data) {
+        var entry
+        for (entry of data) {
+            if (entry["has_update"] == true) {
+                return qsTr("New versions of your software have been released!")
+            }
+        }
+        return qsTr("Everything is up to date!")
+    }
+
 
     Tab {
         title: qsTr("Updates")
@@ -51,17 +62,6 @@ TabView {
                     font.pointSize: 12; font.bold: false
                 }
 
-                function getUpdatesAvailableText(data) {
-                    var entry
-                    for (entry of data) {
-                        if (entry["has_update"] == true) {
-                            return qsTr("New versions of your software have been released!")
-                        }
-                    }
-                    return qsTr("Everything is up to date!")
-                }
-
-
                 ListView {
                     model: root.model
                     Layout.fillWidth: true
@@ -74,10 +74,10 @@ TabView {
 
                     delegate:
                     ColumnLayout {
-                        x:10
+                        x: 10
                         width: parent.width - 20
 
-                        property var url : modelData["url"]
+                        property var url: modelData["url"]
 
                         Rectangle {
                             Layout.fillWidth: true
@@ -164,7 +164,7 @@ TabView {
                                     }
                                 }
 
-                                Item {}
+                                Item { }
 
                                 // VerticalSpacer
                                 Item {
@@ -222,7 +222,7 @@ TabView {
                                     var v = app.getDownloadProgress(url)
                                     dlBar.value = v
                                     dlBar.visible = (v > 0) && (v <= 100)
-                                 }
+                                }
                             }
                         }
 
@@ -236,13 +236,7 @@ TabView {
 
                 }
 
-
                 ColumnLayout {
-
-                    // Text {
-                    //     text: app.downloadProgress
-                    // }
-
 
 
                     Text {
@@ -270,12 +264,6 @@ TabView {
                                 }
                             }
 
-                            Button {
-                                text: qsTr("Check")
-                                onClicked: {
-                                    app.checkForUpdates()
-                                }
-                            }
 
                             Item {
                                 height: 1
@@ -298,9 +286,13 @@ TabView {
 
                 Button {
                     id: extendButton
+                    icon.source: "qrc:/res/gear.svg"
                     y: -height
-                    height: 20
-                    text: parent.extended ? "\\/" : "/\\"
+                    x: (root.width / 2) - (extendButton.width / 2)
+                    height: 30
+
+                    text: parent.extended ? "Settings" : "Settings"
+
                     onClicked: {
                         parent.extended = !parent.extended
                     }
@@ -310,39 +302,58 @@ TabView {
                     id: content
                     width: parent.width
                     height: childrenRect.height
-                    color: "white"
+                    color: "lightgrey"
 
-                    GridLayout {
-                        columns: 2
-                        rows: 2
-                        width: parent.width
-                        height: implicitHeight
+                    RowLayout {
+                        spacing: 10
+                        width: parent.width - 10
 
-                        CheckBox {
-                            id: showOlderVersions
-                            text: qsTr("Show older versions")
-                            checked: app.showOlderVersions
+                        GridLayout {
+                            columns: 2
+                            rows: 2
+                            
+                            height: implicitHeight
+
+                            CheckBox {
+                                id: showOlderVersions
+                                text: qsTr("Show older versions")
+                                checked: app.showOlderVersions
+                                onClicked: {
+                                    app.showOlderVersions = checked
+                                }
+                            }
+
+                            CheckBox {
+                                text: qsTr("Show beta versions")
+                                checked: app.showBetaVersions
+                                onClicked: {
+                                    app.showBetaVersions = checked
+                                }
+                            }
+
+                            CheckBox {
+                                text: qsTr("Autostart AppUpdate")
+                                checked: app.autostart
+                                onClicked: {
+                                    app.autostart = checked
+                                }
+                            }
+                        }
+                        // HorizontalSpacer
+                        Item {
+                            Layout.fillWidth: true
+                            height: 1
+                        } 
+                        
+                        Button {
+                            text: qsTr("Check")
                             onClicked: {
-                                app.showOlderVersions = checked
+                                app.checkForUpdates()
                             }
                         }
 
-                        CheckBox {
-                            text: qsTr("Show beta versions")
-                            checked: app.showBetaVersions
-                            onClicked: {
-                                app.showBetaVersions = checked
-                            }
-                        }
-
-                        CheckBox {
-                            text: qsTr("Autostart AppUpdate")
-                            checked: app.autostart
-                            onClicked: {
-                                app.autostart = checked
-                            }
-                        }
                     }
+
                 }
 
             }
@@ -374,7 +385,7 @@ TabView {
 
                 delegate:
                 ColumnLayout {
-                    x:10
+                    x: 10
                     width: parent.width - 20
 
                     Rectangle {
@@ -384,7 +395,7 @@ TabView {
                     }
 
                     RowLayout {
-                        x:10
+                        x: 10
                         width: parent.width - 20
                         spacing: 10
                         Rectangle{
