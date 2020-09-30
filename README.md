@@ -1,6 +1,10 @@
 # AppUpdate
 Notification service and library for handling application updates
 
+
+![AppUpdate Screenshot](/images/app_update_122.png)
+
+
 # Prerequisites
 AppUpdate is a Qt application. To succesfully build it a Qt installation is needed.
 Currently we are using Qt 5.12.6 (LTS).
