@@ -283,7 +283,10 @@ void AuApplicationData::openDownloadFolder(QUrl download_url)
     }
 
     const QString downloads_folder = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
-    QDesktopServices::openUrl(QUrl(downloads_folder + "/" + file_name, QUrl::TolerantMode));
+    if (!QDesktopServices::openUrl(QUrl(downloads_folder + "/" + file_name, QUrl::TolerantMode)))
+    {
+        QDesktopServices::openUrl(QUrl(downloads_folder, QUrl::TolerantMode));
+    }
 
     if (!m_fast_timer)
     {
@@ -471,7 +474,7 @@ bool AuApplicationData::doDownload(QUrl download_url, const QString nice_name)
     connect(au_dl, &AuDownloader::downloadError, this, &AuApplicationData::downloadError);
     connect(au_dl, &AuDownloader::downloadProgress, this, &AuApplicationData::downloadProgress);
 
-    return false;
+    return true;
 }
 
 void AuApplicationData::downloadFinished(QUrl dl_url, QString filename)

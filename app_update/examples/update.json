@@ -1,16 +1,22 @@
 {
     "DEWETRON OXYGEN": {
-        "5.3.0 RC1": {
-            "beta": "1",
-            "version": "5.3 RC1",
+        "5.3.0": {
+            "version": "5.3.0",
             "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
-            "release_date": "23.09.2020",
+            "release_date": "30.09.2020",
             "license": "5",
-            "url": "https://ccc.dewetron.com/dl/5f6b34ab-f18c-40c6-bb87-282dd9c49a3c",
-            "md5": "392cead9edc847bf3776b8aecf8284ba",
-            "sha1": "9f66b751ddeeef744fcf0eac390d65e1580ed59f",
+            "url": "https://ccc.dewetron.com/dl/5f743eee-2584-45ea-93ef-74f3d9c49a3c",
+            "md5": "ad4751e3883ea8430a06381ac3da0ac8",
+            "sha1": "3c01d9044bb527c32edb4a6a63825e88ef7419bf",
             "changes": [
-                "5.3 Release Candidate 1"
+                "ARINC-429 (Altadt)",
+                "Constant Percentage Bandwidth (CBP) spectrum",
+                "Audio replay",
+                "FFT reference curves",
+                "WAV export",
+                "RPCIII export",
+                "Improved digital instrument",
+                "PUREC device support"
             ]
         },
         "5.2": {
@@ -22,9 +28,10 @@
             "md5": "85d85d607d589004faf72e82df99c866",
             "sha1": "96d7ec76d0c4e67ce00022efa0cb42d11c083b7c",
             "changes": [
-                "Better performance",
-                "less bugs",
-                "a lot more DEWETRON"
+                "Channel-wise sample rate selector",
+                "Advanced storing modes",
+                "Efficiency Map (Matrix Sampler)",
+                "Soundlevel Meter"
             ]
         },
         "5.1.1": {
@@ -36,9 +43,14 @@
             "md5": "b9084c2778bf80cc46431ecdb39f92a4",
             "sha1": "c4e40a9ac1d1df4edf609105b532a76e9ee9d5c9",
             "changes": [
-                "Better performance",
-                "less bugs",
-                "a lot more DEWETRON"
+                "Vector FlexRay support",
+                "CAN Offline decoding",
+                "OXYGEN Viewer",
+                "Array access in formula",
+                "Mechanical Power Analysis (R5.0)",
+                "Order Analysis (R5.0)",
+                "CAN J1939 (R5.0)",
+                "Ethernet sender plugin (R5.0)"
             ]
         },
         "3.7.0": {
@@ -50,29 +62,34 @@
             "md5": "ed42db65c79c5b32b7d1dc8c7991bb6e",
             "sha1": "8f78f6ac562b6c816866c3e439f147ce8981b552",
             "changes": [
-                "Better performance",
-                "less bugs",
-                "a lot more DEWETRON"
+                "Support for MSI(2) adapters added",
+                "Sensor database",
+                "Table scaling",
+                "IIR: bandpass and bandstop filters",
+                "Dark mode for measurement screen",
+                "DMD export"
             ]
         }
     },
     "DEWETRON TRION Applications": {
-        "5.3.0 RC1": {
-            "beta": "1",
-            "version": "5.3.0 RC1",
+        "5.3.0.56273": {
+            "version": "5.3.0",
             "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
-            "release_date": "23.09.2020",
+            "release_date": "30.09.2020",
             "bundle": [
                 "DEWETRON TRION Driver",
                 "DEWETRON Explorer",
                 "DEWETRON DEWE2 Driver",
                 "DEWETRON TRIONCAL"
             ],
-            "url": "https://ccc.dewetron.com/dl/5f6b34ab-eb74-455c-9077-282dd9c49a3c",
-            "md5": "f9fe956ad2a1c2804154713d3ae7bdcd",
-            "sha1": "c4528b8a70b61fd6b60fc4d8bf20d2cfee514858",
+            "url": "https://ccc.dewetron.com/dl/5f743d2f-b780-4671-bd2b-725ad9c49a3c",
+            "md5": "ef9ebab4167a21ddc17ca3ec623ab2c3",
+            "sha1": "1f66878e884e54d43b064127350bd7c50a6497dd",
             "changes": [
-                "5.3 Release Candidate 1"
+                "PUREC-50 and PUREC-200 support",
+                "Dark Mode available for DEWETRON Explorer",
+                "Dark Mode available for DEWETRON TRIONCAL",
+                "Selftest for all CAN devices"
             ]
         },
         "5.2.0": {
@@ -89,37 +106,37 @@
             "md5": "bbb95dbfb1a1069a07fb6d7ba19d6949",
             "sha1": "a97e80a352b1b8e10bda1cee2ed726e3ed6d7e57",
             "changes": [
-                "Better hw support",
-                "less bugs"
+                "TRION3-18XX-MULTI: up to 60mA Excitation in Bridge Mode",
+                "TRION-1802-dLV: Added encoder counter mode",
+                "CB16: MSI not correctly detected when EPADs are used"
             ]
         }
     },
     "DEWETRON TRIONet Firmware": {
-        "5.3.0 RC1": {
-            "beta": "1",
-            "version": "5.3.0 RC1",
+        "5.3.0": {
+            "version": "5.3.0",
             "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
-            "release_date": "23.09.2020",
-            "url": "https://ccc.dewetron.com/dl/5f6b34ab-5ecc-4e77-98bc-282dd9c49a3c",
-            "md5": "f6bd30dbc9c6e5220b015f2a76fb4384",
-            "sha1": "5d2391b9d957cbcf94dd352be2f783d8c92bc676",
+            "release_date": "30.09.2020",
+            "url": "https://ccc.dewetron.com/dl/5f743913-e100-499b-8a54-7307d9c49a3c",
+            "md5": "0649f782a9ee499a8473c09c14b41dca",
+            "sha1": "0e0066ea69613a8304bcc9539778d53d1a23772d",
             "changes": [
-                "5.3 Release Candidate 1"
+                "Selftest for all CAN devices",
+                "Support for DEWETRON TRIONCAl"
             ]
         }
     },
     "DEWETRON AppUpdate": {
-        "1.2.1": {
-            "version": "1.2.1",
+        "1.2.2": {
+            "version": "1.2.2",
             "release_note_url": "https://www.dewetron.com/AppUpdate/changelog.html",
             "release_date": "23.09.2020",
             "url": "https://ccc.dewetron.com/dl/5f69e6b8-1a78-43c1-8945-29ded9c49a3c",
-            "md5": "15903a606f91e7f99ec5c8d2b76b75b5",
-            "sha1": "974f67c669493459fd3a12a9ec93617d2da5da96",
+            "md5": "",
+            "sha1": "",
             "changes": [
-                "Autostart added",
-                "Alert icon",
-                "Notifications filtered"
+                "Setup moved to toolbar",
+                "Show updates is default"
             ]
         }
     }

@@ -47,6 +47,9 @@ bool operator>(const AuVersionNumber& lhs, const AuVersionNumber& rhs)
 {
     if (lhs.m_qversion == rhs.m_qversion)
     {
+        // no suffix means Release vs Release Candidate
+        if (lhs.m_suffix.isEmpty()) return true;
+        if (rhs.m_suffix.isEmpty()) return false;
         return lhs.m_suffix > rhs.m_suffix;
     }
     return lhs.m_qversion > rhs.m_qversion;
