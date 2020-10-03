@@ -1,7 +1,10 @@
 # AppUpdate
 Notification service and library for handling application updates
 
+[![Github All Releases](https://img.shields.io/github/downloads/DEWETRON/AppUpdate/total)]()
 
+
+# Screenshots
 ![AppUpdate Screenshot](/images/app_update_122.png)
 
 
