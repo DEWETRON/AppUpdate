@@ -132,8 +132,8 @@
             "release_note_url": "https://www.dewetron.com/AppUpdate/changelog.html",
             "release_date": "23.09.2020",
             "url": "https://ccc.dewetron.com/dl/5f69e6b8-1a78-43c1-8945-29ded9c49a3c",
-            "md5": "",
-            "sha1": "",
+            "md5": "32bb8e552d1c8ee1e54ce1fcb1671ce8",
+            "sha1": "8670c11de2081ec72d4c2dbaa8f50e7424ca2343",
             "changes": [
                 "Setup moved to toolbar",
                 "Show updates is default"
