@@ -129,7 +129,12 @@ QVariantList AuApplicationData::getUpdateableApps()
             }
 
             // update available?
-            bool has_update = hasUpdate(app.first, ver.toString().toStdString());
+            bool has_update = false;
+            if (app_version.notify != "false")
+            {
+                has_update = hasUpdate(app.first, ver.toString().toStdString());
+            }
+            
             entry["has_update"] = has_update;
             entry["changes"] = changes;
         }
@@ -152,6 +157,7 @@ QVariantList AuApplicationData::getUpdateableApps()
             other_entry["license"] = app_version.license.c_str();
             other_entry["url"] = app_version.url.c_str();
             other_entry["is_older_version"] = true;
+            other_entry["notify"] = app_version.notify.c_str();
 
             QString changes("Changes:\n");
             for (auto change : app_version.changes) {
@@ -448,7 +454,8 @@ bool AuApplicationData::hasUpdate(const std::string& app_name, const std::string
     {
         auto upd_version = AuVersionNumber::fromString(upd_ver.c_str());
         auto inst_version = AuVersionNumber::fromString(installed_app->package_version.c_str());
-        return upd_version > inst_version;
+        auto ret = upd_version > inst_version;
+        return ret;
     }
 
     // Not installed -> update true by default

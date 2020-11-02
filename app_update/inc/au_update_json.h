@@ -38,6 +38,7 @@ namespace au_doc
         std::string url;
         std::string md5;
         std::string sha1;
+        std::string notify;
         std::vector<std::string> bundle;
         std::vector<std::string> changes;
     };

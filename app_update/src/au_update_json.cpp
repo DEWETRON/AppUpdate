@@ -69,7 +69,8 @@ au_doc::AuDoc AuUpdateJson::getDocument() const
             au_ver.url = ver_val["url"].toString().toStdString();
             au_ver.md5 = ver_val["md5"].toString().toStdString();
             au_ver.sha1 = ver_val["sha1"].toString().toStdString();
-            
+            au_ver.notify = ver_val["notify"].toString().toStdString();
+
             auto bundle = ver_val["bundle"].toStringList();
             au_ver.bundle.resize(bundle.size());
             std::transform(bundle.begin(), bundle.end(), au_ver.bundle.begin(),

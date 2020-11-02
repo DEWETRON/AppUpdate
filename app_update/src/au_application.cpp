@@ -118,21 +118,24 @@ bool AuApplication::initGui()
     m_main_window->connect(m_main_window->engine(), &QQmlEngine::quit, &m_app, &QCoreApplication::quit);
     m_main_window->setSource(QUrl(m_qml_main_file));
 
+    connect(m_app_data, &AuApplicationData::doShowNotification, m_main_window, &AuWindowQml::showNotification);
+    connect(m_app_data, &AuApplicationData::resetAlertIcon, m_main_window, &AuWindowQml::resetAlertIcon);
+
+
     if (m_main_window->status() == QQuickView::Error)
         return false;
 
     m_main_window->setResizeMode(QQuickView::SizeRootObjectToView);
     
     m_main_window->rootContext()->setContextProperty("app", m_app_data);
-    
-    m_main_window->show();
+
+
+    m_main_window->hide();
     if (m_qml_reloader) 
     {
         m_qml_reloader->addView(m_main_window);
     }
 
-    connect(m_app_data, &AuApplicationData::doShowNotification, m_main_window, &AuWindowQml::showNotification);
-    connect(m_app_data, &AuApplicationData::resetAlertIcon, m_main_window, &AuWindowQml::resetAlertIcon);
 
     return true;
 }
