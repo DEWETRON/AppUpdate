@@ -122,6 +122,7 @@ QVariantList AuApplicationData::getUpdateableApps()
             entry["license"] = app_version.license.c_str();
             entry["url"] = app_version.url.c_str();
             entry["is_older_version"] = false;
+            entry["notify"] = app_version.notify.c_str();
 
             QString changes("Changes:\n");
             for (auto change : app_version.changes) {
@@ -130,10 +131,7 @@ QVariantList AuApplicationData::getUpdateableApps()
 
             // update available?
             bool has_update = false;
-            if (app_version.notify != "false")
-            {
-                has_update = hasUpdate(app.first, ver.toString().toStdString());
-            }
+            has_update = hasUpdate(app.first, ver.toString().toStdString());
             
             entry["has_update"] = has_update;
             entry["changes"] = changes;
@@ -167,10 +165,26 @@ QVariantList AuApplicationData::getUpdateableApps()
             other_entry["changes"] = changes;
             apps.push_back(other_entry);
         }
-        
     }
 
-    return optionFilter(apps);
+    auto filtered_updates = optionFilter(apps);
+
+    for (const auto upd : filtered_updates)
+    {
+        QVariantMap entry = qvariant_cast<QVariantMap>(upd);
+        auto has_update = entry["has_update"].toBool();
+        auto notify = entry["notify"].toString();
+        auto name = entry["name"].toString();
+        auto version = entry["version"].toString();
+        
+        if (has_update && (notify != "false"))
+        {
+            showNotification(name, QString(tr("New update %1 available")).arg(version));
+        }
+
+    }
+
+    return filtered_updates;
 }
 
 

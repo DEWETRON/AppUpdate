@@ -1,5 +1,19 @@
 {
     "DEWETRON OXYGEN": {
+        "5.3.1": {
+            "version": "5.3.1",
+            "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
+            "release_date": "30.10.2020",
+            "license": "5",
+            "url": "https://ccc.dewetron.com/dl/5f9bd975-bdc8-4d50-8d07-56ebd9c49a3c",
+            "md5": "f74bc1c93cf7e8f2454378c5ab5f8816",
+            "sha1": "7788f71b26d6eea37f6208e8f3396e5e1e788d4c",
+            "changes": [
+                "Power Instrument: Fixed NaN displays in power instrument when opening a DMD",
+                "XCP: Fixed a memory leak",
+                "Oxygen SDK: QML Sandbox fixed reload"
+            ]
+        },
         "5.3.0": {
             "version": "5.3.0",
             "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
@@ -120,6 +134,7 @@
             "url": "https://ccc.dewetron.com/dl/5f743913-e100-499b-8a54-7307d9c49a3c",
             "md5": "0649f782a9ee499a8473c09c14b41dca",
             "sha1": "0e0066ea69613a8304bcc9539778d53d1a23772d",
+            "notify" : "false",
             "changes": [
                 "Selftest for all CAN devices",
                 "Support for DEWETRON TRIONCAl"
@@ -127,16 +142,15 @@
         }
     },
     "DEWETRON AppUpdate": {
-        "1.2.2": {
-            "version": "1.2.2",
+        "1.2.3": {
+            "version": "1.2.3",
             "release_note_url": "https://www.dewetron.com/AppUpdate/changelog.html",
-            "release_date": "23.09.2020",
+            "release_date": "02.11.2020",
             "url": "https://ccc.dewetron.com/dl/5f69e6b8-1a78-43c1-8945-29ded9c49a3c",
-            "md5": "32bb8e552d1c8ee1e54ce1fcb1671ce8",
-            "sha1": "8670c11de2081ec72d4c2dbaa8f50e7424ca2343",
+            "md5": "84afd8b1e5710b42175ddc838faa3ca2",
+            "sha1": "84afd8b1e5710b42175ddc838faa3ca2",
             "changes": [
-                "Setup moved to toolbar",
-                "Show updates is default"
+                "Fixed update notification"
             ]
         }
     }
