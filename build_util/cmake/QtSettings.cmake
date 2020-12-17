@@ -109,7 +109,12 @@ if(NOT QT_VERSION)
       endif()
 
     endforeach()
-    message(STATUS "Qt version detected (${QT_VERSION})")
+
+    if (${_detected})
+      message(STATUS "Qt version detected (${QT_VERSION}): ${_qt_base_path}")
+    else()
+      message(WARNING "No Qt libraries detected")
+    endif()
   endif()
 endif()
 

@@ -41,9 +41,13 @@
 # CLion
 .idea/
 
+# qt
+3rdparty/qt
+
 # build directories
 build/
 build64/
 tmp/
 PKGS/
 *.code-workspace
+
