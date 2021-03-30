@@ -1,9 +1,26 @@
 {
     "DEWETRON OXYGEN": {
+        "5.5.1": {
+            "version": "5.5.0",
+            "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
+            "release_date": "31.03.2021",
+            "license": "5",
+            "url": "https://ccc.dewetron.com/dl/606305e1-84c8-4b8b-8638-54afd9c49a3c",
+            "md5": "844ddadb5c48927c551141e16286c6f8",
+            "sha1": "64adb0ea6afedccc14506fc18df480fafe97319f",
+            "changes": [
+                "Load External Video",
+                "Save Measurement Screen to Video File",
+                "Setup Configuration Lock",
+                "Power d/q Analysis",
+                "NI Diadem DAT Export",
+                "DynaWorks Neutral File"
+            ]
+        },
         "5.4.0": {
             "version": "5.4.0",
             "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
-            "release_date": "17.10.2020",
+            "release_date": "17.12.2020",
             "license": "5",
             "url": "https://ccc.dewetron.com/dl/5fdb4053-00c0-4a43-9794-3303d9c49a3c",
             "md5": "f5f3b6c08930196023e4cbd5bbb596a0",
@@ -102,6 +119,25 @@
         }
     },
     "DEWETRON TRION Applications": {
+        "5.5.0.58071": {
+            "version": "5.5.0",
+            "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
+            "release_date": "31.03.2021",
+            "bundle": [
+                "DEWETRON TRION Driver",
+                "DEWETRON Explorer",
+                "DEWETRON DEWE2 Driver",
+                "DEWETRON TRIONCAL"
+            ],
+            "url": "https://ccc.dewetron.com/dl/606305e1-d4d4-4f6b-850a-54afd9c49a3c",
+            "md5": "ecbe6cd40aca1f4b9fc137ce1a9cffc5",
+            "sha1": "7ab0a9e40cf09d87b91fcd08fcb60264fdd3ac04",
+            "changes": [
+                "TRION3-1810-SUB-8 support",
+                "TRION3-AOUT-8 discret channel support",
+                "Self Test - Board RAM test"
+            ]
+        },
         "5.4.0.57188": {
             "version": "5.4.0",
             "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
@@ -162,6 +198,18 @@
         }
     },
     "DEWETRON TRIONet Firmware": {
+        "5.5.0": {
+            "version": "5.5.0",
+            "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
+            "release_date": "31.03.2021",
+            "url": "https://ccc.dewetron.com/dl/606305e1-8d1c-4a2c-b178-54afd9c49a3c",
+            "md5": "b8c05887652b7e950819ffcc40f28b6b",
+            "sha1": "ba7fc6e168ec9939cb6c871c3e0baba77a940c67",
+            "notify" : "false",
+            "changes": [
+                "Self Test - Board RAM test"
+            ]
+        },
         "5.4.0": {
             "version": "5.4.0",
             "release_note_url": "https://www.dewetron.com/Oxygen/changelog.html",
